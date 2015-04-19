@@ -1,12 +1,5 @@
-/* 
- * File:   delays.h
- * Author: sidor
- *
- * Created on December 12, 2014, 10:39 PM
- */
-
-#ifndef DELAYS_H
-#define	DELAYS_H
+#ifndef DRIVERS_TIMER_H
+#define	DRIVERS_TIMER_H
 
 #include <p33EP512GM710.h>
 

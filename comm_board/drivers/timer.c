@@ -1,4 +1,4 @@
-#include "delays.h"
+#include "timer.h"
 
 
 void init_timer(void) {
@@ -49,3 +49,4 @@ void delay_ns(long ns) {
     delay_cycles((ns * (CYCLES_PER_SECOND/1000000L))/1000L );
 
 }
+

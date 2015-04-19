@@ -5,12 +5,11 @@
  * Created on January 17, 2015, 9:51 AM
  */
 
-#ifndef LCD_CUSTOM_CHARS_H
-#define	LCD_CUSTOM_CHARS_H
+#ifndef USER_INTERFACE_HINDI_H
+#define	USER_INTERFACE_HINDI_H
 
 
-
-unsigned char custom_chars[] = {
+unsigned char hindi_chars[] = {
     // android (0)
     0b01110,
     0b01110,
@@ -67,8 +66,7 @@ unsigned char custom_chars[] = {
     0b00101
 };
 
-
-// usage: pra,
+unsigned int energy_hindi[] = {3,4,5,0};
 
 
 #endif	/* LCD_CUSTOM_CHARS_H */

@@ -1,21 +1,49 @@
 #include "lcd.h"
-#include "lcd_custom_chars.h"
 
-// 0 - top, 1 - bottom
-int current_line;
-// current character in line (0-15)
-int current_char;
+#include "timer.h"
 
-// CUSTOM CHARACTER CACHE
-// THERE CAN BE AT MOST 8 DIFFERENT CUSTOM CHARACTERS USED AT THE SAME TIME.
-// which character is currently cached in which slot.
-int CCC[] = {-1,-1,-1,-1,-1,-1,-1,-1};
-int CCC_next_index = 0;
+/* WIRING
+ * If we look on the board from the top such that MIT logo is in top-left:
+ * D7 D6
+ * D5 D4
+ * D3 D2
+ * D1 D0
+ * E R/W
+ * RS  +
+ *  +  -
+ *
+ * WARNING: Remeber that LCD requires two negative (one of which is V0 for
+ * contrast) and one positive supplies. What you have available on board is
+ * not idead (two positives and one negative, so you need to be a little bit
+ * creative.
+ * 
+ * Tack time!
+ */
 
-char LCD_buffer[32];
+#define RS LATEbits.LATE15
+#define RW LATDbits.LATD5
+#define EN LATCbits.LATC8
 
-void LCD_command(unsigned char command);
-void LCD_write_info(unsigned char info);
+#define D0 LATBbits.LATB10
+#define D1 LATBbits.LATB11
+#define D2 LATBbits.LATB12
+#define D3 LATBbits.LATB13
+
+#define D4 LATAbits.LATA10
+#define D5 LATAbits.LATA7
+#define D6 LATBbits.LATB14
+#define D7 LATBbits.LATB15
+
+
+
+static lcd_row current_row;
+// current character in row (0-15)
+static int current_char;
+
+static char LCD_buffer[32];
+
+static void LCD_command(unsigned char command);
+static void LCD_write_info(unsigned char info);
 
 void reset_buffer() {
     int l=0;
@@ -56,10 +84,11 @@ void LCD_init(void){
 
     delay_ms(2000);
 
-    LCD_home(0);
-    current_line = 0;
-    current_char = 0;
+    LCD_home(LCD_ROW_TOP);
+
     reset_buffer();
+    
+    delay_ms(100);
 }
 
 void LCD_data(unsigned char data){
@@ -84,11 +113,11 @@ void LCD_cursor(int on) {
     }
 }
 
-void LCD_blink(char * msg, int line, int wait_ms) {
-    int old_line = current_line;
+void LCD_blink(char * msg, lcd_row row, int wait_ms) {
+    lcd_row old_row = current_row;
     int old_char = current_char;
 
-    LCD_home(line);
+    LCD_home(row);
     int index = 0;
     while(index < 16) {
         if (!msg[index]) break;
@@ -102,11 +131,11 @@ void LCD_blink(char * msg, int line, int wait_ms) {
         ++index;
     }
     delay_ms(wait_ms);
-    LCD_home(line);
-    LCD_print(&(LCD_buffer[line*16]));
-    current_line = old_line;
+    LCD_home(row);
+    LCD_print(&(LCD_buffer[row*16]));
+    current_row = old_row;
     current_char = old_char;
-    LCD_command((1<<7) + current_char + 40*current_line);
+    LCD_command((1<<7) + current_char + 40*current_row);
 
 }
 
@@ -127,63 +156,13 @@ void LCD_command(unsigned char command){
 
 void LCD_char(unsigned char ch){
     if (current_char < 16) {
-        LCD_buffer[current_line * 16 + current_char] = ch;
+        LCD_buffer[current_row * 16 + current_char] = ch;
         LCD_data(ch);
         LCD_command(0x06);
         current_char++;
     }
 }
 
-void LCD_load_custom_char(unsigned int char_no, int address) {
-    // address auto increments, so it only needs to be set once.
-    LCD_command((1<<6) | (address<<3)); // set cgram address
-    int i=0;
-    while (i<8) {
-        LCD_data(custom_chars[char_no * 8 + i]);
-        ++i;
-    }
-}
-
-int CCC_in_cache(int char_no) {
-    int i = 0;
-    int cache_hit = -1;
-    while (i<8) {
-        if (CCC[i] == char_no) {
-            cache_hit = i;
-            break;
-        }
-        ++i;
-    }
-    return cache_hit;
-}
-
-void LCD_char_custom(unsigned int char_no) {
-    char char_slot = CCC_in_cache(char_no);
-    char_slot = -1;
-    if (char_slot == -1) {
-        CCC_next_index++;
-        if (CCC_next_index == 8) CCC_next_index = 0;
-        char_slot = CCC_next_index;
-        LCD_load_custom_char(char_no, char_slot);
-        LCD_command((1<<7) + current_char + 40*current_line);
-    }
-    // set address to the next char position.
-    LCD_char(char_slot);
-}
-
-void LCD_print_custom(unsigned int* letters) {
-        // set cursor to appropriate position.
-    int string_index = 0;
-
-    while (current_char < 16){
-        if (letters[string_index]) {
-            LCD_char_custom(letters[string_index]);
-            string_index++;
-        } else {
-            break;
-        }
-    };
-}
 
 void LCD_write_info(unsigned char info) {
     D0 = (info & 0x01);
@@ -201,37 +180,38 @@ void LCD_reset(void){	//Clears LCD
     LCD_command(1<<0);
     LCD_home(0);
     delay_ms(10);
-    current_line = 0;
+    current_row = LCD_ROW_TOP;
     current_char = 0;
     reset_buffer();
 
 }
 
-void LCD_move_cursor(int right) {
-    if ((right == 1 && current_char == 16) || (right == 0 && current_char == 0))
+void LCD_move_cursor(lcd_direction direction) {
+    if ((direction == LCD_DIRECTION_RIGHT && current_char == 16) || 
+            (direction == LCD_DIRECTION_LEFT && current_char == 0))
         return;
-    LCD_command(0x10 | ((0x04)*right));
+    LCD_command(0x10 | ((0x04)*direction));
     // -1 for left, +1 for right
-    current_char += -1 + 2*right;
+    current_char += -1 + 2*direction;
 }
 
-void LCD_home(int line) {
-    switch(line) {
-      case 0: // top line
+void LCD_home(lcd_row row) {
+    switch(row) {
+      case LCD_ROW_TOP:
         LCD_command(0x0002);
         break;
-      case 1: // bottom line
+      case LCD_ROW_BOTTOM:
         LCD_command(0x00C0);
         break;
     }
-    current_line = line;
+    current_row = row;
     current_char = 0;
 }
 
-void LCD_replace_line(char letters[], int line) {
-    LCD_home(line);
+void LCD_replace_row(char letters[], lcd_row row) {
+    LCD_home(row);
     LCD_print("                ");
-    LCD_home(line);
+    LCD_home(row);
     LCD_print(letters);
 }
 
@@ -321,4 +301,70 @@ void LCD_float(float f, int digits_after_dot) {
     int num_zeros = digits_after_dot-float_digits;
     while(num_zeros--) LCD_char('0');
     if (float_part > 0) LCD_int(float_part);
+}
+
+
+//////////////////// CUSTOM CHARACTERS /////////////////////////////////////////
+
+static unsigned char *custom_char_map;
+
+// CUSTOM CHARACTER CACHE
+// THERE CAN BE AT MOST 8 DIFFERENT CUSTOM CHARACTERS USED AT THE SAME TIME.
+// which character is currently cached in which slot.
+static int CCC[] = {-1,-1,-1,-1,-1,-1,-1,-1};
+static int CCC_next_index = 0;
+
+void LCD_load_custom_char(unsigned int char_no, int address) {
+    // address auto increments, so it only needs to be set once.
+    LCD_command((1<<6) | (address<<3)); // set cgram address
+    int i=0;
+    while (i<8) {
+        LCD_data(custom_char_map[char_no * 8 + i]);
+        ++i;
+    }
+}
+
+int CCC_in_cache(int char_no) {
+    int i = 0;
+    int cache_hit = -1;
+    while (i<8) {
+        if (CCC[i] == char_no) {
+            cache_hit = i;
+            break;
+        }
+        ++i;
+    }
+    return cache_hit;
+}
+
+void LCD_set_custom_char_map(unsigned char *map) {
+    custom_char_map = map;
+}
+
+void LCD_char_custom(unsigned int char_no) {
+    char char_slot = CCC_in_cache(char_no);
+    char_slot = -1;
+    if (char_slot == -1) {
+        CCC_next_index++;
+        if (CCC_next_index == 8) CCC_next_index = 0;
+        char_slot = CCC_next_index;
+        LCD_load_custom_char(char_no, char_slot);
+        LCD_command((1<<7) + current_char + 40*current_row);
+    }
+    // set address to the next char position.
+    LCD_char(char_slot);
+}
+
+void LCD_print_custom(unsigned int* letters) {
+        // set cursor to appropriate position.
+    int string_index = 0;
+
+    while (current_char < 16){
+        if (letters[string_index]) {
+            LCD_char_custom(letters[string_index]);
+            string_index++;
+        } else {
+            break;
+        }
+    };
 }

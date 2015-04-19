@@ -4,68 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <logicalFolder name="f2"
-                     displayName="ComputerCommunication"
-                     projectFiles="true">
-        <itemPath>ComputerCommunicationDriver.h</itemPath>
-        <itemPath>ComputerInterface.h</itemPath>
-        <itemPath>debugging.h</itemPath>
-        <itemPath>ComputerMessages.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f9" displayName="DataStructures" projectFiles="true">
-        <itemPath>circular_buffer.h</itemPath>
-        <itemPath>set.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f8" displayName="LCD" projectFiles="true">
-        <itemPath>lcd.h</itemPath>
-        <itemPath>LCD_custom_chars.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f5" displayName="LinkBoardInterface" projectFiles="true">
-        <itemPath>LinkBoardInterface.h</itemPath>
-        <itemPath>LinkBoardConstants.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f4" displayName="LoadBoardInterface" projectFiles="true">
-        <itemPath>LoadBoardInterface.h</itemPath>
-        <itemPath>LoadBoardConstants.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f1" displayName="NodalCommunication" projectFiles="true">
-        <itemPath>NodalCommunicationDriver.h</itemPath>
-        <itemPath>NodalCommunicationInterface.h</itemPath>
-        <itemPath>NetworkCommConstants.h</itemPath>
-        <itemPath>NodalCommunicationInterface2.h</itemPath>
-        <itemPath>TokenPassing.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f3" displayName="PowerManagement" projectFiles="true">
-        <itemPath>PowerStateManagement.h</itemPath>
-        <itemPath>BatteryManagement.h</itemPath>
-        <itemPath>SolarForecastModule.h</itemPath>
-        <itemPath>DispatchingExecutive.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f10" displayName="SimpleGridLogic" projectFiles="true">
-        <itemPath>Balance.h</itemPath>
-        <itemPath>UserInterface.h</itemPath>
-        <itemPath>LoadBoxGridManagement.h</itemPath>
-        <itemPath>LinkBoxGridManagement.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f7" displayName="StateManagement" projectFiles="true">
-        <itemPath>GridStateManagement.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f6" displayName="UserInteraction" projectFiles="true">
-        <itemPath>UserManagement.h</itemPath>
-        <itemPath>UserInteractionConstants.h</itemPath>
-        <itemPath>UserLEDs.h</itemPath>
-      </logicalFolder>
-      <itemPath>SPI_EEPROM.h</itemPath>
-      <itemPath>DateAndTime.h</itemPath>
-      <itemPath>DataLogger.h</itemPath>
-      <itemPath>Debugger.h</itemPath>
-      <itemPath>LibraryFunctions.h</itemPath>
-      <itemPath>delays.h</itemPath>
-      <itemPath>settings.h</itemPath>
-      <itemPath>macros.h</itemPath>
-      <itemPath>pininit.h</itemPath>
-      <itemPath>MessageBuilder.h</itemPath>
-      <itemPath>SPI_LOAD_BOARD.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -74,60 +12,20 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <logicalFolder name="f2"
-                     displayName="ComputerCommunication"
+      <logicalFolder name="drivers" displayName="drivers" projectFiles="true">
+        <itemPath>drivers/board.c</itemPath>
+        <itemPath>drivers/board.h</itemPath>
+        <itemPath>drivers/timer.h</itemPath>
+        <itemPath>drivers/timer.c</itemPath>
+        <itemPath>drivers/lcd.h</itemPath>
+        <itemPath>drivers/lcd.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="user_interface"
+                     displayName="user_interface"
                      projectFiles="true">
-        <itemPath>ComputerCommunicationDriver.c</itemPath>
-        <itemPath>ComputerInterface.c</itemPath>
-        <itemPath>ComputerMessages.c</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f8" displayName="DataStructures" projectFiles="true">
-        <itemPath>circular_buffer.c</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f5" displayName="LinkBoardInterface" projectFiles="true">
-        <itemPath>LinkBoardInterface.c</itemPath>
-        <itemPath>SPI_POWER_BOARD.c</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f4" displayName="LoadBoardInterface" projectFiles="true">
-        <itemPath>SPI_LOAD_BOARD.c</itemPath>
-        <itemPath>LoadBoardInterface.c</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f1" displayName="NodalCommunication" projectFiles="true">
-        <itemPath>NodalCommunicationInterface.c</itemPath>
-        <itemPath>NodalCommunicationDriver.c</itemPath>
-        <itemPath>NodalCommunicationInterface2.c</itemPath>
-        <itemPath>TokenPassing.c</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f3" displayName="PowerManagement" projectFiles="true">
-        <itemPath>BatteryManagement.c</itemPath>
-        <itemPath>PowerStateManagement.c</itemPath>
-        <itemPath>SolarForecastModule.c</itemPath>
-        <itemPath>DispatchingExecutive.c</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f9" displayName="SimpleGridLogic" projectFiles="true">
-        <itemPath>Balance.c</itemPath>
-        <itemPath>UserInterface.c</itemPath>
-        <itemPath>LinkBoxGridManagement.c</itemPath>
-        <itemPath>LoadBoxGridManagement.c</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f7" displayName="StateManagement" projectFiles="true">
-        <itemPath>GridStateManagement.c</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f6" displayName="UserInteraction" projectFiles="true">
-        <itemPath>UserManagement.c</itemPath>
-        <itemPath>UserLEDs.c</itemPath>
+        <itemPath>drivers/hindi.h</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
-      <itemPath>SPI_EEPROM.c</itemPath>
-      <itemPath>DateAndTime.c</itemPath>
-      <itemPath>DataLogger.c</itemPath>
-      <itemPath>Debugger.c</itemPath>
-      <itemPath>LibraryFunctions.c</itemPath>
-      <itemPath>lcd.c</itemPath>
-      <itemPath>delays.c</itemPath>
-      <itemPath>settings.c</itemPath>
-      <itemPath>debugging.c</itemPath>
-      <itemPath>MessageBuilder.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -135,6 +33,10 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>drivers</Elem>
+    <Elem>user_interface</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="default" type="2">
@@ -145,8 +47,8 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC16</languageToolchain>
-        <languageToolchainVersion>1.23</languageToolchainVersion>
-        <platform>3</platform>
+        <languageToolchainVersion>1.24</languageToolchainVersion>
+        <platform>2</platform>
       </toolsSet>
       <compileType>
         <linkerTool>
