@@ -41,8 +41,6 @@
                 }
                 return 1;
             }
- * 
- * 
  */
 
 
@@ -62,7 +60,7 @@ typedef enum lcd_direction_dec {
 
 // Must be called before everything else
 // Takes a long time! (about 100ms).
-void LCD_init(void);
+void init_LCD(void);
 
 // clear display
 void LCD_reset(void);

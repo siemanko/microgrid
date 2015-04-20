@@ -1,5 +1,7 @@
 #include "timer.h"
 
+#include <p33EP512GM710.h>
+
 
 void init_timer(void) {
     T8CONbits.TON = 0;       // Disable Timer

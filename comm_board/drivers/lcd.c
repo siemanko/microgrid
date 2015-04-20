@@ -58,7 +58,7 @@ void reset_buffer() {
     }
 }
 
-void LCD_init(void){
+void init_LCD(void){
 
     // Set all pins to output and clear them initially
     RW = 0; RS = 0; EN = 0;

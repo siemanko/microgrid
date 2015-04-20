@@ -1,7 +1,6 @@
 #ifndef DRIVERS_TIMER_H
 #define	DRIVERS_TIMER_H
 
-#include <p33EP512GM710.h>
 
 #define CYCLES_PER_SECOND 35000000L
 

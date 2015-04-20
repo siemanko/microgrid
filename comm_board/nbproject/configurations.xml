@@ -19,6 +19,8 @@
         <itemPath>drivers/timer.c</itemPath>
         <itemPath>drivers/lcd.h</itemPath>
         <itemPath>drivers/lcd.c</itemPath>
+        <itemPath>drivers/uart.c</itemPath>
+        <itemPath>drivers/uart.h</itemPath>
       </logicalFolder>
       <logicalFolder name="user_interface"
                      displayName="user_interface"
