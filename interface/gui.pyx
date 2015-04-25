@@ -7,9 +7,11 @@ from kivy.adapters.simplelistadapter import SimpleListAdapter
 
 from serial_adapter import SerialAdapter
 
+from communication import what_wrapper
+
 popup = Popup(title='Test popup',
-    content=Label(text='Hello world'),
-    size_hint=(None, None), size=(400, 400))
+              content=Label(text='Hello world'),
+              size_hint=(None, None), size=(400, 400))
 
 class LogsView(ListView):
     def __init__(self):
@@ -24,17 +26,14 @@ class LogsView(ListView):
     def clear(self):
         self.adapter.data = []
 
-class TestApp(App):
+class MicrogridApp(App):
     def build(self):
         self.serial = SerialAdapter('/dev/ttyUSB0', self.on_char)
         self.logs_view = LogsView()
+
         return self.logs_view
 
     def on_char(self, c):
         self.logs_view.push(str(c))
 
-
-
-if __name__ == '__main__':
-    TestApp().run()
 
