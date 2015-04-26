@@ -12,6 +12,14 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="communication"
+                     displayName="communication"
+                     projectFiles="true">
+        <itemPath>communication/computer.c</itemPath>
+        <itemPath>communication/computer.h</itemPath>
+        <itemPath>communication/interface.c</itemPath>
+        <itemPath>communication/interface.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="drivers" displayName="drivers" projectFiles="true">
         <itemPath>drivers/board.c</itemPath>
         <itemPath>drivers/board.h</itemPath>
@@ -21,6 +29,20 @@
         <itemPath>drivers/lcd.c</itemPath>
         <itemPath>drivers/uart.c</itemPath>
         <itemPath>drivers/uart.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="shared" displayName="shared" projectFiles="true">
+        <logicalFolder name="algorithm" displayName="algorithm" projectFiles="true">
+          <itemPath>../shared/algorithm/circular_buffer.c</itemPath>
+          <itemPath>../shared/algorithm/circular_buffer.h</itemPath>
+          <itemPath>../shared/algorithm/set.c</itemPath>
+          <itemPath>../shared/algorithm/set.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="communication"
+                       displayName="communication"
+                       projectFiles="true">
+          <itemPath>../shared/communication/ethermini.c</itemPath>
+          <itemPath>../shared/communication/ethermini.h</itemPath>
+        </logicalFolder>
       </logicalFolder>
       <logicalFolder name="user_interface"
                      displayName="user_interface"
@@ -38,6 +60,9 @@
   <sourceRootList>
     <Elem>drivers</Elem>
     <Elem>user_interface</Elem>
+    <Elem>../shared</Elem>
+    <Elem>computer_communication</Elem>
+    <Elem>communication</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -88,7 +113,7 @@
         <property key="enable-short-double" value="false"/>
         <property key="enable-symbols" value="true"/>
         <property key="enable-unroll-loops" value="false"/>
-        <property key="extra-include-directories" value=""/>
+        <property key="extra-include-directories" value="."/>
         <property key="isolate-each-function" value="false"/>
         <property key="keep-inline" value="false"/>
         <property key="oXC16gcc-align-arr" value="false"/>
