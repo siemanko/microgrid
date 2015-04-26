@@ -3,6 +3,12 @@ import time
 
 from threading import Thread
 
+from bindings.communication import (
+    init_communication,
+    on_symbol,
+    receive_message,
+)
+
 # TODO(szymon): make reliable
 
 class SerialAdapter(object):
@@ -15,7 +21,8 @@ class SerialAdapter(object):
                             timeout=1)  # open first serial port
 
         self.start_polling()
-        self.char_callback = callback
+        self.message_callback = callback
+        init_communication()
 
     def start_polling(self):
         self.thread_should_stop = False
@@ -23,7 +30,11 @@ class SerialAdapter(object):
             while not self.thread_should_stop:
                 x = [ ord(x) for x in self.s.read(1)]
                 if len(x) > 0:
-                    self.char_callback(x[0])
+                    on_symbol(x[0])
+                msg = receive_message()
+
+                if msg is not None:
+                    self.message_callback(msg)
 
         self.polling_thread = Thread(target=thread_loop)
         self.polling_thread.setDaemon(True)

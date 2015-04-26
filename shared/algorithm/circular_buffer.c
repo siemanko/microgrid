@@ -1,12 +1,14 @@
 #include "circular_buffer.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 
 void make_cb(CircularBuffer *buffer, int size) {
     buffer->size = size;
     buffer->start = 0;
     buffer->count = 0;
     buffer->element = malloc(sizeof(buffer->element)*size);
+
     /* allocated array of void pointers. Same as below */
     //buffer->element = malloc(sizeof(void *) * size);
 
