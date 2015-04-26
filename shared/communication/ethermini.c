@@ -44,8 +44,6 @@ void ethermini_send_immediately(Ethermini *e, EtherminiMessage *msg) {
 }
 
 void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
-    printf("Received %u in state %d (aux = %d)\n",
-            symbol, e->state, e->state_aux);
     if (e->state == FRAMING) {
         // here state_aux determines how many preambles
         // have we seen.
@@ -93,7 +91,6 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
     } else if (e->state == CONTENT) {
         e->msg_receive_buffer->content[e->state_aux++] = symbol;
         if (e->state_aux == e->msg_receive_buffer->length) {
-            printf("ADRES put: %u\n", e->msg_receive_buffer);
             cb_push(e->inbound_messages, e->msg_receive_buffer);
             e->msg_receive_buffer = 0;
 
@@ -109,8 +106,6 @@ EtherminiMessage* ethermini_receive_message(Ethermini* e) {
         EtherminiMessage* ret =
                 (EtherminiMessage *)cb_popqueue(
                         e->inbound_messages);
-        printf("ADRES got: %u\n", ret);
-        printf("len: %u\n", ret->length);
         return ret;
     } else {
         return 0;

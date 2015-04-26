@@ -31,10 +31,6 @@ ext_modules.append(Extension(
         join(CPATH, "shared/algorithm/circular_buffer.c"),
     ],
     include_dirs = [CPATH],
-    # sources = [
-    #     join(CPATH, "shared/communication/ethermini.c"),
-    #     join(CPATH, "shared/algorithm/circular_buffer.c"),
-    # ],
 ))
 build_ext.cython_c_in_temp = True
 cmdclass.update({ 'build_ext': build_ext })
