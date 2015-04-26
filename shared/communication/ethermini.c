@@ -1,5 +1,6 @@
 #include "ethermini.h"
-#include "shared/communication/ethermini.h"
+
+#include "shared/utils.h"
 
 #include <stdlib.h>
 
@@ -23,6 +24,20 @@ void make_ethermini(Ethermini* e, void (*put)(uint8_t)) {
     e->msg_receive_buffer = 0;
 }
 
+uint32_t checksum(EtherminiMessage* msg) {
+    uint32_t res = 0;
+
+    res = res*333 + msg->source;
+    res = res*333 + msg->destination;
+    res = res*333 + msg->length;
+
+    int midx;
+    for (midx = 0; midx < msg->length; ++midx) {
+        res = res*333 + msg->content[midx];
+    }
+    return res;
+}
+
 void ethermini_send_immediately(Ethermini *e, EtherminiMessage *msg) {
     // preamble - 2 time 0xaa
     int pidx;
@@ -40,7 +55,12 @@ void ethermini_send_immediately(Ethermini *e, EtherminiMessage *msg) {
     for (msg_idx = 0; msg_idx < msg->length; ++msg_idx) {
         e->put(msg->content[msg_idx]);
     }
-    // TODO(szymon): checksum.
+    uint8_t cc[4];
+    long_to_bytes(checksum(msg), cc);
+    int ccidx;
+    for (ccidx = 0; ccidx < 4; ++ccidx) {
+        e->put(cc[ccidx]);
+    }
 }
 
 void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
@@ -57,7 +77,6 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
             if (e->state_aux >= ETHERMINI_FRAMING_PREAMBLE_LENGTH) {
                 // got message - reserve space.
                 if (e->msg_receive_buffer != 0) {
-                    printf("FREE\n");
                     free(e->msg_receive_buffer);
                 }
                 e->msg_receive_buffer =
@@ -80,22 +99,33 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
         e->msg_receive_buffer->content =
                 (uint8_t*)malloc(symbol*sizeof(uint8_t));
         if (symbol == 0) {
-            cb_push(e->inbound_messages, e->msg_receive_buffer);
-            e->msg_receive_buffer = 0;
-            e->state = FRAMING;
             e->state_aux = 0;
+            e->state = CHECKSUM;
         } else {
             e->state_aux = 0;
             e->state = CONTENT;
         }
     } else if (e->state == CONTENT) {
+        // TODO(szymon): move this to the top of id ladder.
         e->msg_receive_buffer->content[e->state_aux++] = symbol;
         if (e->state_aux == e->msg_receive_buffer->length) {
-            cb_push(e->inbound_messages, e->msg_receive_buffer);
-            e->msg_receive_buffer = 0;
-
-            e->state = FRAMING;
+            e->state = CHECKSUM;
             e->state_aux = 0;
+        }
+    } else if (e->state == CHECKSUM) {
+        e->checksum_buffer[e->state_aux++] = symbol;
+        if (e->state_aux == 4) {
+            uint32_t cc_received = bytes_to_long(e->checksum_buffer);
+            uint32_t cc_computed = checksum(e->msg_receive_buffer);
+            if (cc_received == cc_computed) {
+                cb_push(e->inbound_messages, e->msg_receive_buffer);
+                e->msg_receive_buffer = 0;
+            } else {
+                free(e->msg_receive_buffer);
+                e->msg_receive_buffer = 0;
+            }
+            e->state_aux = 0;
+            e->state = FRAMING;
         }
     }
 }

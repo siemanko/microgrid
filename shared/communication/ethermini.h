@@ -9,7 +9,7 @@ typedef struct {
     uint8_t* content;
     uint8_t length;
     uint8_t destination;
-    uint8_t source; 
+    uint8_t source;
 } EtherminiMessage;
 
 typedef enum {
@@ -18,6 +18,7 @@ typedef enum {
     SOURCE,
     LENGTH,
     CONTENT,
+    CHECKSUM,
 } EtherminiState;
 
 typedef struct {
@@ -28,6 +29,7 @@ typedef struct {
     EtherminiState state;
     int state_aux;
     EtherminiMessage* msg_receive_buffer;
+    uint8_t checksum_buffer[4];
 } Ethermini;
 
 void make_ethermini(Ethermini* e, void (*put)(uint8_t));

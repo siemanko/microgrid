@@ -14,6 +14,7 @@ def find_files(path, pattern):
 
 cmdclass = {}
 ext_modules = []
+sources = []
 
 SCRIPT_DIR = dirname(realpath(__file__))
 CPATH = join(SCRIPT_DIR, 'cython')
@@ -23,13 +24,15 @@ for cython_file in find_files(CPATH, '*.pyx'):
     # touch
     utime(cython_file, None)
 
+sources.append(join(CPATH, "communication.pyx"))
+
+sources.extend(find_files(join(CPATH, "shared"), "*.c"))
+
+print sources
+
 ext_modules.append(Extension(
     "bindings.communication",
-    [
-        join(CPATH, "communication.pyx"),
-        join(CPATH, "shared/communication/ethermini.c"),
-        join(CPATH, "shared/algorithm/circular_buffer.c"),
-    ],
+    sources,
     include_dirs = [CPATH],
 ))
 build_ext.cython_c_in_temp = True
