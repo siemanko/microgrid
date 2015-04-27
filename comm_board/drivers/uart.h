@@ -14,5 +14,7 @@ void uart_put(uart_device u, uint8_t data);
 
 void uart_set_callback(uart_device u, void (*callback)(uint8_t));
 
+void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt( void );
+
 #endif	
 

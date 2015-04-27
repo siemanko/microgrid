@@ -1,6 +1,6 @@
 #ifndef COMMUNICATION_COMPUTER_H
 #define COMMUNICATION_COMPUTER_H
-
+ 
 #include <stdint.h>
 
 #include "shared/communication/ethermini.h"

@@ -1,14 +1,25 @@
 #include "board.h"
 
+#define TRIS_INPUT 1
+#define TRIS_OUTPUT 0
 
-// Internal FRC Oscillator
-_FOSCSEL(FNOSC_FRCPLL);  // FRC Oscillator
-_FOSC(FCKSM_CSECMD & OSCIOFNC_OFF  & POSCMD_NONE);   // Clock Switching is enabled and Fail Safe Clock Monitor is disabled
-						     // OSC2 Pin Function: OSC2 is Clock Output
-                                                     // Primary Oscillator Mode: Disabled
-_FWDT(FWDTEN_OFF);              // Watchdog Timer Enabled/disabled by user software
-_FGS(GWRP_OFF); // General segment Write protect turned off
-_FICD(ICS_PGD2 & JTAGEN_OFF) // Select Debug/Program Lines and JTAG OFF
+#define TRIS_AUX TRISAbits.TRISA0
+#define TRIS_AUX2 TRISAbits.TRISA11
+#define TRIS_AUX3 TRISAbits.TRISA12
+
+#define TRIS_RS TRISEbits.TRISE15
+#define TRIS_RW TRISDbits.TRISD5
+#define TRIS_EN TRISCbits.TRISC8
+
+#define TRIS_D0 TRISBbits.TRISB10
+#define TRIS_D1 TRISBbits.TRISB11
+#define TRIS_D2 TRISBbits.TRISB12
+#define TRIS_D3 TRISBbits.TRISB13
+
+#define TRIS_D4 TRISAbits.TRISA10
+#define TRIS_D5 TRISAbits.TRISA7
+#define TRIS_D6 TRISBbits.TRISB14
+#define TRIS_D7 TRISBbits.TRISB15
 
 #define SYS_FREQUENCY 36850000
 

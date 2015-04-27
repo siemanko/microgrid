@@ -19,6 +19,8 @@
         <itemPath>communication/computer.h</itemPath>
         <itemPath>communication/interface.c</itemPath>
         <itemPath>communication/interface.h</itemPath>
+        <itemPath>communication/messages.c</itemPath>
+        <itemPath>communication/messages.h</itemPath>
       </logicalFolder>
       <logicalFolder name="drivers" displayName="drivers" projectFiles="true">
         <itemPath>drivers/board.c</itemPath>

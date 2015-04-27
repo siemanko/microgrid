@@ -89,7 +89,8 @@ void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt( void ){
         uart_callback[UART_DEVICE1](data);
     }
     
-    IFS0bits.U1RXIF = 0;
+    U1STAbits.OERR = 0;
+    IFS0bits.U1RXIF = 0;    
 }
 
 void __attribute__((interrupt, no_auto_psv)) _U2RXInterrupt( void ){

@@ -1,5 +1,6 @@
 #include "computer.h"
 
+#include "communication/messages.h"
 #include "shared/communication/ethermini.h"
 #include "drivers/uart.h"
 
@@ -9,12 +10,17 @@ void put_uart1(uint8_t symbol) {
     uart_put(UART_DEVICE1, symbol);
 }
 
+void on_receive_uart1(uint8_t symbol) {
+    ethermini_on_symbol(&network, symbol);
+}
+
 void init_computer_communication() {
-    make_ethermini(&network, put_uart1);
+    init_uart(UART_DEVICE1);
+    make_ethermini(&network, put_uart1, handle_message);
+    uart_set_callback(UART_DEVICE1, on_receive_uart1);
 }
 
 void computer_send_message(Message* msg) {
-    // TODO(szymon): add to queue.
     ethermini_send(&network, msg);
 }
 

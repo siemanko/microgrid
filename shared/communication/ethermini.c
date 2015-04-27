@@ -10,7 +10,9 @@
 #define ETHERMINI_FRAMING_SOF             171
 #define ETHERMINI_FRAMING_PREAMBLE_LENGTH 3
 
-void make_ethermini(Ethermini* e, void (*put)(uint8_t)) {
+void make_ethermini(Ethermini* e,
+        void (*put)(uint8_t),
+        void (*on_message_callback)(Message*)) {
     e->outbound_messages =
             (CircularBuffer*)malloc(sizeof(CircularBuffer));
     make_cb(e->outbound_messages, MAX_MESSAGES);
@@ -19,6 +21,7 @@ void make_ethermini(Ethermini* e, void (*put)(uint8_t)) {
     make_cb(e->inbound_messages, MAX_MESSAGES);
 
     e->put = put;
+    e->on_message_callback = on_message_callback;
     e->state = FRAMING;
     e->state_aux = 0;
     e->msg_receive_buffer = 0;
@@ -151,6 +154,12 @@ void ethermini_step(Ethermini* e) {
     while(!cb_empty(e->outbound_messages)) {
         Message* msg = (Message*)cb_popqueue(e->outbound_messages);
         ethermini_send_immediately(e, msg);
+        free(msg);
+    }
+    
+    while(!cb_empty(e->inbound_messages)) {
+        Message* msg = (Message*)cb_popqueue(e->inbound_messages);
+        e->on_message_callback(msg);
         free(msg);
     }
 }

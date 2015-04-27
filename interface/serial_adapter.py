@@ -7,6 +7,8 @@ from bindings.communication import (
     init_communication,
     on_symbol,
     receive_message,
+    get_outgoing_char,
+    send_message,
 )
 
 # TODO(szymon): make reliable
@@ -18,11 +20,12 @@ class SerialAdapter(object):
                             bytesize=8,
                             stopbits=1,
                             parity='N',
-                            timeout=1)  # open first serial port
+                            timeout=0.00001)  # open first serial port
 
         self.start_polling()
         self.message_callback = callback
         init_communication()
+        self.send('o hai')
 
     def start_polling(self):
         self.thread_should_stop = False
@@ -30,17 +33,23 @@ class SerialAdapter(object):
             while not self.thread_should_stop:
                 x = [ ord(x) for x in self.s.read(1)]
                 if len(x) > 0:
-                    print 'traffic: ', x[0]
+                    print 'inbound: ', x[0]
                     on_symbol(x[0])
                 msg = receive_message()
-
                 if msg is not None:
                     self.message_callback(msg)
+
+                outgoing_char = get_outgoing_char()
+                if outgoing_char is not None:
+                    self.s.write([outgoing_char])
+                    print 'outbound: ', outgoing_char
 
         self.polling_thread = Thread(target=thread_loop)
         self.polling_thread.setDaemon(True)
         self.polling_thread.start()
 
+    def send(self, msg):
+        send_message(msg)
 
     def close():
         self.thread_should_stop = True
