@@ -5,6 +5,7 @@
 #include "drivers/uart.h"
 
 #include "communication/interface.h"
+#include "shared/utils.h"
 
 void init(void) {
     init_board();
@@ -25,15 +26,14 @@ int main() {
            
     while(1) {
         LCD_reset();
-        LCD_print("hello");
+        LCD_replace_row("hello", LCD_ROW_TOP);
+        send_string((uint8_t*)copy_string("hello"), COMPUTER);
         delay_ms(1000);
         LCD_reset();
         LCD_print_custom(energy_hindi);
         delay_ms(1000);
         uart_put(UART_DEVICE1, 77);
-
-        test_comm();
-
+        communication_step();
     }
     return 1;
 }

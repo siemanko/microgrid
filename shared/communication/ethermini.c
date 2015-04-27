@@ -24,7 +24,7 @@ void make_ethermini(Ethermini* e, void (*put)(uint8_t)) {
     e->msg_receive_buffer = 0;
 }
 
-uint32_t checksum(EtherminiMessage* msg) {
+uint32_t checksum(Message* msg) {
     uint32_t res = 0;
 
     res = res*333 + msg->source;
@@ -38,8 +38,12 @@ uint32_t checksum(EtherminiMessage* msg) {
     return res;
 }
 
-void ethermini_send_immediately(Ethermini *e, EtherminiMessage *msg) {
-    // preamble - 2 time 0xaa
+void ethermini_send(Ethermini* e,  Message *msg) {
+    cb_push(e->outbound_messages, msg);
+}
+
+void ethermini_send_immediately(Ethermini *e, Message *msg) {
+    // preamble - 2 time 170
     int pidx;
     for (pidx=0; pidx < ETHERMINI_FRAMING_PREAMBLE_LENGTH; ++pidx) {
         e->put(ETHERMINI_FRAMING_PREAMBLE);
@@ -80,7 +84,7 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
                     free(e->msg_receive_buffer);
                 }
                 e->msg_receive_buffer =
-                        (EtherminiMessage*)malloc(sizeof(EtherminiMessage));
+                        (Message*)malloc(sizeof(Message));
                 e->state = DESTINATION;
             } else {
                 e->state_aux = 0;
@@ -130,14 +134,23 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
     }
 }
 
-EtherminiMessage* ethermini_receive_message(Ethermini* e) {
+Message* ethermini_receive_message(Ethermini* e) {
     if (!cb_empty(e->inbound_messages)) {
 
-        EtherminiMessage* ret =
-                (EtherminiMessage *)cb_popqueue(
+        Message* ret =
+                (Message *)cb_popqueue(
                         e->inbound_messages);
         return ret;
     } else {
         return 0;
+    }
+}
+
+void ethermini_step(Ethermini* e) {
+    // send all the messages.
+    while(!cb_empty(e->outbound_messages)) {
+        Message* msg = (Message*)cb_popqueue(e->outbound_messages);
+        ethermini_send_immediately(e, msg);
+        free(msg);
     }
 }

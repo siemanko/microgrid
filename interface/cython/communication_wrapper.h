@@ -17,7 +17,6 @@ void c_init_communication() {
 }
 
 void c_on_symbol(unsigned char symbol) {
-    printf("Symbol received => %u\n", symbol);
     ethermini_on_symbol(&network, symbol);
 }
 

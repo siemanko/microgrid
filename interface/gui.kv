@@ -1,0 +1,42 @@
+#:kivy 1.0.9
+
+#:import label kivy.uix.label
+#:import sla kivy.adapters.simplelistadapter
+#:import c controller
+<MenuView>:
+    orientation: 'vertical'
+    spacing: 10
+    Button:
+        size_hint: (1, 0.1)
+        text: 'Clear screen'
+        on_press: c.get.clear_logs()
+    Button
+        size_hint: (1, 0.1)
+        text: 'me toooooooooo!'
+    Label:
+
+<LogsView>:
+    logs_list: id_logs_list
+
+    ListView:
+        id: id_logs_list
+        adapter:
+            sla.SimpleListAdapter(
+            data=[],
+            cls=label.Label)
+
+<RootView>:
+    logs: id_logs.logs_list
+    orientation: 'horizontal'
+    spacing: 10
+
+    MenuView:
+        size_hint: (.35,1)
+        id: id_menu
+
+    LogsView:
+        size_hint: (.65,1)
+        id: id_logs
+
+
+

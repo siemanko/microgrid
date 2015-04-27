@@ -10,9 +10,18 @@
 
 #include "communication/computer.h"
 
+#define COMPUTER ((uint8_t)254)
+
 void init_communication();
 
-void test_comm();
+// only works for messages with zero at the end.
+// takes ownership of content.
+void send_string(uint8_t* msg, uint8_t destination);
+
+// takes ownership of content.
+void send(uint8_t* msg, uint8_t length, uint8_t destination);
+
+void communication_step();
 
 #endif	/* INTERFACE_H */
 

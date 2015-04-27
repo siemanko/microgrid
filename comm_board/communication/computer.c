@@ -13,7 +13,11 @@ void init_computer_communication() {
     make_ethermini(&network, put_uart1);
 }
 
-void computer_send_message(EtherminiMessage* msg) {
+void computer_send_message(Message* msg) {
     // TODO(szymon): add to queue.
-    ethermini_send_immediately(&network, msg);
+    ethermini_send(&network, msg);
+}
+
+void computer_step() {
+    ethermini_step(&network);
 }

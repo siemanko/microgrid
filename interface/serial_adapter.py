@@ -30,6 +30,7 @@ class SerialAdapter(object):
             while not self.thread_should_stop:
                 x = [ ord(x) for x in self.s.read(1)]
                 if len(x) > 0:
+                    print 'traffic: ', x[0]
                     on_symbol(x[0])
                 msg = receive_message()
 

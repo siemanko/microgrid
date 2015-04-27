@@ -4,12 +4,13 @@
 #include <stdint.h>
 
 #include "shared/communication/ethermini.h"
+#include "shared/communication/message.h"
 
-#define COMPUTER_UID 254
 
 void init_computer_communication();
 
-void computer_send_message(EtherminiMessage *msg);
+void computer_send_message(Message *msg);
 
+void computer_step();
 
 #endif

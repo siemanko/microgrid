@@ -21,5 +21,9 @@ void init_random();
 
 uint16_t get_random_int();
 
+char* copy_string(const char*);
+
+char* copy_array(const char*, int length);
+
 #endif	/* LIBRARYFUNCTIONS_H */
 

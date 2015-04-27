@@ -50,3 +50,22 @@ void init_random(){
 uint16_t get_random_int(){
     return rand();
 }
+
+char* copy_string(const char* input) {
+    int length = strlen(input);
+    char* ret = malloc(sizeof(char)*(length + 1));
+    int i;
+    for(i=0; i<length+1; ++i) {
+        ret[i] = input[i];
+    }
+    return ret;
+}
+
+char* copy_array(const char* input, int length) {
+    char* ret = malloc(sizeof(char)*length);
+    int i;
+    for(i=0; i<length; ++i) {
+        ret[i] = input[i];
+    }
+    return ret;
+}
