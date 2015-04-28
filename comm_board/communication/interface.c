@@ -3,8 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "communication/messages.h"
+
 void init_communication() {
     init_computer_communication();
+    register_misc_message_handlers();
 }
 
 void send_string(uint8_t* msg, uint8_t destination) {
