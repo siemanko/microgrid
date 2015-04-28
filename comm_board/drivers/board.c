@@ -23,6 +23,16 @@
 
 #define SYS_FREQUENCY 36850000
 
+// Internal FRC Oscillator
+_FOSCSEL(FNOSC_FRCPLL);  // FRC Oscillator
+_FOSC(FCKSM_CSECMD & OSCIOFNC_OFF  & POSCMD_NONE);   // Clock Switching is enabled and Fail Safe Clock Monitor is disabled
+						     // OSC2 Pin Function: OSC2 is Clock Output
+                                                     // Primary Oscillator Mode: Disabled
+_FWDT(FWDTEN_OFF);              // Watchdog Timer Enabled/disabled by user software
+_FGS(GWRP_OFF); // General segment Write protect turned off
+_FICD(ICS_PGD2 & JTAGEN_OFF) // Select Debug/Program Lines and JTAG OFF
+
+
 static void init_pins(void) {
     // auxilary output for testing
     TRIS_AUX = TRIS_OUTPUT;

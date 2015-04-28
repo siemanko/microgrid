@@ -13,10 +13,6 @@ void long_to_bytes(uint32_t source, uint8_t* destination);
 
 uint32_t bytes_to_long(uint8_t* source);
 
-void blink_led(void);
-
-void slow_blink(void);
-
 void init_random();
 
 uint16_t get_random_int();

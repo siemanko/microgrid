@@ -25,7 +25,6 @@ class SerialAdapter(object):
         self.start_polling()
         self.message_callback = callback
         init_communication()
-        self.send('o hai')
 
     def start_polling(self):
         self.thread_should_stop = False

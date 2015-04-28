@@ -16,6 +16,7 @@ from os.path import dirname, realpath, join
 
 import controller
 
+from message_handler import MessageHandler
 from serial_adapter import SerialAdapter
 
 SCRIPT_DIR = dirname(realpath(__file__))
@@ -35,10 +36,11 @@ class RootView(BoxLayout):
 
         self.serial = SerialAdapter('/dev/ttyUSB0',
                                     self.on_message)
+        self.message_handler = MessageHandler(self)
+
 
     def on_message(self, msg):
-        self.logs.adapter.data.append(
-            'Very long examplanation of the message:' + msg)
+        self.message_handler.handle(msg)
 
 class MicrogridApp(App):
     def build(self):

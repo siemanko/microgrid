@@ -45,11 +45,11 @@ void c_on_symbol(unsigned char symbol) {
     ethermini_on_symbol(&network, symbol);
 }
 
-char* c_receive_message() {
+unsigned char* c_receive_message(int* length) {
     Message* msg =
             (Message*)ethermini_receive_message(&network);
     if (msg) {
-        char* ret = (char*)malloc(sizeof(uint8_t) *
+        unsigned char* ret = (unsigned char*)malloc(sizeof(uint8_t) *
                            (msg->length + 1));
 
         int i;
@@ -57,8 +57,10 @@ char* c_receive_message() {
             ret[i] = msg->content[i];
         }
         ret[msg->length] = 0;
+        *length = msg->length;
         return ret;
     } else {
+        *length = 0;
         return 0;
     }
     //return "o hai";
