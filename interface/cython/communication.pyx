@@ -2,7 +2,7 @@ cdef extern from "communication_wrapper.h":
     cdef unsigned char* c_receive_message(int*)
     cdef void c_init_communication()
     cdef void c_on_symbol(unsigned char)
-    cdef void c_send_message(char*)
+    cdef void c_send_message(char*, int)
     cdef int c_outgoing_empty()
     cdef unsigned char c_outgoing_get()
 
@@ -29,4 +29,4 @@ def get_outgoing_char():
         return c_outgoing_get()
 
 def send_message(msg):
-    c_send_message(msg)
+    c_send_message(msg, len(msg))

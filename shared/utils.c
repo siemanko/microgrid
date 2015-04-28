@@ -69,3 +69,12 @@ char* copy_array(const char* input, int length) {
     }
     return ret;
 }
+
+int str_prefix_equal(char* s1, char* s2, int prefix) {
+    int i;
+    for(i=0; i<prefix; ++i) {
+        if (s1[i] != s2[i])
+            break;
+    }
+    return i == prefix;
+}

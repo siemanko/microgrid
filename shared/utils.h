@@ -21,5 +21,9 @@ char* copy_string(const char*);
 
 char* copy_array(const char*, int length);
 
+// compares first <prefix> bytes of two strings
+// returns 1 if equal zero otherwise.
+int str_prefix_equal(char* s1, char* s2, int prefix);
+
 #endif	/* LIBRARYFUNCTIONS_H */
 

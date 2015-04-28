@@ -11,6 +11,8 @@ from bindings.communication import (
     send_message,
 )
 
+debug_bytes = False
+
 # TODO(szymon): make reliable
 
 class SerialAdapter(object):
@@ -33,6 +35,8 @@ class SerialAdapter(object):
             while not self.thread_should_stop:
                 x = [ ord(x) for x in self.s.read(1)]
                 if len(x) > 0:
+                    if debug_bytes:
+                        print 'INCOMING traffic: ', x[0]
                     self.recent_traffic[0] = x[0]
                     on_symbol(x[0])
                 msg = receive_message()
@@ -42,6 +46,8 @@ class SerialAdapter(object):
                 outgoing_char = get_outgoing_char()
                 if outgoing_char is not None:
                     self.s.write([outgoing_char])
+                    if debug_bytes:
+                        print 'OUTGOING traffic: ', outgoing_char
                     self.recent_traffic[1] = outgoing_char
 
         self.polling_thread = Thread(target=thread_loop)

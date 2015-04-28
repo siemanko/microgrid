@@ -23,11 +23,11 @@ void put_char(uint8_t symbol) {
     cb_push(&outgoing_characters, (void*)symbol);
 }
 
-void c_send_message(char* content) {
+void c_send_message(char* content, int length) {
     Message msg;
-    msg.length = strlen(content);
+    msg.length = length;
     msg.source = 254;
-    msg.destination = 1;
+    msg.destination = 255;
     msg.content = content;
     ethermini_send_immediately(&network, &msg);
 }

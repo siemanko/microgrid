@@ -1,5 +1,14 @@
 from kivy.clock import Clock
 
+# This should be identical to messages.c enum MessageType
+# in comm_board code.
+class MessageType(object):
+    PING = 0
+
+
+def ints_to_bytes(ints):
+    return ''.join([ chr(x) for x in ints])
+
 class Ctrl(object):
     def __init__(self, root):
         self.root = root
@@ -10,7 +19,7 @@ class Ctrl(object):
         self.root.logs.adapter.data = []
 
     def send_ping(self):
-        self.root.serial.send('ping')
+        self.root.serial.send(ints_to_bytes([MessageType.PING]))
 
     def update_indicators(self, *largs):
         inbound, outbound = self.root.serial.pop_recent_traffic()
