@@ -31,5 +31,8 @@ uint32_t time_seconds_since_epoch();
 
 // Time since 1 Jan 1970 in milliseconds.
 uint64_t time_milliseconds_since_epoch();
+
+// Time travel.
+void time_set_seconds_since_epoch(uint32_t value);
 #endif	/* DELAYS_H */
 

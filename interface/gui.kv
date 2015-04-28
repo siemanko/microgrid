@@ -20,10 +20,17 @@
         size_hint: (1, 0.1)
         text: 'Ping'
         on_press: c.get.send_ping()
-    Button
+    BoxLayout:
         size_hint: (1, 0.1)
-        text: 'Time?'
-        on_press: c.get.get_time()
+        orientation: 'horizontal'
+        Button:
+            size_hint: (0.5, 1)
+            text: 'Time?'
+            on_press: c.get.get_time()
+        Button:
+            size_hint: (0.5, 1)
+            text: 'Sync time'
+            on_press: c.get.sync_time()
     Label:
 
 <IndicatorView>

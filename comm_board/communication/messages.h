@@ -6,6 +6,7 @@
 typedef enum {
     UMSG_PING = 0,
     UMSG_GET_TIME = 1,
+    UMSG_SET_TIME = 2,
     // leave last (also make sure no gaps above)
     UMSG_TOTAL_MESSAGES 
 } MessageToUlink; 

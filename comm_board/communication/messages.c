@@ -35,9 +35,14 @@ void get_time_handler(Message* msg) {
     send_mb(&mb, COMPUTER);
 }
 
+void set_time_handler(Message* msg) {
+    uint32_t ts = bytes_to_long(msg->content + 1);
+    time_set_seconds_since_epoch(ts);
+}
+
 void register_misc_message_handlers() {
     set_message_handler(UMSG_PING, ping_handler);
     set_message_handler(UMSG_GET_TIME, get_time_handler);
-
+    set_message_handler(UMSG_SET_TIME, set_time_handler);
 }
 

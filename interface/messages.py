@@ -2,6 +2,7 @@
 class ToUlink(object):
     PING = 0
     GET_TIME = 1
+    SET_TIME = 2
 
 class ToComputer(object):
     DEBUG = 0

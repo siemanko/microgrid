@@ -87,3 +87,7 @@ uint32_t time_seconds_since_epoch() {
 uint64_t time_milliseconds_since_epoch() {
     return (uint64_t)abs_time_s * 1000 + abs_time_ms;
 }
+
+void time_set_seconds_since_epoch(uint32_t value) {
+    abs_time_s = value;
+}
