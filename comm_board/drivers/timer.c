@@ -2,8 +2,11 @@
 
 #include <p33EP512GM710.h>
 
+#define CYCLES_PER_SECOND 35000000L
 
 void init_timer(void) {
+    // Set up 32 bit clock for high resolution delays.
+    
     T8CONbits.TON = 0;       // Disable Timer
     T8CONbits.TCS = 0;       // Select internal instruction cycle clock
     T8CONbits.TGATE = 0;     // Disable Gated Timer mode
@@ -13,10 +16,20 @@ void init_timer(void) {
     T9CONbits.TSIDL = 0;     // ditto
     TMR9HLD = 0x00;          // reset timer register
     TMR8 = 0x00;             // ditto
-    //IPC0bits.T1IP = 0x01; // Set Timer 1 Interrupt Priority Level
-    //IFS0bits.T1IF = 0; // Clear Timer 1 Interrupt Flag
-    ///IEC0bits.T1IE = 1; // Enable Timer1 interrupt
     T8CONbits.TON = 1; // Start Timer
+    
+    // Setup absolute time clock
+    // EXPLENATION FOR RESET/INTERRUPT PERIOD
+    // SYS_FREQUENCY / (PRESCALER * MILLISECONDS_IN_SECONDS)
+    // 36850000 / (256 * 1000)
+    PR1 = 144;
+
+    T1CONbits.TON = 1;
+    T1CONbits.TCKPS = 0b11; // PRESCALER: 256
+
+    IPC0bits.T1IP = 6;
+    IFS0bits.T1IF = 0;
+    IEC0bits.T1IE = 1;
 }
 
 // Inline to make next cycle be time zero.
@@ -25,30 +38,52 @@ inline void reset_time() {
     TMR8 =    0x00;
 }
 
-inline long timer_cycles(void) {
-     long lsw = TMR8;
-     long msw = TMR9HLD;
-     return msw*((long)1<<(long)16) + lsw;
+inline uint32_t timer_cycles(void) {
+     uint32_t lsw = TMR8;
+     uint32_t msw = TMR9HLD;
+     return msw*((uint32_t)1<<(uint32_t)16) + lsw;
 }
 
-void delay_cycles(long cycles) {
+void delay_cycles(uint32_t cycles) {
     reset_time();
     // ideally one would subtract execution of get_time()...
     while(timer_cycles()<cycles);
 }
 
 
-void delay_ms(long ms) {
+void delay_ms(uint32_t ms) {
     delay_cycles(ms * (CYCLES_PER_SECOND/1000L));
 }
 
-void delay_us(long us) {
+void delay_us(uint32_t us) {
     delay_cycles(us * (CYCLES_PER_SECOND/1000000L));
 }
 
-void delay_ns(long ns) {
+void delay_ns(uint32_t ns) {
     // This funny formula tries to avoid overflow for large number of ns.
     delay_cycles((ns * (CYCLES_PER_SECOND/1000000L))/1000L );
-
 }
 
+static uint32_t abs_time_s = 0;
+static uint16_t abs_time_ms = 0;
+
+void __attribute__((__interrupt__,auto_psv)) _T1Interrupt(void){
+    ++abs_time_ms;
+    if (abs_time_ms == 1000) {
+        abs_time_ms = 0;
+        ++abs_time_s;
+    }
+    IFS0bits.T1IF = 0;    
+}
+
+uint16_t time_milliseconds() {
+    return abs_time_ms;
+}
+
+uint32_t time_seconds_since_epoch() {
+    return abs_time_s;
+}
+
+uint64_t time_milliseconds_since_epoch() {
+    return (uint64_t)abs_time_s * 1000 + abs_time_ms;
+}

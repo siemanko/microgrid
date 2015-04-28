@@ -2,8 +2,9 @@
 
 #include <stdlib.h>
 #include <string.h>
-
 #include <stdio.h>
+
+#include "shared/utils.h"
 
 void make_mb(MessageBuilder* mb, int capacity) {
     mb->next_char = 0;
@@ -107,6 +108,25 @@ void mb_add_int(MessageBuilder* mb, int d) {
     mb_add_int_noprefix(mb, d);
 }
 
+void mb_add_uint32_noprefix(MessageBuilder* mb, uint32_t ld) {
+    mb_ensure_capacity(mb, 4);
+    
+    uint8_t ld_bytes[4];
+    uint32_to_bytes(ld, ld_bytes);
+    int i;
+    for (i=0; i<4; ++i) {
+        mb_add_char(mb, ld_bytes[i]);
+    }
+}
+
+void mb_add_uint32(MessageBuilder* mb, uint32_t ld) {
+    mb_ensure_capacity(mb, 6);
+    
+    mb_add_char(mb, '%');
+    mb_add_char(mb, 'l');
+    
+    mb_add_uint32_noprefix(mb, ld);
+}
 
 void mb_add_formated(MessageBuilder* mb, char* format, ...) {
 
@@ -135,6 +155,9 @@ void mb_add_formated_args(MessageBuilder* mb, char* format, va_list args) {
             ++i;
         } else if (format[i] == '%' && format[i+1] == 'f') {
             mb_add_float(mb, va_arg(args, float));
+            ++i;
+        } else if (format[i] == '%' && format[i+1] == 'l') {
+            mb_add_uint32(mb, va_arg(args, uint32_t));
             ++i;
         } else { 
             mb_add_char(mb, format[i]);

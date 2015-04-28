@@ -26,7 +26,7 @@ int bytes_to_int(uint8_t* raw){
     return (uint16_t)raw[0] + ((uint16_t)(raw[1])<<8);
 }
 
-void long_to_bytes(uint32_t source, uint8_t* destination) {
+void uint32_to_bytes(uint32_t source, uint8_t* destination) {
     destination[0] = source & 0xFF;
     destination[1] = (source>>8) & 0xFF;
     destination[2] = (source>>16) & 0xFF;

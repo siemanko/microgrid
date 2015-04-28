@@ -24,6 +24,13 @@ def parse_message(msg):
             parsed_message.append(parsed_float)
             last_open_str = i + 6
             i = i + 6
+        elif msg[i:(i+2)] == '%l':
+            store_string_so_far()
+            uint32_bytes = msg[(i+2):(i+6)]
+            parsed_uint32 = struct.unpack('<I', uint32_bytes)[0]
+            parsed_message.append(parsed_uint32)
+            last_open_str = i + 6
+            i = i + 6
         else:
             if i+1 == len(msg):
                 i += 1
@@ -40,6 +47,14 @@ class MessageHandler(object):
         self.ui_root = ui_root
 
     def handle(self, msg):
-        msg = parse_message(msg)
-        msg = ''.join([str(m) for m in msg])
-        self.ui_root.logs.adapter.data.append(msg)
+        if msg[0] == 'd':
+            # debug message
+            subsystem = [
+                'MISC'
+            ][ord(msg[1])]
+            content = parse_message(msg[2:])
+            content = ''.join([str(m) for m in content])
+            content = '[%s] %s' % (subsystem, content)
+            self.ui_root.logs.adapter.data.append(content)
+        else:
+            print 'WARNING: Uknown message type :', ord(msg[0])

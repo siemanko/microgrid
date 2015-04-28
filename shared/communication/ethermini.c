@@ -63,7 +63,7 @@ void ethermini_send_immediately(Ethermini *e, Message *msg) {
         e->put(msg->content[msg_idx]);
     }
     uint8_t cc[4];
-    long_to_bytes(checksum(msg), cc);
+    uint32_to_bytes(checksum(msg), cc);
     int ccidx;
     for (ccidx = 0; ccidx < 4; ++ccidx) {
         e->put(cc[ccidx]);

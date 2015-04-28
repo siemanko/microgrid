@@ -1,13 +1,12 @@
+#include "communication/interface.h"
 #include "drivers/board.h"
 #include "drivers/timer.h"
 #include "drivers/lcd.h"
 #include "drivers/hindi.h"
 #include "drivers/uart.h"
-
-#include "communication/interface.h"
 #include "shared/utils.h"
-
 #include "shared/communication/utils/message_builder.h"
+#include "utils/debug.h"
 
 void init(void) {
     init_board();
@@ -25,14 +24,12 @@ int main() {
     init();
     
     LCD_set_custom_char_map(hindi_chars);
-        
+
     while(1) {
         LCD_reset();
-        MessageBuilder mb;
-        make_mb(&mb, 11);
-        mb_add_formated(&mb, "pozdro%f!!! (yeah: %d)", 3.14, 111);
-        send((uint8_t*)mb.message, mb.next_char, COMPUTER);
-        
+
+        debug(DEBUG_MISC, "hello %f!!! (yeah: %l)", 3.14, 
+                time_seconds_since_epoch());
         LCD_replace_row("hello", LCD_ROW_TOP);
         delay_ms(1000);
         LCD_reset();

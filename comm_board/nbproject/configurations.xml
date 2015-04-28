@@ -58,6 +58,10 @@
                      projectFiles="true">
         <itemPath>drivers/hindi.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="utils" displayName="utils" projectFiles="true">
+        <itemPath>utils/debug.c</itemPath>
+        <itemPath>utils/debug.h</itemPath>
+      </logicalFolder>
       <itemPath>main.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -72,6 +76,7 @@
     <Elem>../shared</Elem>
     <Elem>computer_communication</Elem>
     <Elem>communication</Elem>
+    <Elem>utils</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

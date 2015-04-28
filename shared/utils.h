@@ -9,7 +9,7 @@ void int_to_bytes(int source, uint8_t* destination);
 
 int bytes_to_int(uint8_t* source);
 
-void long_to_bytes(uint32_t source, uint8_t* destination);
+void uint32_to_bytes(uint32_t source, uint8_t* destination);
 
 uint32_t bytes_to_long(uint8_t* source);
 

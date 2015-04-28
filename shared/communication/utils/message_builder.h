@@ -9,6 +9,7 @@
 #define	SHARED_COMMUNICATION_UTILS_MESSAGEBUILDER_H
 
 #include <stdarg.h>
+#include <stdint.h>
 
 typedef struct StructMessageBuilder {
     int next_char;
@@ -34,10 +35,13 @@ void mb_add_int(MessageBuilder* mb, int d);
 // Uses six bytes.
 void mb_add_float(MessageBuilder* mb, float f);
 
+// Uses six bytes
+void mb_add_uint32(MessageBuilder* mb, uint32_t ld);
+
 // Accepts print like syntax
 void mb_add_formated(MessageBuilder* mb, char* format, ...);
 
-// Accepts already initiated args - useful for wrapping
+// Accepts already initiated arguments - useful for wrapping
 // build function.- 
 void mb_add_formated_args(MessageBuilder* mb, char* format, va_list args);
 
