@@ -17,6 +17,9 @@ class Ctrl(object):
     def send_ping(self):
         self.root.serial.send(ints_to_bytes([ToUlink.PING]))
 
+    def get_time(self):
+        self.root.serial.send(ints_to_bytes([ToUlink.GET_TIME]))
+
     def update_indicators(self, *largs):
         inbound, outbound = self.root.serial.pop_recent_traffic()
         self.root.indicators.update(inbound, outbound)

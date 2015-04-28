@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "communication/messages.h"
+#include "shared/communication/utils/message_builder.h"
 
 void init_communication() {
     init_computer_communication();
@@ -29,6 +30,11 @@ void send(uint8_t* content, uint8_t length, uint8_t destination) {
         // not yet implemented
     }
 }
+
+void send_mb(MessageBuilder* mb, uint8_t destination) {
+    send((uint8_t*)mb->message, mb->next_char, destination);
+}
+
 
 void communication_step() {
     computer_step();

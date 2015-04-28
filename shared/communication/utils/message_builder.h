@@ -32,11 +32,20 @@ void mb_add_char(MessageBuilder* mb, char chr);
 // Uses four bytes.
 void mb_add_int(MessageBuilder* mb, int d);
 
+// Uses two bytes
+void mb_add_int_noprefix(MessageBuilder* mb, int d);
+
 // Uses six bytes.
 void mb_add_float(MessageBuilder* mb, float f);
 
+// Uses four bytes
+void mb_add_float_noprefix(MessageBuilder* mb, float f);
+
 // Uses six bytes
 void mb_add_uint32(MessageBuilder* mb, uint32_t ld);
+
+// Uses four bytes.
+void mb_add_uint32_noprefix(MessageBuilder* mb, uint32_t ld);
 
 // Accepts print like syntax
 void mb_add_formated(MessageBuilder* mb, char* format, ...);

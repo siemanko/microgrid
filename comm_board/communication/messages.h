@@ -12,6 +12,7 @@ typedef enum {
 
 typedef enum {
     CMSG_DEBUG = 0,
+    CMSG_GET_TIME_REPLY = 1,
     // leave last (also make sure no gaps above)
     CMSG_TOTAL_MESSAGES
 } MessageToComputer;
