@@ -3,6 +3,12 @@
 #:import label kivy.uix.label
 #:import sla kivy.adapters.simplelistadapter
 #:import c controller
+
+<SaneLabel>:
+    size_hint_y: None
+    text_size: self.width, None
+    height: self.texture_size[1]
+
 <MenuView>:
     orientation: 'vertical'
     spacing: 10
@@ -16,11 +22,25 @@
         on_press: c.get.send_ping()
     Label:
 
+<IndicatorView>
+    orientation: 'horizontal'
+    spacing:0
+    Label:
+    SaneLabel:
+        size_hint: (0.2, 1)
+
+        text: self.parent.inbound_traffic_text
+    SaneLabel:
+        size_hint: (0.2, 1)
+        text: self.parent.outbound_traffic_text
+
+
 <LogsView>:
     logs_list: id_logs_list
 
     ListView:
         id: id_logs_list
+        scrolling: True
         adapter:
             sla.SimpleListAdapter(
             data=[],
@@ -28,6 +48,7 @@
 
 <RootView>:
     logs: id_logs.logs_list
+    indicators: id_indicators
     orientation: 'horizontal'
     spacing: 10
 
@@ -35,9 +56,15 @@
         size_hint: (.35,1)
         id: id_menu
 
-    LogsView:
+    BoxLayout:
         size_hint: (.65,1)
-        id: id_logs
+        orientation: 'vertical'
+        LogsView:
+            size_hint: (1, 0.9)
+            id: id_logs
 
+        IndicatorView:
+            size_hint: (1, 0.1)
+            id: id_indicators
 
 

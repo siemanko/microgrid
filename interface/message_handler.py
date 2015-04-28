@@ -40,7 +40,6 @@ class MessageHandler(object):
         self.ui_root = ui_root
 
     def handle(self, msg):
-        print list(msg)
         msg = parse_message(msg)
         msg = ''.join([str(m) for m in msg])
         self.ui_root.logs.adapter.data.append(msg)

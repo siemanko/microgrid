@@ -3,6 +3,7 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.properties import (
     ObjectProperty,
+    StringProperty,
 )
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
@@ -21,6 +22,19 @@ from serial_adapter import SerialAdapter
 
 SCRIPT_DIR = dirname(realpath(__file__))
 Builder.load_file(join(SCRIPT_DIR, 'gui.kv'))
+
+class SaneLabel(Label):
+    pass
+
+class IndicatorView(BoxLayout):
+    inbound_traffic_text = StringProperty('IN:')
+    outbound_traffic_text = StringProperty('OUT:')
+
+    def update(self, inbound, outbound):
+        in_str = str(inbound or '')
+        out_str = str(outbound or '')
+        self.inbound_traffic_text = 'IN: ' + in_str
+        self.outbound_traffic_text = 'OUT: ' + out_str
 
 class LogsView(BoxLayout):
     pass
