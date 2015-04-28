@@ -1,5 +1,7 @@
 import struct
 
+from messages import ToComputer, ToUlink
+
 def parse_message(msg):
     parsed_message = []
     i = 0
@@ -47,7 +49,8 @@ class MessageHandler(object):
         self.ui_root = ui_root
 
     def handle(self, msg):
-        if msg[0] == 'd':
+        msg_type = ord(msg[0])
+        if msg_type == ToComputer.DEBUG:
             # debug message
             subsystem = [
                 'MISC'
