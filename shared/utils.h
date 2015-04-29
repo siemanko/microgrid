@@ -1,7 +1,10 @@
-#include "stdint.h"
-
 #ifndef SHARED_UTILS_H
 #define	SHARED_UTILS_H
+
+#include <stdint.h>
+#include <stdarg.h>
+
+#define ASSERT(condition) internal_assert((condition), "%s (%s:%d)", ( #condition ) , __FILE__, __LINE__)
 
 float bytes_to_float(uint8_t raw[]);
 
@@ -24,6 +27,10 @@ char* copy_array(const char*, int length);
 // compares first <prefix> bytes of two strings
 // returns 1 if equal zero otherwise.
 int str_prefix_equal(char* s1, char* s2, int prefix);
+
+void internal_assert(int condition, char* format, ...);
+
+void set_assert_callback(void (*callback)(char*, va_list));
 
 #endif	/* LIBRARYFUNCTIONS_H */
 

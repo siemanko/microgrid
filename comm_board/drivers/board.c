@@ -1,5 +1,8 @@
 #include "board.h"
 
+#include <p33EP512GM710.h>
+
+
 #define TRIS_INPUT 1
 #define TRIS_OUTPUT 0
 

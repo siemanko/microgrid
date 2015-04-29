@@ -24,6 +24,10 @@ void computer_send_message(Message* msg) {
     ethermini_send(&network, msg);
 }
 
+void computer_send_message_unsafe(Message *msg) {
+    ethermini_send_immediately(&network, msg);
+}
+
 void computer_step() {
     ethermini_step(&network);
 }

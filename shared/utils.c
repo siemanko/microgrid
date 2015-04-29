@@ -78,3 +78,18 @@ int str_prefix_equal(char* s1, char* s2, int prefix) {
     }
     return i == prefix;
 }
+
+static void (*assert_callback)(char*, va_list);
+
+void internal_assert(int condition, char* format, ...) {
+    if (!condition && assert_callback != 0) {
+        va_list args;
+        va_start(args, format);
+        assert_callback(format, args);
+        va_end(args);
+    }
+}
+
+void set_assert_callback(void (*callback)(char*, va_list)) {
+    assert_callback = callback;
+}

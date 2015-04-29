@@ -38,6 +38,8 @@
           <itemPath>../shared/algorithm/circular_buffer.h</itemPath>
           <itemPath>../shared/algorithm/set.c</itemPath>
           <itemPath>../shared/algorithm/set.h</itemPath>
+          <itemPath>shared/algorithm/vector.c</itemPath>
+          <itemPath>shared/algorithm/vector.h</itemPath>
         </logicalFolder>
         <logicalFolder name="communication"
                        displayName="communication"
@@ -61,8 +63,13 @@
       <logicalFolder name="utils" displayName="utils" projectFiles="true">
         <itemPath>utils/debug.c</itemPath>
         <itemPath>utils/debug.h</itemPath>
+        <itemPath>utils/cron.c</itemPath>
+        <itemPath>utils/cron.h</itemPath>
+        <itemPath>utils/misc.c</itemPath>
+        <itemPath>utils/misc.h</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
+      <itemPath>constants.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

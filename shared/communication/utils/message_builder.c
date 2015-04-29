@@ -147,7 +147,8 @@ void mb_add_formated_args(MessageBuilder* mb, char* format, va_list args) {
         if (format[i-1] == '%' && format[i] == 'd') ++num_ints;
         if (format[i-1] == '%' && format[i] == 'f') ++num_floats;
     }
-    mb_ensure_capacity(mb, str_length + 2*num_ints + 4*num_floats);
+    int capacity_guess = str_length + 2*num_ints + 4*num_floats;
+    mb_ensure_capacity(mb, capacity_guess);
     
     for(i=0; i < str_length; ++i) {
         if (format[i] == '%' && format[i+1] == 'd') {
@@ -158,6 +159,12 @@ void mb_add_formated_args(MessageBuilder* mb, char* format, va_list args) {
             ++i;
         } else if (format[i] == '%' && format[i+1] == 'l') {
             mb_add_uint32(mb, va_arg(args, uint32_t));
+            ++i;
+        } else if (format[i] == '%' && format[i+1] == 's') {
+            char* substring = va_arg(args, char*);
+            capacity_guess += strlen(substring);
+            mb_ensure_capacity(mb, capacity_guess);
+            mb_add_string(mb, substring);
             ++i;
         } else { 
             mb_add_char(mb, format[i]);

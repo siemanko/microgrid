@@ -7,11 +7,14 @@
 #include "shared/utils.h"
 #include "shared/communication/utils/message_builder.h"
 #include "utils/debug.h"
+#include "utils/misc.h"
 
 void init(void) {
     init_board();
    
     init_timer();
+    
+    init_assert();
         
     init_communication();
     
@@ -25,11 +28,13 @@ int main() {
     
     LCD_set_custom_char_map(hindi_chars);
 
+    ASSERT(2==3);
+    
     while(1) {
         LCD_reset();
 
-        debug(DEBUG_MISC, "hello %f!!! (yeah: %l)", 3.14, 
-                time_seconds_since_epoch());
+        debug(DEBUG_MISC, "hello %f!!! (yeah: %d)", 3.14, 
+                sizeof(void (*)()));
         LCD_replace_row("hello", LCD_ROW_TOP);
         delay_ms(1000);
         LCD_reset();

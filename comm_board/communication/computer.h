@@ -11,6 +11,8 @@ void init_computer_communication();
 
 void computer_send_message(Message *msg);
 
+void computer_send_message_unsafe(Message *msg);
+
 void computer_step();
 
 #endif
