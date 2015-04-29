@@ -122,7 +122,7 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
     } else if (e->state == CHECKSUM) {
         e->checksum_buffer[e->state_aux++] = symbol;
         if (e->state_aux == 4) {
-            uint32_t cc_received = bytes_to_long(e->checksum_buffer);
+            uint32_t cc_received = bytes_to_uint32(e->checksum_buffer);
             uint32_t cc_computed = checksum(e->msg_receive_buffer);
             if (cc_received == cc_computed) {
                 cb_push(e->inbound_messages, e->msg_receive_buffer);

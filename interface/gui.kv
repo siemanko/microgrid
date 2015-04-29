@@ -3,11 +3,16 @@
 #:import label kivy.uix.label
 #:import sla kivy.adapters.simplelistadapter
 #:import c controller
+#:import gui gui
 
 <SaneLabel>:
     size_hint_y: None
     text_size: self.width, None
     height: self.texture_size[1]
+
+<LogEntry>:
+    font_name: 'DroidSansMono'
+
 
 <MenuView>:
     orientation: 'vertical'
@@ -35,6 +40,10 @@
         size_hint: (1, 0.1)
         text: 'Cron stats'
         on_press: c.get.cron_stats()
+    Button:
+        size_hint: (1, 0.1)
+        text: 'Reboot'
+        on_press: c.get.reset_pic()
     Label:
 
 <IndicatorView>
@@ -59,7 +68,7 @@
         adapter:
             sla.SimpleListAdapter(
             data=[],
-            cls=label.Label)
+            cls=gui.LogEntry)
 
 <RootView>:
     logs: id_logs.logs_list

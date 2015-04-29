@@ -14,7 +14,7 @@ int bytes_to_int(uint8_t* source);
 
 void uint32_to_bytes(uint32_t source, uint8_t* destination);
 
-uint32_t bytes_to_long(uint8_t* source);
+uint32_t bytes_to_uint32(uint8_t* source);
 
 void init_random();
 

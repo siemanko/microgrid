@@ -37,14 +37,19 @@ void get_time_handler(Message* msg) {
 }
 
 void set_time_handler(Message* msg) {
-    uint32_t ts = bytes_to_long(msg->content + 1);
+    uint32_t ts = bytes_to_uint32(msg->content + 1);
     time_set_seconds_since_epoch(ts);
     cron_reset_timers();
+}
+
+void reset_pic_handler(Message* msg) {
+    asm("RESET");
 }
 
 void register_misc_message_handlers() {
     set_message_handler(UMSG_PING, ping_handler);
     set_message_handler(UMSG_GET_TIME, get_time_handler);
     set_message_handler(UMSG_SET_TIME, set_time_handler);
+    set_message_handler(UMSG_RESET_PIC, reset_pic_handler);
 }
 

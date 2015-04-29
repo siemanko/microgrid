@@ -40,10 +40,15 @@ class Ctrl(object):
     def get_time(self):
         mb = MessageBuilder(ToUlink.GET_TIME)
         self.send(mb.to_bytes())
+
     def sync_time(self):
         ts = int(time.time())
         mb = MessageBuilder(ToUlink.SET_TIME)
         mb.add_uint32(ts)
+        self.send(mb.to_bytes())
+
+    def reset_pic(self):
+        mb = MessageBuilder(ToUlink.RESET_PIC)
         self.send(mb.to_bytes())
 
     def update_indicators(self, *largs):

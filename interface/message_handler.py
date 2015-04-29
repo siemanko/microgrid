@@ -64,6 +64,9 @@ class MessageHandler(object):
         self.ui_root.logs.adapter.data.append(msg)
 
     def handle(self, msg):
+        if len(msg) == 0:
+            print 'WARNING: Empty message'
+            return
         msg_type = ord(msg[0])
         if msg_type == ToComputer.DEBUG:
             # debug message

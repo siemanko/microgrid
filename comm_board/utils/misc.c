@@ -8,7 +8,7 @@
 #include "shared/utils.h"
 
 void display_assert_message(char* format, va_list args) {
-    if (asserts_enabled) {
+    if (ASSERTS_ENABLED) {
         while(1) {
             // TODO(szymon): also display on LCD?
             debug_unsafe_args(DEBUG_ERROR, format, args);

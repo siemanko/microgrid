@@ -31,6 +31,8 @@
         <itemPath>drivers/lcd.c</itemPath>
         <itemPath>drivers/uart.c</itemPath>
         <itemPath>drivers/uart.h</itemPath>
+        <itemPath>drivers/eeprom.c</itemPath>
+        <itemPath>drivers/eeprom.h</itemPath>
       </logicalFolder>
       <logicalFolder name="shared" displayName="shared" projectFiles="true">
         <logicalFolder name="algorithm" displayName="algorithm" projectFiles="true">
@@ -70,6 +72,8 @@
       </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>constants.h</itemPath>
+      <itemPath>storage.c</itemPath>
+      <itemPath>storage.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
