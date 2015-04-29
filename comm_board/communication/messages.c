@@ -4,6 +4,7 @@
 #include "utils/debug.h"
 #include "drivers/timer.h"
 #include "shared/communication/utils/message_builder.h"
+#include "utils/cron.h"
 
 void (*message_handler[UMSG_TOTAL_MESSAGES])(Message*);
 
@@ -38,6 +39,7 @@ void get_time_handler(Message* msg) {
 void set_time_handler(Message* msg) {
     uint32_t ts = bytes_to_long(msg->content + 1);
     time_set_seconds_since_epoch(ts);
+    cron_reset_timers();
 }
 
 void register_misc_message_handlers() {

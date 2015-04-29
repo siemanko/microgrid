@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-#define ASSERT(condition) internal_assert((condition), "%s (%s:%d)", ( #condition ) , __FILE__, __LINE__)
+#define assert(condition) internal_assert((condition), "%s (%s:%d)", ( #condition ) , __FILE__, __LINE__)
 
 float bytes_to_float(uint8_t raw[]);
 
