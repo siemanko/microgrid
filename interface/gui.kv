@@ -16,7 +16,7 @@
         size_hint: (1, 0.1)
         text: 'Clear screen'
         on_press: c.get.clear_logs()
-    Button
+    Button:
         size_hint: (1, 0.1)
         text: 'Ping'
         on_press: c.get.send_ping()
@@ -31,6 +31,10 @@
             size_hint: (0.5, 1)
             text: 'Sync time'
             on_press: c.get.sync_time()
+    Button:
+        size_hint: (1, 0.1)
+        text: 'Cron stats'
+        on_press: c.get.cron_stats()
     Label:
 
 <IndicatorView>

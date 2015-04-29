@@ -6,6 +6,7 @@
 #include "shared/algorithm/vector.h"
 #include "shared/utils.h"
 #include "utils/debug.h"
+#include "communication/messages.h"
 
 // Vector of functions executed every iteration.
 static Vector repeat_rapid;
@@ -31,6 +32,8 @@ void init_cron() {
     make_vector(&repeat_rapid, 0, 1);
     make_vector(&repeat_s, 0, 1);
     make_vector(&repeat_ms, 0, 1);
+    
+    set_message_handler(UMSG_CRON_STATS, cron_print_stats);
 }
 
 void cron_repeat_rapidly(void (*callback)()) {
@@ -95,4 +98,8 @@ void cron_step() {
         }
     }
 
+}
+
+void cron_print_stats() {
+    debug(DEBUG_ERROR, "You must define CRON_STATS to use this feature.");
 }

@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#include <constants.h>
+
 void init_cron();
 
 void cron_repeat_rapidly(void (*callback)());
@@ -16,5 +18,7 @@ void cron_repeat_every_ms(uint32_t num_ms, void(*callback)());
 void cron_reset_timers();
 
 void cron_step();
+
+void cron_print_stats();
 
 #endif
