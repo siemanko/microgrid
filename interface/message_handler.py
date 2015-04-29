@@ -68,8 +68,9 @@ class MessageHandler(object):
         if msg_type == ToComputer.DEBUG:
             # debug message
             subsystem = [
-                'MISC',
+                'INFO',
                 'ERROR',
+                'CRON'
             ][ord(msg[1])]
             content = parse_message(msg[2:])
             content = ''.join([str(m) for m in content])

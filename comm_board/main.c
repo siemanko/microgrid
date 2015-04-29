@@ -27,7 +27,7 @@ void init(void) {
 }
 
 void say_hi() {
-    debug(DEBUG_MISC, "hello %f!!! (yeah: %d)", 3.14, sizeof(void (*)()));
+    debug(DEBUG_INFO, "hello %f!!! (yeah: %d)", 3.14, sizeof(void (*)()));
 }
 
 int round = 0;

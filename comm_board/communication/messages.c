@@ -25,7 +25,7 @@ void set_message_handler(MessageToUlink msg_type,
 }
 
 void ping_handler(Message* msg) {
-    debug(DEBUG_MISC, "pong");
+    debug(DEBUG_INFO, "pong");
 }
 
 void get_time_handler(Message* msg) {

@@ -3,8 +3,9 @@
 
 #include <stdarg.h>
 
-#define DEBUG_MISC  0
+#define DEBUG_INFO  0
 #define DEBUG_ERROR 1
+#define DEBUG_CRON  2
 
 void debug(char subsystem, char* format, ...);
 void debug_args(char subsystem, char* format, va_list args);
