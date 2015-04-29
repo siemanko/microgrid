@@ -23,6 +23,13 @@ void delay_us(uint32_t us);
 // Accuracy is +/- 14 ns.
 void delay_ns(uint32_t ns);
 
+// WARNING: this stopwatch is primarily meant for chrome
+// don't use! (ask szymon if you need a timer - at the time
+// of writing there's still plenty unused).
+void stopwatch_start();
+// Returns number of us since the last time stopwatch was called.
+uint32_t stopwatch_stop_us();
+
 // Number of milliseconds passed in current second.
 uint16_t time_milliseconds();
 

@@ -6,7 +6,6 @@
 
 void init_timer(void) {
     // Set up 32 bit clock for high resolution delays.
-    
     T8CONbits.TON = 0;       // Disable Timer
     T8CONbits.TCS = 0;       // Select internal instruction cycle clock
     T8CONbits.TGATE = 0;     // Disable Gated Timer mode
@@ -17,6 +16,20 @@ void init_timer(void) {
     TMR9HLD = 0x00;          // reset timer register
     TMR8 = 0x00;             // ditto
     T8CONbits.TON = 1; // Start Timer
+    
+    
+    // Set up 32 bit clock for stopwatch
+    T6CONbits.TON = 0;       // Disable Timer
+    T6CONbits.TCS = 0;       // Select internal instruction cycle clock
+    T6CONbits.TGATE = 0;     // Disable Gated Timer mode
+    T6CONbits.TCKPS = 0b000; // Select 1:1 Prescaler
+    T6CONbits.T32 = 1;       // Enable 32 bit mode
+    T6CONbits.TSIDL = 0;     // tick when idle
+    T7CONbits.TSIDL = 0;     // ditto
+    TMR7HLD = 0x00;          // reset timer register
+    TMR6 = 0x00;             // ditto
+    T6CONbits.TON = 1; // Start Timer
+    
     
     // Setup absolute time clock
     // EXPLENATION FOR RESET/INTERRUPT PERIOD
@@ -31,6 +44,9 @@ void init_timer(void) {
     IFS0bits.T1IF = 0;
     IEC0bits.T1IE = 1;
 }
+
+
+///////////////////////////// DELAYS ////////////////////////////////////////
 
 // Inline to make next cycle be time zero.
 inline void reset_time() {
@@ -63,6 +79,22 @@ void delay_ns(uint32_t ns) {
     // This funny formula tries to avoid overflow for large number of ns.
     delay_cycles((ns * (CYCLES_PER_SECOND/1000000L))/1000L );
 }
+
+void stopwatch_start() {
+    TMR7HLD = 0x00;
+    TMR6 =    0x00;    
+}
+
+uint32_t stopwatch_stop_us() {
+    uint32_t lsw = TMR6;
+    uint32_t msw = TMR7HLD;
+    uint32_t stopwatch_cycles = msw*((uint32_t)1<<(uint32_t)16) + lsw;
+    // derivation: 1000000 us * stopwatch_cycles / CYCLES_PER_SECOND
+    return stopwatch_cycles / 35;
+}
+
+
+///////////////////////// ABSOLUTE TIME //////////////////////////////////
 
 static uint32_t abs_time_s = 0;
 static uint16_t abs_time_ms = 0;
