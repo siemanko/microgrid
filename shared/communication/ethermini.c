@@ -115,7 +115,7 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
     } else if (e->state == CONTENT) {
         // TODO(szymon): move this to the top of id ladder.
         e->msg_receive_buffer->content[e->state_aux++] = symbol;
-        if (e->state_aux == e->msg_receive_buffer->length) {
+        if (e->state_aux >= e->msg_receive_buffer->length) {
             e->state = CHECKSUM;
             e->state_aux = 0;
         }

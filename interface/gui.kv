@@ -8,7 +8,6 @@
 <SaneLabel>:
     size_hint_y: None
     text_size: self.width, None
-    height: self.texture_size[1]
 
 <LogEntry>:
     font_name: 'DroidSansMono'
@@ -25,17 +24,6 @@
         size_hint: (1, 0.1)
         text: 'Ping'
         on_press: c.get.send_ping()
-    BoxLayout:
-        size_hint: (1, 0.1)
-        orientation: 'horizontal'
-        Button:
-            size_hint: (0.5, 1)
-            text: 'Time?'
-            on_press: c.get.get_time()
-        Button:
-            size_hint: (0.5, 1)
-            text: 'Sync time'
-            on_press: c.get.sync_time()
     Button:
         size_hint: (1, 0.1)
         text: 'Cron stats'
@@ -64,13 +52,48 @@
 
     ListView:
         id: id_logs_list
-        scrolling: True
         adapter:
             sla.SimpleListAdapter(
             data=[],
             cls=gui.LogEntry)
 
 <RootView>:
+    debug_panel: id_debug_panel
+    settings: id_settings
+
+    do_default_tab: False
+    TabbedPanelItem:
+        text: "Debug"
+        DebugView:
+            id: id_debug_panel
+    TabbedPanelItem:
+        text: "Settings"
+        SettingsView:
+            id: id_settings
+
+
+<SettingsView>:
+    orientation: 'vertical'
+    BoxLayout:
+        size_hint: (1, 0.1)
+        orientation: 'horizontal'
+        TextInput:
+            size_hint: (0.5, 1)
+            padding_y: ( self.height - self.line_height ) / 2
+            hint_text: 'Loading...'
+            disabled: True
+            text: self.parent.parent.box_time
+            multiline: False
+            readonly: True
+            font_size: '20sp'
+        Button:
+
+            size_hint: (0.5, 1)
+            text:'Sync time with Computer'
+            on_press: c.get.sync_time()
+    Label:
+
+<DebugView>:
     logs: id_logs.logs_list
     indicators: id_indicators
     orientation: 'horizontal'

@@ -10,6 +10,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.listview import ListView
 from kivy.uix.widget import Widget
+from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.adapters.simplelistadapter import SimpleListAdapter
 
 import controller
@@ -40,9 +41,13 @@ class LogsView(BoxLayout):
 class MenuView(BoxLayout):
     pass
 
-class RootView(BoxLayout):
+class DebugView(BoxLayout):
     logs=ObjectProperty(None)
 
+class SettingsView(BoxLayout):
+    box_time = StringProperty("Loading")
+
+class RootView(TabbedPanel):
     def __init__(self, *args, **kwargs):
         super(RootView, self).__init__(*args, **kwargs)
 

@@ -12,6 +12,8 @@
 #include "utils/cron.h"
 #include "drivers/eeprom.h"
 
+extern Ethermini computer_network;
+
 void init(void) {
     init_board();
     init_timer();
@@ -29,22 +31,17 @@ void init(void) {
 }
 
 
-int round_no = 0;
-
 void ui_showcase() {
-    if (round_no % 2) {
-        LCD_replace_row("hello", LCD_ROW_TOP);
-    } else {
-        LCD_reset();
-        LCD_print_custom(energy_hindi);
-    }
-    ++round_no;
+    LCD_replace_row("ST: ", LCD_ROW_TOP);
+    LCD_int(computer_network.state);
+    LCD_replace_row("SA: ", LCD_ROW_BOTTOM);
+    LCD_int(computer_network.state_aux);
 }
 
 void init_cron_schedule() {
     cron_repeat_rapidly(communication_step);
     cron_repeat_every_s(10, storage_backup);
-    cron_repeat_every_s(1, ui_showcase);
+    cron_repeat_every_ms(500, ui_showcase);
 
 }
 

@@ -22,12 +22,13 @@ class Ctrl(object):
     def __init__(self, root):
         self.root = root
         Clock.schedule_interval(self.update_indicators, 0.2)
+        Clock.schedule_interval(self.update_settings, 1.0)
 
     def send(self, msg):
         self.root.serial.send(msg)
 
     def clear_logs(self):
-        self.root.logs.adapter.data = []
+        self.root.debug_panel.logs.adapter.data = []
 
     def send_ping(self):
         mb = MessageBuilder(ToUlink.PING)
@@ -37,7 +38,8 @@ class Ctrl(object):
         mb = MessageBuilder(ToUlink.CRON_STATS)
         self.send(mb.to_bytes())
 
-    def get_time(self):
+
+    def update_settings(self, *largs):
         mb = MessageBuilder(ToUlink.GET_TIME)
         self.send(mb.to_bytes())
 
@@ -53,6 +55,6 @@ class Ctrl(object):
 
     def update_indicators(self, *largs):
         inbound, outbound = self.root.serial.pop_recent_traffic()
-        self.root.indicators.update(inbound, outbound)
+        self.root.debug_panel.indicators.update(inbound, outbound)
 
 get = None

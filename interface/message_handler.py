@@ -61,7 +61,7 @@ class MessageHandler(object):
         self.ui_root = ui_root
 
     def log(self, msg):
-        self.ui_root.logs.adapter.data.append(msg)
+        self.ui_root.debug_panel.logs.adapter.data.append(msg)
 
     def handle(self, msg):
         if len(msg) == 0:
@@ -82,6 +82,7 @@ class MessageHandler(object):
         elif msg_type == ToComputer.GET_TIME_REPLY:
             time_since_epoch_s = parse_uint32(msg[1:5])
             date = datetime.fromtimestamp(time_since_epoch_s)
-            self.log('Time on device is ' + str(date))
+            #self.log('Time on device is ' + str(date))
+            self.ui_root.settings.box_time = str(date)
         else:
             print 'WARNING: Uknown message type :', ord(msg[0])
