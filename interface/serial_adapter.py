@@ -54,9 +54,11 @@ class SerialAdapter(object):
                     if len(self.outgoing_messages) > 0:
                         msg = self.outgoing_messages.pop()
                         send_message(msg)
-                except Exception:
+                except Exception as e:
+                    print e
+                    print dir(self)
                     print 'WARNING: expcetion in serial adapter loop.'
-                    pass
+                    raise
 
 
         self.polling_thread = Thread(target=thread_loop)

@@ -59,7 +59,9 @@ class SettingsView(BoxLayout):
     # box_node_type     =   StringProperty("")
     # box_balance       =   StringProperty("")
 
-class RootView(TabbedPanel):
+class RootView(BoxLayout):
+    serial = ObjectProperty(None)
+
     def __init__(self, *args, **kwargs):
         super(RootView, self).__init__(*args, **kwargs)
 

@@ -63,17 +63,24 @@
 
 <RootView>:
     debug_panel: id_debug_panel
-    settings: id_settings
+    settings:    id_settings
+    indicators:  id_indicators
 
-    do_default_tab: False
-    TabbedPanelItem:
-        text: "Debug"
-        DebugView:
-            id: id_debug_panel
-    TabbedPanelItem:
-        text: "Settings"
-        SettingsView:
-            id: id_settings
+    orientation: 'vertical'
+    TabbedPanel:
+        size_hint: (1, 0.93)
+        do_default_tab: False
+        TabbedPanelItem:
+            text: "Debug"
+            DebugView:
+                id: id_debug_panel
+        TabbedPanelItem:
+            text: "Settings"
+            SettingsView:
+                id: id_settings
+    IndicatorView:
+        size_hint: (1, 0.07)
+        id: id_indicators
 
 <SettingsText>:
     padding_y: ( self.height - self.line_height ) / 2
@@ -127,7 +134,6 @@
 
 <DebugView>:
     logs: id_logs.logs_list
-    indicators: id_indicators
     orientation: 'horizontal'
     spacing: 10
 
@@ -141,9 +147,5 @@
         LogsView:
             size_hint: (1, 0.9)
             id: id_logs
-
-        IndicatorView:
-            size_hint: (1, 0.1)
-            id: id_indicators
 
 

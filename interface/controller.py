@@ -89,6 +89,6 @@ class Ctrl(object):
 
     def update_indicators(self, *largs):
         inbound, outbound = self.root.serial.pop_recent_traffic()
-        self.root.debug_panel.indicators.update(inbound, outbound)
+        self.root.indicators.update(inbound, outbound)
 
 get = None
