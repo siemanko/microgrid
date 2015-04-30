@@ -1,6 +1,7 @@
 #include "misc.h"
 
 #include <stdarg.h>
+#include <stdlib.h>
 
 #include "drivers/timer.h"
 #include "constants.h"

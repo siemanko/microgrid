@@ -5,6 +5,7 @@
 #include "drivers/timer.h"
 #include "shared/communication/utils/message_builder.h"
 #include "utils/cron.h"
+#include "shared/algorithm/vector.h"
 
 void (*message_handler[UMSG_TOTAL_MESSAGES])(Message*);
 
@@ -47,10 +48,36 @@ void reset_pic_handler(Message* msg) {
     asm("RESET");
 }
 
+void get_memory_handler(Message* msg) {
+    Vector addresses;
+    const int INITIAL_VECTOR_CAPACITY = 500;
+    make_vector(&addresses, INITIAL_VECTOR_CAPACITY, 0);
+    const int CHUNK_SIZE = 100;
+    
+    uint32_t mem_used = INITIAL_VECTOR_CAPACITY;
+    while(1) {
+        void* allocated = malloc(CHUNK_SIZE);
+        if (allocated == 0) {
+            break;
+        } else {
+            vector_push_back(&addresses, allocated);
+            mem_used += CHUNK_SIZE;
+        }
+    }
+    int vidx;
+    for (vidx=0; vidx< addresses.size; ++vidx) {
+        free(addresses.buffer[vidx]);
+    }
+    destroy_vector(&addresses);
+    debug(DEBUG_INFO, "Free memory on heap: %l bytes (approximately).",
+            mem_used);
+}
+
 void register_misc_message_handlers() {
     set_message_handler(UMSG_PING, ping_handler);
     set_message_handler(UMSG_GET_TIME, get_time_handler);
     set_message_handler(UMSG_SET_TIME, set_time_handler);
     set_message_handler(UMSG_RESET_PIC, reset_pic_handler);
+    set_message_handler(UMSG_GET_MEMORY, get_memory_handler);
 }
 

@@ -43,6 +43,10 @@ class Ctrl(object):
         mb = MessageBuilder(ToUlink.GET_TIME)
         self.send(mb.to_bytes())
 
+    def get_memory(self):
+        mb = MessageBuilder(ToUlink.GET_MEMORY)
+        self.send(mb.to_bytes())
+
     def sync_time(self):
         ts = int(time.time())
         mb = MessageBuilder(ToUlink.SET_TIME)

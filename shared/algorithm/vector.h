@@ -17,6 +17,8 @@ void make_vector(Vector* v,
                  uint16_t initial_capacity,
                  uint8_t conserve_memory);
 
+void destroy_vector(Vector* v);
+
 void vector_resize(Vector* v, int new_capacity);
 
 void vector_push_back(Vector* v, void* el);

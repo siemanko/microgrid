@@ -20,6 +20,7 @@ void mb_ensure_capacity(MessageBuilder* mb, int bytes_required) {
     int space_left = mb->capacity - mb->next_char;
     if (space_left < bytes_required) {
         int new_capacity = mb->next_char + bytes_required;
+        assert(new_capacity > mb->capacity);
         char* new_buffer = (char*)safe_malloc(new_capacity*sizeof(char));
         int bufidx;
         for (bufidx =0; bufidx < mb->next_char; ++bufidx) {

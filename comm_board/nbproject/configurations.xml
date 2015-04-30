@@ -53,6 +53,7 @@
           <itemPath>../shared/communication/ethermini.c</itemPath>
           <itemPath>../shared/communication/ethermini.h</itemPath>
           <itemPath>shared/communication/message.h</itemPath>
+          <itemPath>../shared/communication/message.c</itemPath>
         </logicalFolder>
         <itemPath>shared/utils.c</itemPath>
         <itemPath>shared/utils.h</itemPath>

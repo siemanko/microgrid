@@ -5,6 +5,7 @@ class ToUlink(object):
     SET_TIME = 2
     CRON_STATS = 3
     RESET_PIC = 4
+    GET_MEMORY = 5
 
 class ToComputer(object):
     DEBUG = 0

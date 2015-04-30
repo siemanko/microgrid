@@ -14,6 +14,12 @@ void make_vector(Vector* v,
     v->size = 0;
 }
 
+void destroy_vector(Vector* v) {
+    if (v->buffer != 0) {
+        free(v->buffer);
+    }
+}
+
 void vector_resize(Vector* v, int new_capacity) {
     assert(new_capacity >= v->size);
     void** new_buffer = safe_malloc(sizeof(void*) * new_capacity);

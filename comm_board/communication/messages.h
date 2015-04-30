@@ -9,6 +9,7 @@ typedef enum {
     UMSG_SET_TIME = 2,
     UMSG_CRON_STATS = 3,
     UMSG_RESET_PIC = 4,
+    UMSG_GET_MEMORY = 5,
     // leave last (also make sure no gaps above)
     UMSG_TOTAL_MESSAGES 
 } MessageToUlink; 

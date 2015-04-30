@@ -30,6 +30,10 @@
         on_press: c.get.cron_stats()
     Button:
         size_hint: (1, 0.1)
+        text: 'Probe memory'
+        on_press: c.get.get_memory()
+    Button:
+        size_hint: (1, 0.1)
         text: 'Reboot'
         on_press: c.get.reset_pic()
     Label:
