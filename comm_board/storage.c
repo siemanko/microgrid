@@ -32,6 +32,8 @@ void storage_load_settings() {
 
 void storage_backup() {
     eeprom_write_uint32(STORAGE_TIME, time_seconds_since_epoch());
+    eeprom_write_uint32(STORAGE_BALANCE, balance_get());
+
 }
 
 

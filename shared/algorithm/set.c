@@ -2,10 +2,13 @@
 
 #include <stdlib.h>
 
+#include "shared/utils.h"
+
+
 #define INITIAL_CAPACITY 5
 
 void make_set(Set * s) {
-    s->contents = (uint8_t*)malloc(sizeof(uint8_t)*INITIAL_CAPACITY);
+    s->contents = (uint8_t*)safe_malloc(sizeof(uint8_t)*INITIAL_CAPACITY);
     s->size = 0;
     s->capacity = INITIAL_CAPACITY;
 }
@@ -13,7 +16,7 @@ void make_set(Set * s) {
 void set_increase_capacity(Set* s) {
     uint8_t* old_contents = s->contents;
     int new_capacity = 2*s->capacity;
-    s->contents = (uint8_t*)malloc(sizeof(uint8_t)*new_capacity);
+    s->contents = (uint8_t*)safe_malloc(sizeof(uint8_t)*new_capacity);
     s->capacity = new_capacity;
     int i;
     for (i=0; i<s->size; ++i) s->contents[i] = old_contents[i];

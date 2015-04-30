@@ -5,6 +5,7 @@
 
 #include "communication/messages.h"
 #include "shared/communication/utils/message_builder.h"
+#include "shared/utils.h"
 
 void init_communication() {
     init_computer_communication();
@@ -17,7 +18,7 @@ void send_string(uint8_t* msg, uint8_t destination) {
 
 
 void send(uint8_t* content, uint8_t length, uint8_t destination) {
-    Message* msg = (Message*)malloc(sizeof(Message));
+    Message* msg = (Message*)safe_malloc(sizeof(Message));
     
     msg->source = 1;
     msg->destination = destination;

@@ -53,7 +53,7 @@ uint16_t get_random_int(){
 
 char* copy_string(const char* input) {
     int length = strlen(input);
-    char* ret = malloc(sizeof(char)*(length + 1));
+    char* ret = safe_malloc(sizeof(char)*(length + 1));
     int i;
     for(i=0; i<length+1; ++i) {
         ret[i] = input[i];
@@ -62,7 +62,7 @@ char* copy_string(const char* input) {
 }
 
 char* copy_array(const char* input, int length) {
-    char* ret = malloc(sizeof(char)*length);
+    char* ret = safe_malloc(sizeof(char)*length);
     int i;
     for(i=0; i<length; ++i) {
         ret[i] = input[i];
@@ -87,6 +87,19 @@ void internal_assert(int condition, char* format, ...) {
         va_start(args, format);
         assert_callback(format, args);
         va_end(args);
+    }
+}
+
+void* internal_safe_malloc(uint16_t size, char* format, ...) {
+    void *ret = malloc(size);
+    if (ret == 0) {
+        va_list args;
+        va_start(args, format);
+        assert_callback(format, args);
+        va_end(args);
+        return 0;
+    } else {
+        return ret;
     }
 }
 

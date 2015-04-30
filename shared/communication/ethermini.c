@@ -14,10 +14,10 @@ void make_ethermini(Ethermini* e,
         void (*put)(uint8_t),
         void (*on_message_callback)(Message*)) {
     e->outbound_messages =
-            (CircularBuffer*)malloc(sizeof(CircularBuffer));
+            (CircularBuffer*)safe_malloc(sizeof(CircularBuffer));
     make_cb(e->outbound_messages, MAX_MESSAGES);
      e->inbound_messages =
-            (CircularBuffer*)malloc(sizeof(CircularBuffer));
+            (CircularBuffer*)safe_malloc(sizeof(CircularBuffer));
     make_cb(e->inbound_messages, MAX_MESSAGES);
 
     e->put = put;
@@ -98,7 +98,7 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
                 // got message - reserve space.
                 clear_message_buffer(e);
                 e->msg_receive_buffer =
-                        (Message*)malloc(sizeof(Message));
+                        (Message*)safe_malloc(sizeof(Message));
                 e->state = DESTINATION;
             } else {
                 e->state_aux = 0;
@@ -120,7 +120,7 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
             e->state = CHECKSUM;
         } else {
             e->msg_receive_buffer->content =
-                (uint8_t*)malloc(symbol*sizeof(uint8_t));
+                (uint8_t*)safe_malloc(symbol*sizeof(uint8_t));
             e->state_aux = 0;
             e->state = CONTENT;
         }

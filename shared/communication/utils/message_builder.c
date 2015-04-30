@@ -9,7 +9,7 @@
 void make_mb(MessageBuilder* mb, int capacity) {
     mb->next_char = 0;
     if (capacity > 0) {
-        mb->message = (char*)malloc((capacity)*sizeof(char));
+        mb->message = (char*)safe_malloc((capacity)*sizeof(char));
     } else {
         mb->message = 0;
     }
@@ -20,7 +20,7 @@ void mb_ensure_capacity(MessageBuilder* mb, int bytes_required) {
     int space_left = mb->capacity - mb->next_char;
     if (space_left < bytes_required) {
         int new_capacity = mb->next_char + bytes_required;
-        char* new_buffer = (char*)malloc(new_capacity*sizeof(char));
+        char* new_buffer = (char*)safe_malloc(new_capacity*sizeof(char));
         int bufidx;
         for (bufidx =0; bufidx < mb->next_char; ++bufidx) {
             new_buffer[bufidx] = mb->message[bufidx];
@@ -48,12 +48,12 @@ void mb_add_string(MessageBuilder* mb, const char* str) {
 
 MessageBuilder* mb_copy(MessageBuilder* mb, int deep) {
     MessageBuilder* mb_cpy =
-            (MessageBuilder*)malloc(sizeof(MessageBuilder));
+            (MessageBuilder*)safe_malloc(sizeof(MessageBuilder));
     mb_cpy->capacity = mb->capacity;
     mb_cpy->next_char = mb->next_char;
     mb_cpy->message = mb->message;
     if (deep && mb->capacity > 0) {
-        mb_cpy->message = (char*)malloc((mb->capacity+1)*sizeof(char));
+        mb_cpy->message = (char*)safe_malloc((mb->capacity+1)*sizeof(char));
         int i;
         for(i=0; i<mb->next_char; ++i) {
             (mb_cpy->message)[i] = (mb->message)[i];

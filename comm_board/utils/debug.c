@@ -6,6 +6,7 @@
 #include "communication/interface.h"
 #include "communication/messages.h"
 #include "shared/communication/utils/message_builder.h"
+#include "shared/utils.h"
 
 static void make_debug_mb(MessageBuilder* mb,
                           char subsystem,
@@ -40,7 +41,7 @@ void debug_unsafe_args(char subsystem, char* format, va_list args) {
     MessageBuilder mb;
     make_debug_mb(&mb, subsystem, format, args);
     
-    Message* msg = (Message*)malloc(sizeof(Message));
+    Message* msg = (Message*) safe_malloc(sizeof(Message));
     
     msg->source = 1;
     msg->destination = COMPUTER;

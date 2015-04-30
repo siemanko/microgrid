@@ -56,7 +56,7 @@ void init_cron() {
 
 
 void cron_repeat_rapidly_internal(void (*callback)(), char* name) {
-    RepeatRapid* repeat = malloc(sizeof(RepeatRapid));
+    RepeatRapid* repeat = safe_malloc(sizeof(RepeatRapid));
     repeat->callback = callback;
     #ifdef CRON_STATS
         repeat->name = name;
@@ -68,7 +68,7 @@ void cron_repeat_rapidly_internal(void (*callback)(), char* name) {
 // This one is recommended over repeat_every_ms, as it consumes
 // less memory.
 void cron_repeat_every_s_internal(uint32_t num_s, void (*callback)(), char* name) {
-    RepeatSeconds* repeat = malloc(sizeof(RepeatSeconds));
+    RepeatSeconds* repeat = safe_malloc(sizeof(RepeatSeconds));
     repeat->callback = callback;
     repeat->last_repeat = 0;
     repeat->time_between_repeats = num_s;
@@ -80,7 +80,7 @@ void cron_repeat_every_s_internal(uint32_t num_s, void (*callback)(), char* name
 }
 
 void cron_repeat_every_ms_internal(uint32_t num_ms, void(*callback)(), char* name) {
-    RepeatMilliseconds* repeat = malloc(sizeof(RepeatMilliseconds));
+    RepeatMilliseconds* repeat = safe_malloc(sizeof(RepeatMilliseconds));
     repeat->callback = callback;
     repeat->last_repeat = 0;
     repeat->time_between_repeats = num_ms;

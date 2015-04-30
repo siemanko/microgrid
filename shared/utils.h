@@ -5,6 +5,7 @@
 #include <stdarg.h>
 
 #define assert(condition) internal_assert((condition), "%s (%s:%d)", ( #condition ) , __FILE__, __LINE__)
+#define safe_malloc(size) internal_safe_malloc((size), "malloc (%s:%d)", __FILE__, __LINE__)
 
 float bytes_to_float(uint8_t raw[]);
 
@@ -29,6 +30,8 @@ char* copy_array(const char*, int length);
 int str_prefix_equal(char* s1, char* s2, int prefix);
 
 void internal_assert(int condition, char* format, ...);
+
+void* internal_safe_malloc(uint16_t size, char* format, ...);
 
 void set_assert_callback(void (*callback)(char*, va_list));
 

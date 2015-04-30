@@ -8,7 +8,7 @@ void make_vector(Vector* v,
                  uint16_t initial_capacity,
                  uint8_t conserve_memory) {
     assert(initial_capacity >= 0);
-    v->buffer = malloc(sizeof(void*) * initial_capacity);
+    v->buffer = safe_malloc(sizeof(void*) * initial_capacity);
     v->capacity = initial_capacity;
     v->conserve_memory = conserve_memory;
     v->size = 0;
@@ -16,7 +16,7 @@ void make_vector(Vector* v,
 
 void vector_resize(Vector* v, int new_capacity) {
     assert(new_capacity >= v->size);
-    void** new_buffer = malloc(sizeof(void*) * new_capacity);
+    void** new_buffer = safe_malloc(sizeof(void*) * new_capacity);
     int vidx;
     for (vidx = 0; vidx < v->size; ++vidx) {
         new_buffer[vidx] = v->buffer[vidx];
