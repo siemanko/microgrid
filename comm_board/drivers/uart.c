@@ -1,9 +1,15 @@
 #include "uart.h"
 
 #include <p33EP512GM710.h>
+
+#include "shared/utils.h"
+
 #define FP 37000000 //36850000
 #define BAUDRATE 9600
 #define BRGVAL ((FP/BAUDRATE)/16)-1
+
+#define BAUDRATE2 57600
+#define BRGVAL2 ((FP/BAUDRATE)/16)-1
 
 static void (*uart_callback[2])(uint8_t);
 
@@ -36,6 +42,9 @@ void init_uart(uart_device u) {
         U1STAbits.UTXEN = 1;   // Enable UART TX
                                // must be called after enable UART.
     } else if (u == UART_DEVICE2) {
+        U2STA = 0;
+        U2MODE = 0;
+        
         TRISCbits.TRISC7 = 0;   //DRIVE ENABLE AS OUTPUT, C7, PIN78
         LATCbits.LATC7 = 0;     //Turn enable as low (to begin)
 
@@ -59,7 +68,7 @@ void init_uart(uart_device u) {
                                 // interrupt
 
         IPC7bits.U2RXIP = 2;    //U2RX interrupt priority
-        U2BRG = BRGVAL;
+        U2BRG = BRGVAL2;
 
         U2MODEbits.UARTEN = 1; // Enable UART
         U2STAbits.UTXEN = 1; // Enable UART TX
@@ -73,9 +82,12 @@ void uart_put(uart_device u, uint8_t data) {
         U1TXREG = data;
         while(!U1STAbits.TRMT);      // until transmit buffer is empty.
     } else if (u == UART_DEVICE2) {
+        // TODO(szymon): understand LATC7.
+        LATCbits.LATC7 = 1;
         while(U2STAbits.UTXBF == 1);
         U2TXREG = data;
         while(!U2STAbits.TRMT);
+        LATCbits.LATC7 = 0;
     }
 }
 
@@ -85,7 +97,6 @@ void uart_set_callback(uart_device u, void (*callback)(uint8_t)) {
 
 void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt( void ){
     if(U1STAbits.OERR == 1) U1STAbits.OERR = 0;
-    
     
     uint8_t data;
     while (U1STAbits.URXDA == 1){
@@ -104,7 +115,6 @@ void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt( void ){
 
 void __attribute__((interrupt, no_auto_psv)) _U2RXInterrupt( void ){
     int data;
-    
     while (U2STAbits.URXDA == 1){
         data = U2RXREG;
 
@@ -112,7 +122,8 @@ void __attribute__((interrupt, no_auto_psv)) _U2RXInterrupt( void ){
             uart_callback[UART_DEVICE2](data);
         }
     }
-
+    U2STAbits.PERR = 0;
+    U2STAbits.FERR = 0;
     U2STAbits.OERR = 0;
     IFS1bits.U2RXIF  = 0;   //U2RX flag set to 0
 }

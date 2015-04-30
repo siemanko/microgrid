@@ -23,23 +23,23 @@ void init(void) {
     init_communication();
     init_display();
     
+    init_uart(UART_DEVICE2);
+    
     storage_load_settings();
         
     debug(DEBUG_INFO, "Initialization sequence complete.");
 }
 
-void init_cron_schedule() {
+void init_cron_schedule() {    
     cron_repeat_rapidly(communication_step);
     cron_repeat_every_s(10, storage_backup);
     cron_repeat_every_s(1,  display_step);
     cron_repeat_every_s(1,  balance_step);
-
 }
 
 int main() {
     init();
     init_cron_schedule();
-    
     
     while(1) {
         cron_step();
