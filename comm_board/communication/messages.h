@@ -5,18 +5,20 @@
 
 typedef enum {
     UMSG_PING = 0,
-    UMSG_GET_TIME = 1,
+    UMSG_GET_SETTINGS = 1,
     UMSG_SET_TIME = 2,
     UMSG_CRON_STATS = 3,
     UMSG_RESET_PIC = 4,
     UMSG_GET_MEMORY = 5,
+    UMSG_SET_UID_NODE_TYPE = 6,
+    UMSG_SET_BALANCE = 7,
     // leave last (also make sure no gaps above)
     UMSG_TOTAL_MESSAGES 
 } MessageToUlink; 
 
 typedef enum {
     CMSG_DEBUG = 0,
-    CMSG_GET_TIME_REPLY = 1,
+    CMSG_GET_SETTINGS_REPLY = 1,
     // leave last (also make sure no gaps above)
     CMSG_TOTAL_MESSAGES
 } MessageToComputer;

@@ -10,16 +10,18 @@ void init_display() {
     init_LCD();
     LCD_set_custom_char_map(hindi_chars);
 
-    LCD_replace_row("UID:", LCD_ROW_TOP);
-    LCD_int(eeprom_read_byte(STORAGE_UID));
-    LCD_print(" type:");
-    LCD_char(eeprom_read_byte(STORAGE_NODE_TYPE));
+    LCD_replace_row("UID: ?", LCD_ROW_TOP);
+    LCD_print(" type: ?");
     LCD_replace_row("", LCD_ROW_BOTTOM); 
     LCD_print_custom(energy_hindi);
-    LCD_print(": LOADING");
+    LCD_print(": ?");
 }
 
 void display_step() {
+    LCD_replace_row("UID: ", LCD_ROW_TOP);
+    LCD_int(eeprom_read_byte(STORAGE_UID));
+    LCD_print(" type: ");
+    LCD_char(eeprom_read_byte(STORAGE_NODE_TYPE));
     LCD_replace_row("", LCD_ROW_BOTTOM);
     LCD_print_custom(energy_hindi);
     LCD_print(": ");

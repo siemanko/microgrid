@@ -6,6 +6,9 @@
 #include "shared/communication/utils/message_builder.h"
 #include "utils/cron.h"
 #include "shared/algorithm/vector.h"
+#include "drivers/eeprom.h"
+#include "storage.h"
+#include "user_interface/balance.h"
 
 void (*message_handler[UMSG_TOTAL_MESSAGES])(Message*);
 
@@ -29,11 +32,15 @@ void ping_handler(Message* msg) {
     debug(DEBUG_INFO, "pong");
 }
 
-void get_time_handler(Message* msg) {
+void get_settings_handler(Message* msg) {
     MessageBuilder mb;
-    make_mb(&mb, 5);
-    mb_add_char(&mb, CMSG_GET_TIME_REPLY);
+    make_mb(&mb, 11);
+    mb_add_char(&mb, CMSG_GET_SETTINGS_REPLY);
     mb_add_uint32_noprefix(&mb, time_seconds_since_epoch());
+    mb_add_char(&mb, eeprom_read_byte(STORAGE_UID));
+    mb_add_char(&mb, eeprom_read_byte(STORAGE_NODE_TYPE));
+    mb_add_uint32_noprefix(&mb, balance_get());
+
     send_mb(&mb, COMPUTER);
 }
 
@@ -73,11 +80,25 @@ void get_memory_handler(Message* msg) {
             mem_used);
 }
 
+void set_uid_node_type_handler(Message* msg) {
+    assert(msg->length == 3);
+    eeprom_write_byte(STORAGE_UID, msg->content[1]);
+    eeprom_write_byte(STORAGE_NODE_TYPE, msg->content[2]);
+}
+
+void set_balance_handler(Message* msg) {
+    assert(msg->length == 5);
+    uint32_t balance = bytes_to_uint32(msg->content + 1);
+    balance_set(balance);
+}
+
 void register_misc_message_handlers() {
     set_message_handler(UMSG_PING, ping_handler);
-    set_message_handler(UMSG_GET_TIME, get_time_handler);
+    set_message_handler(UMSG_GET_SETTINGS, get_settings_handler);
     set_message_handler(UMSG_SET_TIME, set_time_handler);
     set_message_handler(UMSG_RESET_PIC, reset_pic_handler);
     set_message_handler(UMSG_GET_MEMORY, get_memory_handler);
+    set_message_handler(UMSG_SET_UID_NODE_TYPE, set_uid_node_type_handler);
+    set_message_handler(UMSG_SET_BALANCE, set_balance_handler);
 }
 

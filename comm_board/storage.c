@@ -5,9 +5,9 @@
 #include "drivers/timer.h"
 #include "user_interface/balance.h"
 
-#define STORAGE_INTEGRITY_CONSTANT 1LL
+#define STORAGE_INTEGRITY_CONSTANT 2LL
 
-#define INITIAL_BALANCE 1000
+#define INITIAL_BALANCE 10000
 
 void init_storage() {
     init_eeprom();

@@ -10,6 +10,7 @@ def parse_int(int_bytes):
         return struct.unpack('<h', int_bytes)[0]
     else:
         return 666
+
 def parse_float(float_bytes):
     if len(float_bytes) == 4:
         return struct.unpack('<f', float_bytes)[0]
@@ -69,6 +70,10 @@ class MessageHandler(object):
     def log(self, msg):
         self.ui_root.debug_panel.logs.adapter.data.append(msg)
 
+    def update_if_not_focused(self, element, value):
+        if not element.focused:
+            element.text = value
+
     def handle(self, msg):
         if len(msg) == 0:
             print 'WARNING: Empty message'
@@ -92,10 +97,18 @@ class MessageHandler(object):
             content = ''.join([str(m) for m in content])
             content = '[%s] %s' % (subsystem, content)
             self.log(content)
-        elif msg_type == ToComputer.GET_TIME_REPLY:
+        elif msg_type == ToComputer.GET_SETTINGS_REPLY:
             time_since_epoch_s = parse_uint32(msg[1:5])
             date = datetime.fromtimestamp(time_since_epoch_s)
+            box_uid = ord(msg[5])
+            box_node_type = msg[6]
+            box_balance = parse_uint32(msg[7:11])
             #self.log('Time on device is ' + str(date))
-            self.ui_root.settings.box_time = str(date)
+
+            self.update_if_not_focused(self.ui_root.settings.box_time, str(date))
+            self.update_if_not_focused(self.ui_root.settings.box_uid, str(box_uid))
+            self.update_if_not_focused(self.ui_root.settings.box_node_type, str(box_node_type))
+            self.update_if_not_focused(self.ui_root.settings.box_balance, str(box_balance))
+
         else:
             print 'WARNING: Uknown message type :', ord(msg[0])

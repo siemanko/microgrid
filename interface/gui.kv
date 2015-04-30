@@ -75,26 +75,54 @@
         SettingsView:
             id: id_settings
 
+<SettingsText>:
+    padding_y: ( self.height - self.line_height ) / 2
+    hint_text: 'Loading...'
+    multiline: False
+    font_size: '20sp'
 
 <SettingsView>:
+    box_time:      id_box_time
+    box_uid:       id_box_uid
+    box_node_type: id_box_node_type
+    box_balance:   id_box_balance
     orientation: 'vertical'
-    BoxLayout:
+    spacing: 10
+    BoxLayout: # TIME
         size_hint: (1, 0.1)
         orientation: 'horizontal'
-        TextInput:
+        SettingsText:
             size_hint: (0.5, 1)
-            padding_y: ( self.height - self.line_height ) / 2
-            hint_text: 'Loading...'
-            disabled: True
-            text: self.parent.parent.box_time
-            multiline: False
+            id: id_box_time
             readonly: True
-            font_size: '20sp'
         Button:
-
             size_hint: (0.5, 1)
             text:'Sync time with Computer'
             on_press: c.get.sync_time()
+
+    BoxLayout: # uid and box type
+        size_hint: (1, 0.1)
+        orientation: 'horizontal'
+        SettingsText:
+            size_hint: (0.25, 1)
+            id: id_box_uid
+        SettingsText:
+            size_hint: (0.25, 1)
+            id: id_box_node_type
+        Button:
+            size_hint: (0.5, 1)
+            text:'Set uid and node type'
+            on_press: c.get.set_uid_node_type()
+    BoxLayout: # uid and box type
+        size_hint: (1, 0.1)
+        orientation: 'horizontal'
+        SettingsText:
+            size_hint: (0.5, 1)
+            id: id_box_balance
+        Button:
+            size_hint: (0.5, 1)
+            text:'Set balance'
+            on_press: c.get.set_balance()
     Label:
 
 <DebugView>:

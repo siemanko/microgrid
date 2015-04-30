@@ -12,6 +12,10 @@ class MessageBuilder(object):
     def __init__(self, msg_type):
         self.buffer = [ chr(msg_type) ]
 
+    def add_byte(self, number):
+        assert 0 <= number and number <= 255
+        self.buffer.append(chr(number))
+
     def add_uint32(self, number):
         packed = list(struct.pack('<I', number))
         self.buffer += packed
@@ -40,7 +44,7 @@ class Ctrl(object):
 
 
     def update_settings(self, *largs):
-        mb = MessageBuilder(ToUlink.GET_TIME)
+        mb = MessageBuilder(ToUlink.GET_SETTINGS)
         self.send(mb.to_bytes())
 
     def get_memory(self):
@@ -52,6 +56,32 @@ class Ctrl(object):
         mb = MessageBuilder(ToUlink.SET_TIME)
         mb.add_uint32(ts)
         self.send(mb.to_bytes())
+
+    def set_uid_node_type(self):
+        mb = MessageBuilder(ToUlink.SET_UID_NODE_TYPE)
+        try:
+            uid = int(self.root.settings.box_uid.text)
+            assert 0<= uid and uid <= 255
+            node_type = self.root.settings.box_node_type.text
+            node_type = node_type.upper()
+            assert len(node_type) == 1 and node_type in ['A', 'B']
+            node_type = ord(node_type)
+            mb.add_byte(uid)
+            mb.add_byte(node_type)
+            self.send(mb.to_bytes())
+        except Exception as e:
+            print e
+            print 'WARNING: invalid uid or node type value.'
+
+    def set_balance(self):
+        try:
+            mb = MessageBuilder(ToUlink.SET_BALANCE)
+            balance = int(self.root.settings.box_balance.text)
+            mb.add_uint32(balance)
+            self.send(mb.to_bytes())
+        except Exception as e:
+            print e
+            print 'WARNING: invalid balance value.'
 
     def reset_pic(self):
         mb = MessageBuilder(ToUlink.RESET_PIC)

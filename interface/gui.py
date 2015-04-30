@@ -11,6 +11,7 @@ from kivy.uix.label import Label
 from kivy.uix.listview import ListView
 from kivy.uix.widget import Widget
 from kivy.uix.tabbedpanel import TabbedPanel
+from kivy.uix.textinput import TextInput
 from kivy.adapters.simplelistadapter import SimpleListAdapter
 
 import controller
@@ -18,6 +19,13 @@ import controller
 from message_handler import MessageHandler
 from serial_adapter import SerialAdapter
 
+class SettingsText(TextInput):
+    def __init__(self, *args, **kwargs):
+        super(SettingsText, self).__init__(*args, **kwargs)
+        self.focues = False
+
+    def on_focus(self, instance, value):
+        self.focused = value
 
 class SaneLabel(Label):
     pass
@@ -45,7 +53,11 @@ class DebugView(BoxLayout):
     logs=ObjectProperty(None)
 
 class SettingsView(BoxLayout):
-    box_time = StringProperty("Loading")
+    pass
+    # box_time          =   StringProperty("")
+    # box_uid           =   StringProperty("")
+    # box_node_type     =   StringProperty("")
+    # box_balance       =   StringProperty("")
 
 class RootView(TabbedPanel):
     def __init__(self, *args, **kwargs):
