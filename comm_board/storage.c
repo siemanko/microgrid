@@ -3,8 +3,11 @@
 #include "drivers/eeprom.h"
 #include "utils/debug.h"
 #include "drivers/timer.h"
+#include "user_interface/balance.h"
 
-#define STORAGE_INTEGRITY_CONSTANT 123456789LL
+#define STORAGE_INTEGRITY_CONSTANT 1LL
+
+#define INITIAL_BALANCE 1000
 
 void init_storage() {
     init_eeprom();
@@ -24,6 +27,7 @@ void storage_integrity_check() {
 void storage_load_settings() {
     storage_integrity_check();
     time_set_seconds_since_epoch(eeprom_read_uint32(STORAGE_TIME));
+    balance_set(eeprom_read_uint32(STORAGE_BALANCE));
 }
 
 void storage_backup() {
@@ -37,4 +41,5 @@ void storage_factory_reset() {
                         STORAGE_INTEGRITY_CONSTANT);
     eeprom_write_byte(STORAGE_UID, 1);
     eeprom_write_byte(STORAGE_NODE_TYPE, 'B');
+    eeprom_write_uint32(STORAGE_BALANCE, INITIAL_BALANCE);
 }

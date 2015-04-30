@@ -2,7 +2,6 @@
 #include "drivers/board.h"
 #include "drivers/timer.h"
 #include "drivers/lcd.h"
-#include "drivers/hindi.h"
 #include "drivers/uart.h"
 #include "shared/utils.h"
 #include "shared/communication/utils/message_builder.h"
@@ -11,8 +10,9 @@
 #include "utils/misc.h"
 #include "utils/cron.h"
 #include "drivers/eeprom.h"
+#include "user_interface/display.h"
+#include "user_interface/balance.h"
 
-extern Ethermini computer_network;
 
 void init(void) {
     init_board();
@@ -21,27 +21,18 @@ void init(void) {
     init_storage();
     init_cron();
     init_communication();
-    init_LCD();
+    init_display();
     
     storage_load_settings();
-    
-    LCD_set_custom_char_map(hindi_chars);
-    
+        
     debug(DEBUG_INFO, "Initialization sequence complete.");
-}
-
-
-void ui_showcase() {
-    LCD_replace_row("ST: ", LCD_ROW_TOP);
-    LCD_int(computer_network.state);
-    LCD_replace_row("SA: ", LCD_ROW_BOTTOM);
-    LCD_int(computer_network.state_aux);
 }
 
 void init_cron_schedule() {
     cron_repeat_rapidly(communication_step);
     cron_repeat_every_s(10, storage_backup);
-    cron_repeat_every_ms(500, ui_showcase);
+    cron_repeat_every_s(1,  display_step);
+    cron_repeat_every_s(1,  balance_step);
 
 }
 

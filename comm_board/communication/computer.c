@@ -4,7 +4,7 @@
 #include "shared/communication/ethermini.h"
 #include "drivers/uart.h"
 
-Ethermini computer_network;
+static Ethermini computer_network;
 
 void put_uart1(uint8_t symbol) {
     uart_put(UART_DEVICE1, symbol);

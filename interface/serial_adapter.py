@@ -1,6 +1,6 @@
 import serial
 import time
-
+from Queue import Queue, Empty
 from threading import Thread
 
 from bindings.communication import (
@@ -18,9 +18,9 @@ debug_bytes = False
 class SerialAdapter(object):
     def __init__(self, port='/dev/ttyUSB0', callback=lambda x: None):
         self.s = serial.Serial(port='/dev/ttyUSB0',
-                            baudrate=57600,
+                            baudrate=9600,
                             bytesize=8,
-                            stopbits=1,
+                            stopbits=2,
                             parity='N',
                             timeout=0.00001)  # open first serial port
 
@@ -28,6 +28,7 @@ class SerialAdapter(object):
         self.message_callback = callback
         init_communication()
         self.recent_traffic = [None, None]
+        self.outgoing_messages = Queue()
 
     def start_polling(self):
         self.thread_should_stop = False
@@ -49,6 +50,12 @@ class SerialAdapter(object):
                     if debug_bytes:
                         print 'OUTGOING traffic: ', outgoing_char
                     self.recent_traffic[1] = outgoing_char
+                try:
+                    msg = self.outgoing_messages.get(block=False)
+                    send_message(msg)
+                except Empty:
+                    pass
+
 
         self.polling_thread = Thread(target=thread_loop)
         self.polling_thread.setDaemon(True)
@@ -62,7 +69,7 @@ class SerialAdapter(object):
         return ret
 
     def send(self, msg):
-        send_message(msg)
+        self.outgoing_messages.put(msg)
 
     def close():
         self.thread_should_stop = True

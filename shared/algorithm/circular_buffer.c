@@ -3,12 +3,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void make_cb(CircularBuffer *buffer, int size) {
+#include "shared/utils.h"
+
+void make_cb(CircularBuffer *buffer, uint16_t size) {
+    assert(size >= 0);
     buffer->size = size;
     buffer->start = 0;
     buffer->count = 0;
-    buffer->element = malloc(sizeof(buffer->element)*size);
-
+    if (buffer->size >= 0) {
+        buffer->element = malloc(sizeof(buffer->element)*size);
+    }
     /* allocated array of void pointers. Same as below */
     //buffer->element = malloc(sizeof(void *) * size);
 
@@ -40,16 +44,18 @@ int cb_push(CircularBuffer *buffer, void *data) {
             index = 0;
         }
         buffer->element[index] = data;
+        
+        assert(buffer->count <= buffer->size);
+        assert(buffer->start <= buffer->size);
+        
         return 1;
     }
 }
 
 
 void * cb_popqueue(CircularBuffer *buffer) {
-    void * element;
-    if (cb_empty(buffer)) {
-        return 0;
-    } else {
+    void * element = 0;
+    if (!cb_empty(buffer)) {
        /* FIFO implementation */
        element = buffer->element[buffer->start];
        buffer->start++;
@@ -57,9 +63,10 @@ void * cb_popqueue(CircularBuffer *buffer) {
        if (buffer->start == buffer->size) {
            buffer->start = 0;
        }
-
-       return element;
     }
+    assert(buffer->count <= buffer->size);
+    assert(buffer->start <= buffer->size);
+    return element;
 }
 
 void * cb_popstack(CircularBuffer *buffer) {

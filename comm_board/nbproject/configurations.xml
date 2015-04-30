@@ -60,7 +60,11 @@
       <logicalFolder name="user_interface"
                      displayName="user_interface"
                      projectFiles="true">
-        <itemPath>drivers/hindi.h</itemPath>
+        <itemPath>user_interface/display.c</itemPath>
+        <itemPath>user_interface/display.h</itemPath>
+        <itemPath>user_interface/hindi.h</itemPath>
+        <itemPath>user_interface/balance.c</itemPath>
+        <itemPath>user_interface/balance.h</itemPath>
       </logicalFolder>
       <logicalFolder name="utils" displayName="utils" projectFiles="true">
         <itemPath>utils/debug.c</itemPath>
@@ -207,7 +211,7 @@
         <property key="general-code-protect" value="no_code_protect"/>
         <property key="general-write-protect" value="no_write_protect"/>
         <property key="generate-cross-reference-file" value="false"/>
-        <property key="heap-size" value="10000"/>
+        <property key="heap-size" value="20000"/>
         <property key="input-libraries" value=""/>
         <property key="linker-stack" value="true"/>
         <property key="linker-symbols" value=""/>

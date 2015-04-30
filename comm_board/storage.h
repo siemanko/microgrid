@@ -5,7 +5,8 @@ typedef enum {
     STORAGE_INTEGRITY_CHECK = 0,   // uint32
     STORAGE_UID = 4,               // byte 
     STORAGE_NODE_TYPE = 5,         // byte
-    STORAGE_TIME = 6               // uint32   
+    STORAGE_TIME = 6,              // uint32   
+    STORAGE_BALANCE = 10           // uint32
 } StorageAddress;
 
 void init_storage();

@@ -43,6 +43,7 @@ void set_time_handler(Message* msg) {
 }
 
 void reset_pic_handler(Message* msg) {
+    debug_unsafe(DEBUG_INFO, "Resetting PIC. See you soon!");
     asm("RESET");
 }
 

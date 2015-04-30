@@ -42,7 +42,10 @@ uint32_t checksum(Message* msg) {
 }
 
 void ethermini_send(Ethermini* e,  Message *msg) {
-    cb_push(e->outbound_messages, msg);
+    if (!cb_push(e->outbound_messages, msg)) {
+        // buffer full.
+        free(msg);
+    }
 }
 
 void ethermini_send_immediately(Ethermini *e, Message *msg) {
@@ -70,6 +73,16 @@ void ethermini_send_immediately(Ethermini *e, Message *msg) {
     }
 }
 
+static void clear_message_buffer(Ethermini* e) {
+    if (e->msg_receive_buffer != 0) {
+        if (e->msg_receive_buffer->content != 0) {
+            free(e->msg_receive_buffer->content);
+        }
+        free(e->msg_receive_buffer);
+        e->msg_receive_buffer = 0;
+    }
+}
+
 void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
     if (e->state == FRAMING) {
         // here state_aux determines how many preambles
@@ -83,9 +96,7 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
             // ETHERMINI_FRAMING_PREAMBLE_LENGTH preambles.
             if (e->state_aux >= ETHERMINI_FRAMING_PREAMBLE_LENGTH) {
                 // got message - reserve space.
-                if (e->msg_receive_buffer != 0) {
-                    free(e->msg_receive_buffer);
-                }
+                clear_message_buffer(e);
                 e->msg_receive_buffer =
                         (Message*)malloc(sizeof(Message));
                 e->state = DESTINATION;
@@ -103,12 +114,13 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
         e->state = LENGTH;
     } else if (e->state == LENGTH) {
         e->msg_receive_buffer->length = symbol;
-        e->msg_receive_buffer->content =
-                (uint8_t*)malloc(symbol*sizeof(uint8_t));
+
         if (symbol == 0) {
             e->state_aux = 0;
             e->state = CHECKSUM;
         } else {
+            e->msg_receive_buffer->content =
+                (uint8_t*)malloc(symbol*sizeof(uint8_t));
             e->state_aux = 0;
             e->state = CONTENT;
         }
@@ -125,11 +137,13 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
             uint32_t cc_received = bytes_to_uint32(e->checksum_buffer);
             uint32_t cc_computed = checksum(e->msg_receive_buffer);
             if (cc_received == cc_computed) {
-                cb_push(e->inbound_messages, e->msg_receive_buffer);
+                if (!cb_push(e->inbound_messages, e->msg_receive_buffer)) {
+                    // buffer full.
+                    clear_message_buffer(e);
+                }
                 e->msg_receive_buffer = 0;
             } else {
-                free(e->msg_receive_buffer);
-                e->msg_receive_buffer = 0;
+                clear_message_buffer(e);
             }
             e->state_aux = 0;
             e->state = FRAMING;
@@ -156,7 +170,7 @@ void ethermini_step(Ethermini* e) {
         ethermini_send_immediately(e, msg);
         free(msg);
     }
-    
+
     while(!cb_empty(e->inbound_messages)) {
         Message* msg = (Message*)cb_popqueue(e->inbound_messages);
         e->on_message_callback(msg);

@@ -22,7 +22,7 @@ typedef struct {
     void (*put)(uint8_t);
     void (*on_message_callback)(Message*);
     EtherminiState state;
-    int state_aux;
+    uint16_t state_aux;
     Message* msg_receive_buffer;
     uint8_t checksum_buffer[4];
 } Ethermini;

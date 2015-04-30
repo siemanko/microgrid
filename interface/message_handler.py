@@ -6,14 +6,20 @@ from datetime import datetime
 from messages import ToComputer, ToUlink
 
 def parse_int(int_bytes):
-    return struct.unpack('<h', int_bytes)[0]
-
+    if len(int_bytes) == 2:
+        return struct.unpack('<h', int_bytes)[0]
+    else:
+        return 666
 def parse_float(float_bytes):
-    return struct.unpack('<f', float_bytes)[0]
-
+    if len(float_bytes) == 4:
+        return struct.unpack('<f', float_bytes)[0]
+    else:
+        return 666
 def parse_uint32(uint32_bytes):
-    return struct.unpack('<I', uint32_bytes)[0]
-
+    if len(uint32_bytes) == 4:
+        return struct.unpack('<I', uint32_bytes)[0]
+    else:
+        return 666
 def parse_message(msg):
     parsed_message = []
     i = 0
@@ -70,11 +76,18 @@ class MessageHandler(object):
         msg_type = ord(msg[0])
         if msg_type == ToComputer.DEBUG:
             # debug message
-            subsystem = [
+            subsystems = [
                 'INFO',
                 'ERROR',
-                'CRON'
-            ][ord(msg[1])]
+                'CRON',
+            ]
+            if (0 > ord(msg[1]) or ord(msg[1]) >= len(subsystems)):
+                print  "WARNING: Unknown debug category: %d.." % (ord(msg[1],))
+                subsystem = 'UNKNOWN'
+                print msg[2:]
+            else:
+                subsystem = subsystems[ord(msg[1])]
+
             content = parse_message(msg[2:])
             content = ''.join([str(m) for m in content])
             content = '[%s] %s' % (subsystem, content)
