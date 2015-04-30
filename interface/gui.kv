@@ -39,15 +39,19 @@
     Label:
 
 <IndicatorView>
+    serial_choices: id_serial_choices
     orientation: 'horizontal'
-    spacing:0
-    Label:
+    BoxLayout:
+        id: id_serial_choices
+        orientation: 'horizontal'
+        size_hint: (0.8, 1)
+
     SaneLabel:
-        size_hint: (0.2, 1)
+        size_hint: (0.1, 1)
 
         text: self.parent.inbound_traffic_text
     SaneLabel:
-        size_hint: (0.2, 1)
+        size_hint: (0.1, 1)
         text: self.parent.outbound_traffic_text
 
 

@@ -27,9 +27,11 @@ class Ctrl(object):
         self.root = root
         Clock.schedule_interval(self.update_indicators, 0.2)
         Clock.schedule_interval(self.update_settings, 1.0)
+        Clock.schedule_interval(self.root.update_serial_choices, 1.0)
 
     def send(self, msg):
-        self.root.serial.send(msg)
+        if self.root.serial:
+            self.root.serial.send(msg)
 
     def clear_logs(self):
         self.root.debug_panel.logs.adapter.data = []
@@ -88,7 +90,8 @@ class Ctrl(object):
         self.send(mb.to_bytes())
 
     def update_indicators(self, *largs):
-        inbound, outbound = self.root.serial.pop_recent_traffic()
-        self.root.indicators.update(inbound, outbound)
+        if self.root.serial:
+            inbound, outbound = self.root.serial.pop_recent_traffic()
+            self.root.indicators.update(inbound, outbound)
 
 get = None

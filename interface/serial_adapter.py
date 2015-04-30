@@ -17,18 +17,28 @@ debug_bytes = False
 
 class SerialAdapter(object):
     def __init__(self, port='/dev/ttyUSB0', callback=lambda x: None):
-        self.s = serial.Serial(port='/dev/ttyUSB0',
-                            baudrate=9600,
-                            bytesize=8,
-                            stopbits=2,
-                            parity='N',
-                            timeout=0.00001)  # open first serial port
+        self.s = None
+        self.port = port
+        self.reconnect()
 
         self.start_polling()
         self.message_callback = callback
         init_communication()
         self.recent_traffic = [None, None]
         self.outgoing_messages = []
+
+    def reconnect(self):
+        if self.s is not None:
+            self.s.close()
+        try:
+            self.s = serial.Serial(port=self.port,
+                                baudrate=9600,
+                                bytesize=8,
+                                stopbits=2,
+                                parity='N',
+                                timeout=0.00001)  # open first serial port
+        except Exception:
+            print 'Error connecting to %s' % (self.port)
 
     def start_polling(self):
         self.thread_should_stop = False
@@ -55,10 +65,9 @@ class SerialAdapter(object):
                         msg = self.outgoing_messages.pop()
                         send_message(msg)
                 except Exception as e:
-                    print e
-                    print dir(self)
-                    print 'WARNING: expcetion in serial adapter loop.'
-                    raise
+                    time.sleep(1.0)
+                    print 'WARNING: Exception in serial - reconnecting...'
+                    self.reconnect()
 
 
         self.polling_thread = Thread(target=thread_loop)
@@ -75,7 +84,8 @@ class SerialAdapter(object):
     def send(self, msg):
         self.outgoing_messages.append(msg)
 
-    def close():
+    def close(self):
         self.thread_should_stop = True
-        self.polling_thread.stop()
-        self.s.close()
+        self.polling_thread.join()
+        if self.s is not None:
+            self.s.close()
