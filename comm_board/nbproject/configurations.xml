@@ -33,6 +33,12 @@
         <itemPath>drivers/uart.h</itemPath>
         <itemPath>drivers/eeprom.c</itemPath>
         <itemPath>drivers/eeprom.h</itemPath>
+        <itemPath>drivers/spi.c</itemPath>
+        <itemPath>drivers/spi.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="power" displayName="power" projectFiles="true">
+        <itemPath>power/load_board_interface.c</itemPath>
+        <itemPath>power/load_board_interface.h</itemPath>
       </logicalFolder>
       <logicalFolder name="shared" displayName="shared" projectFiles="true">
         <logicalFolder name="algorithm" displayName="algorithm" projectFiles="true">
@@ -93,6 +99,7 @@
     <Elem>computer_communication</Elem>
     <Elem>communication</Elem>
     <Elem>utils</Elem>
+    <Elem>power</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
