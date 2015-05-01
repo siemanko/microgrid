@@ -15,12 +15,24 @@
       <logicalFolder name="communication"
                      displayName="communication"
                      projectFiles="true">
+        <logicalFolder name="other_boards"
+                       displayName="other_boards"
+                       projectFiles="true">
+          <itemPath>communication/other_boards/load_board.h</itemPath>
+          <itemPath>communication/other_boards/load_board.c</itemPath>
+        </logicalFolder>
         <itemPath>communication/computer.c</itemPath>
         <itemPath>communication/computer.h</itemPath>
         <itemPath>communication/interface.c</itemPath>
         <itemPath>communication/interface.h</itemPath>
         <itemPath>communication/messages.c</itemPath>
         <itemPath>communication/messages.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="demand_response"
+                     displayName="demand_response"
+                     projectFiles="true">
+        <itemPath>demand_response/b_box.c</itemPath>
+        <itemPath>demand_response/b_box.h</itemPath>
       </logicalFolder>
       <logicalFolder name="drivers" displayName="drivers" projectFiles="true">
         <itemPath>drivers/board.c</itemPath>
@@ -35,10 +47,6 @@
         <itemPath>drivers/eeprom.h</itemPath>
         <itemPath>drivers/spi.c</itemPath>
         <itemPath>drivers/spi.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="power" displayName="power" projectFiles="true">
-        <itemPath>power/load_board_interface.c</itemPath>
-        <itemPath>power/load_board_interface.h</itemPath>
       </logicalFolder>
       <logicalFolder name="shared" displayName="shared" projectFiles="true">
         <logicalFolder name="algorithm" displayName="algorithm" projectFiles="true">
@@ -100,6 +108,7 @@
     <Elem>communication</Elem>
     <Elem>utils</Elem>
     <Elem>power</Elem>
+    <Elem>demand_response</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

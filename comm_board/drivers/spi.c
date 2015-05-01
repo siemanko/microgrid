@@ -91,8 +91,14 @@ int getFloatLoadBoard(float* result){
    return 1;
 }
 
+void ignore_reading(uint8_t trash) {
+}
+
 uint8_t sendLoadBoardByteRaw(uint8_t message) {
-    uint8_t trashBit = SPI3BUF;
+// Code below get's rid of annoying unused variable warning.
+
+    ignore_reading(SPI3BUF);
+    
     // while(SPI3STATbits.SPITBF);
     SPI3BUF = message;
     while( !SPI3STATbits.SPIRBF);

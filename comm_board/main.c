@@ -11,9 +11,8 @@
 #include "utils/cron.h"
 #include "drivers/eeprom.h"
 #include "user_interface/display.h"
-#include "user_interface/balance.h"'
-
-#include "power/load_board_interface.h"
+#include "user_interface/balance.h"
+#include "demand_response/b_box.h"
 
 
 void init(void) {
@@ -23,23 +22,18 @@ void init(void) {
     init_storage();
     init_cron();
     init_communication();
-    init_display();
-    
-    init_load_board_interface();    
     
     storage_load_settings();
+
+    if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
+        
+    } else {
+        init_b_box_demand_response();
+        init_display();
+    }
+        
         
     debug(DEBUG_INFO, "Initialization sequence complete.");
-}
-
-void load_board_test() {
-    load_board_ports_on();
-    float res;
-    if (load_board_output_current(&res)) {
-        debug(DEBUG_INFO, "Current is %f", res);
-    } else {
-        debug(DEBUG_INFO, "Unable to get current reading.");
-    }
 }
 
 void init_cron_schedule() {    
@@ -47,8 +41,7 @@ void init_cron_schedule() {
     cron_repeat_every_s(10, storage_backup);
     cron_repeat_every_s(1,  display_step);
     cron_repeat_every_s(1,  balance_step);
-    
-    cron_repeat_every_s(1,  load_board_test);
+    cron_repeat_every_s(1,  b_box_demand_response_step);
 }
 
 int main() {

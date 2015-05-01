@@ -1,4 +1,4 @@
-#include "load_board_interface.h"
+#include "load_board.h"
 
 #include "drivers/spi.h"
 #include "utils/debug.h"
