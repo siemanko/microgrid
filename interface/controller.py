@@ -89,6 +89,21 @@ class Ctrl(object):
         mb = MessageBuilder(ToUlink.RESET_PIC)
         self.send(mb.to_bytes())
 
+    def read_eeprom(self, mem_type):
+        mem_types = [ 'float', 'uint32', 'byte']
+        assert mem_type in mem_types
+        mem_type_idx = mem_types.index(mem_type)
+        addr = None
+        try:
+            addr = int(self.root.debug_panel.eeprom_addr.text)
+        except Exception:
+            print 'WARNING: invalid eeprom_addr'
+
+        mb = MessageBuilder(ToUlink.READ_EEPROM)
+        mb.add_byte(mem_type_idx)
+        mb.add_uint32(addr)
+        self.send(mb.to_bytes())
+
     def update_indicators(self, *largs):
         if self.root.serial:
             inbound, outbound = self.root.serial.pop_recent_traffic()

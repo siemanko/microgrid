@@ -93,6 +93,8 @@
       <itemPath>constants.h</itemPath>
       <itemPath>storage.c</itemPath>
       <itemPath>storage.h</itemPath>
+      <itemPath>data_logger.c</itemPath>
+      <itemPath>data_logger.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

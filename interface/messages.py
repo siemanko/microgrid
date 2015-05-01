@@ -8,6 +8,7 @@ class ToUlink(object):
     GET_MEMORY = 5
     SET_UID_NODE_TYPE = 6
     SET_BALANCE = 7
+    READ_EEPROM = 8
 
 class ToComputer(object):
     DEBUG = 0

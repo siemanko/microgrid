@@ -92,6 +92,25 @@ void set_balance_handler(Message* msg) {
     balance_set(balance);
 }
 
+void read_eeprom_handler(Message* msg) {
+    assert(msg->length == 6);
+    int variable_type = msg->content[1];
+    uint32_t addr = bytes_to_uint32(msg->content + 2);
+    if (variable_type == 0) { // float
+        float f_read = eeprom_read_float((uint16_t)addr);
+        debug(DEBUG_INFO, "EEPROM address %l contains float %f.",
+                addr, f_read); 
+    } else if (variable_type == 1) { // uint32
+        uint32_t l_read = eeprom_read_uint32((uint16_t)addr);
+        debug(DEBUG_INFO, "EEPROM address %l contains uint32 %l.",
+                addr, l_read);       
+    } else if (variable_type == 2) { // byte
+        uint32_t b_read = eeprom_read_byte((uint16_t)addr);
+        debug(DEBUG_INFO, "EEPROM address %l contains byte %d.",
+                addr, (int)b_read); 
+    }
+}
+
 void register_misc_message_handlers() {
     set_message_handler(UMSG_PING, ping_handler);
     set_message_handler(UMSG_GET_SETTINGS, get_settings_handler);
@@ -100,5 +119,6 @@ void register_misc_message_handlers() {
     set_message_handler(UMSG_GET_MEMORY, get_memory_handler);
     set_message_handler(UMSG_SET_UID_NODE_TYPE, set_uid_node_type_handler);
     set_message_handler(UMSG_SET_BALANCE, set_balance_handler);
+    set_message_handler(UMSG_READ_EEPROM, read_eeprom_handler);
 }
 

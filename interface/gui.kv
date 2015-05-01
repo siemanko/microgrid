@@ -12,31 +12,6 @@
 <LogEntry>:
     font_name: 'DroidSansMono'
 
-<MenuView>:
-    orientation: 'vertical'
-    spacing: 10
-    Button:
-        size_hint: (1, 0.1)
-        text: 'Clear screen'
-        on_press: c.get.clear_logs()
-    Button:
-        size_hint: (1, 0.1)
-        text: 'Ping'
-        on_press: c.get.send_ping()
-    Button:
-        size_hint: (1, 0.1)
-        text: 'Cron stats'
-        on_press: c.get.cron_stats()
-    Button:
-        size_hint: (1, 0.1)
-        text: 'Probe memory'
-        on_press: c.get.get_memory()
-    Button:
-        size_hint: (1, 0.1)
-        text: 'Reboot'
-        on_press: c.get.reset_pic()
-    Label:
-
 <IndicatorView>
     serial_choices: id_serial_choices
     orientation: 'horizontal'
@@ -88,8 +63,8 @@
 
 <SettingsText>:
     padding_y: ( self.height - self.line_height ) / 2
-    hint_text: 'Loading...'
     multiline: False
+    hint_text: 'Loading...'
     font_size: '20sp'
 
 <SettingsView>:
@@ -138,12 +113,58 @@
 
 <DebugView>:
     logs: id_logs.logs_list
+    eeprom_addr: id_eeprom_addr
+
     orientation: 'horizontal'
     spacing: 10
 
-    MenuView:
+    BoxLayout:
         size_hint: (.35,1)
-        id: id_menu
+        orientation: 'vertical'
+        spacing: 10
+        Button:
+            size_hint: (1, 0.1)
+            text: 'Clear screen'
+            on_press: c.get.clear_logs()
+        Button:
+            size_hint: (1, 0.1)
+            text: 'Ping'
+            on_press: c.get.send_ping()
+        BoxLayout:
+            size_hint: (1, 0.1)
+            orientation: 'horizontal'
+            TextInput:
+                id: id_eeprom_addr
+                size_hint: (0.4, 1)
+                padding_y: (self.height - self.line_height) / 2
+                multiline: False
+                hint_text: 'eeprom'
+            Button:
+                size_hint: (0.2, 1)
+                text: 'float'
+                on_press: c.get.read_eeprom('float')
+            Button:
+                size_hint: (0.2, 1)
+                text: 'uint32'
+                on_press: c.get.read_eeprom('uint32')
+            Button:
+                size_hint: (0.2, 1)
+                text: 'byte'
+                on_press: c.get.read_eeprom('byte')
+
+        Button:
+            size_hint: (1, 0.1)
+            text: 'Cron stats'
+            on_press: c.get.cron_stats()
+        Button:
+            size_hint: (1, 0.1)
+            text: 'Probe memory'
+            on_press: c.get.get_memory()
+        Button:
+            size_hint: (1, 0.1)
+            text: 'Reboot'
+            on_press: c.get.reset_pic()
+        Label:
 
     BoxLayout:
         size_hint: (.65,1)

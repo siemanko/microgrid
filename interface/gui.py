@@ -50,9 +50,6 @@ class IndicatorView(BoxLayout):
 class LogsView(BoxLayout):
     pass
 
-class MenuView(BoxLayout):
-    pass
-
 class DebugView(BoxLayout):
     logs=ObjectProperty(None)
 

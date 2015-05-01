@@ -12,6 +12,7 @@ typedef enum {
     UMSG_GET_MEMORY = 5,
     UMSG_SET_UID_NODE_TYPE = 6,
     UMSG_SET_BALANCE = 7,
+    UMSG_READ_EEPROM = 8,
     // leave last (also make sure no gaps above)
     UMSG_TOTAL_MESSAGES 
 } MessageToUlink; 
