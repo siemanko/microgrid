@@ -8,7 +8,7 @@
 #define SPI_SLAVE_SELECT        LATAbits.LATA12
 
 #define SPI_REQUEST_DATA                           0
-#define SPI_READ_AGAIN                             11
+#define SPI_READ_AGAIN                             1
 
 
 
