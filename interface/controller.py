@@ -3,38 +3,25 @@ import time
 
 from kivy.clock import Clock
 
+from data_logger import DataLogger
 from messages import ToUlink, ToComputer
-
-def ints_to_bytes(ints):
-    return ''.join([ chr(x) for x in ints])
-
-class MessageBuilder(object):
-    def __init__(self, msg_type):
-        self.buffer = [ chr(msg_type) ]
-
-    def add_byte(self, number):
-        assert 0 <= number and number <= 255
-        self.buffer.append(chr(number))
-
-    def add_uint32(self, number):
-        packed = list(struct.pack('<I', number))
-        self.buffer += packed
-    def to_bytes(self):
-        return ''.join([x for x in self.buffer])
+from utils import MessageBuilder
 
 class Ctrl(object):
     def __init__(self, root):
-        self.root = root
+        self.ui_root = root
+        self.data_logger = DataLogger(self.ui_root)
+
         Clock.schedule_interval(self.update_indicators, 0.2)
         Clock.schedule_interval(self.update_settings, 1.0)
-        Clock.schedule_interval(self.root.update_serial_choices, 1.0)
+        Clock.schedule_interval(self.ui_root.update_serial_choices, 1.0)
 
     def send(self, msg):
-        if self.root.serial:
-            self.root.serial.send(msg)
+        if self.ui_root.serial:
+            self.ui_root.serial.send(msg)
 
     def clear_logs(self):
-        self.root.debug_panel.logs.adapter.data = []
+        self.ui_root.debug_panel.logs.adapter.data = []
 
     def send_ping(self):
         mb = MessageBuilder(ToUlink.PING)
@@ -62,9 +49,9 @@ class Ctrl(object):
     def set_uid_node_type(self):
         mb = MessageBuilder(ToUlink.SET_UID_NODE_TYPE)
         try:
-            uid = int(self.root.settings.box_uid.text)
+            uid = int(self.ui_root.settings.box_uid.text)
             assert 0<= uid and uid <= 255
-            node_type = self.root.settings.box_node_type.text
+            node_type = self.ui_root.settings.box_node_type.text
             node_type = node_type.upper()
             assert len(node_type) == 1 and node_type in ['A', 'B']
             node_type = ord(node_type)
@@ -78,7 +65,7 @@ class Ctrl(object):
     def set_balance(self):
         try:
             mb = MessageBuilder(ToUlink.SET_BALANCE)
-            balance = int(self.root.settings.box_balance.text)
+            balance = int(self.ui_root.settings.box_balance.text)
             mb.add_uint32(balance)
             self.send(mb.to_bytes())
         except Exception as e:
@@ -95,7 +82,7 @@ class Ctrl(object):
         mem_type_idx = mem_types.index(mem_type)
         addr = None
         try:
-            addr = int(self.root.debug_panel.eeprom_addr.text)
+            addr = int(self.ui_root.debug_panel.eeprom_addr.text)
         except Exception:
             print 'WARNING: invalid eeprom_addr'
 
@@ -105,8 +92,8 @@ class Ctrl(object):
         self.send(mb.to_bytes())
 
     def update_indicators(self, *largs):
-        if self.root.serial:
-            inbound, outbound = self.root.serial.pop_recent_traffic()
-            self.root.indicators.update(inbound, outbound)
+        if self.ui_root.serial:
+            inbound, outbound = self.ui_root.serial.pop_recent_traffic()
+            self.ui_root.indicators.update(inbound, outbound)
 
 get = None

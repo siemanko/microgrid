@@ -13,6 +13,7 @@ typedef enum {
     UMSG_SET_UID_NODE_TYPE = 6,
     UMSG_SET_BALANCE = 7,
     UMSG_READ_EEPROM = 8,
+    UMSG_DATA_LOGGER = 9,
     // leave last (also make sure no gaps above)
     UMSG_TOTAL_MESSAGES 
 } MessageToUlink; 
@@ -20,6 +21,7 @@ typedef enum {
 typedef enum {
     CMSG_DEBUG = 0,
     CMSG_GET_SETTINGS_REPLY = 1,
+    CMSG_DATA_LOGGER_REPLY = 2,
     // leave last (also make sure no gaps above)
     CMSG_TOTAL_MESSAGES
 } MessageToComputer;

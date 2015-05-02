@@ -56,6 +56,9 @@ class DebugView(BoxLayout):
 class SettingsView(BoxLayout):
     pass
 
+class DataLoggerView(BoxLayout):
+    pass
+
 class RootView(BoxLayout):
     def __init__(self, *args, **kwargs):
         super(RootView, self).__init__(*args, **kwargs)

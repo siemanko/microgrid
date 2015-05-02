@@ -1,26 +1,12 @@
 import pytz
 import struct
 
+import controller
+
 from datetime import datetime
-
 from messages import ToComputer, ToUlink
+from utils import parse_float, parse_int, parse_uint32
 
-def parse_int(int_bytes):
-    if len(int_bytes) == 2:
-        return struct.unpack('<h', int_bytes)[0]
-    else:
-        return 666
-
-def parse_float(float_bytes):
-    if len(float_bytes) == 4:
-        return struct.unpack('<f', float_bytes)[0]
-    else:
-        return 666
-def parse_uint32(uint32_bytes):
-    if len(uint32_bytes) == 4:
-        return struct.unpack('<I', uint32_bytes)[0]
-    else:
-        return 666
 def parse_message(msg):
     parsed_message = []
     i = 0
@@ -109,6 +95,7 @@ class MessageHandler(object):
             self.update_if_not_focused(self.ui_root.settings.box_uid, str(box_uid))
             self.update_if_not_focused(self.ui_root.settings.box_node_type, str(box_node_type))
             self.update_if_not_focused(self.ui_root.settings.box_balance, str(box_balance))
-
+        elif msg_type == ToComputer.DATA_LOGGER_REPLY:
+            controller.get.data_logger.on_message(msg)
         else:
             print 'WARNING: Uknown message type :', ord(msg[0])

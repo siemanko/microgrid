@@ -10,6 +10,8 @@
 
 #include <stdint.h>
 
+#define EEPROM_TOTAL_MEMORY 32000LL
+
 void init_eeprom();
 
 // Those functions read from memory

@@ -65,8 +65,9 @@ class SerialAdapter(object):
                         msg = self.outgoing_messages.pop()
                         send_message(msg)
                 except Exception as e:
-                    time.sleep(1.0)
+                    print e
                     print 'WARNING: Exception in serial - reconnecting...'
+                    time.sleep(1.0)
                     self.reconnect()
 
 

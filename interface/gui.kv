@@ -44,7 +44,7 @@
     debug_panel: id_debug_panel
     settings:    id_settings
     indicators:  id_indicators
-
+    data_logger: id_data_logger
     orientation: 'vertical'
     TabbedPanel:
         size_hint: (1, 0.93)
@@ -57,6 +57,10 @@
             text: "Settings"
             SettingsView:
                 id: id_settings
+        TabbedPanelItem:
+            text: "Data Logger"
+            DataLoggerView:
+                id: id_data_logger
     IndicatorView:
         size_hint: (1, 0.07)
         id: id_indicators
@@ -151,7 +155,10 @@
                 size_hint: (0.2, 1)
                 text: 'byte'
                 on_press: c.get.read_eeprom('byte')
-
+        Button:
+            size_hint: (1, 0.1)
+            text: 'Data Logger Status'
+            on_press: c.get.data_logger.status()
         Button:
             size_hint: (1, 0.1)
             text: 'Cron stats'
@@ -175,3 +182,30 @@
             id: id_logs
 
 
+<DataLoggerView>
+    data_logs: id_data_logs
+    orientation: 'horizontal'
+    spacing: 10
+
+    BoxLayout:
+        size_hint: (.35,1)
+        orientation: 'vertical'
+        spacing: 10
+        Button:
+            size_hint: (1, 0.1)
+            text: 'Load Data'
+            on_press: c.get.data_logger.load_data()
+        Button:
+            size_hint: (1, 0.1)
+            text: 'Reset Logs'
+        Label:
+    BoxLayout:
+        size_hint: (.65,1)
+        orientation: 'vertical'
+
+        ListView:
+            id: id_data_logs
+            adapter:
+                sla.SimpleListAdapter(
+                data=[],
+                cls=gui.LogEntry)
