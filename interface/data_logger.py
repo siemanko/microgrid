@@ -43,7 +43,7 @@ class DataPuller(object):
             if dl_msg_type == DataLoggerMessages.EXTRACT_GENERAL:
                 self.uid = ord(msg[2])
                 self.n_columns = parse_uint32(msg[3:7])
-                self.n_entries = 20 # parse_uint32(msg[7:11])
+                self.n_entries = parse_uint32(msg[7:11])
                 self.schema_name = msg[11:]
             elif dl_msg_type == DataLoggerMessages.EXTRACT_COLUMN:
                 column_idx = ord(msg[2])
