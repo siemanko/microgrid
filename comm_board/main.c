@@ -13,7 +13,7 @@
 #include "user_interface/display.h"
 #include "user_interface/balance.h"
 #include "demand_response/b_box.h"
-
+#include "data_logger/b_box.h"
 
 void init(void) {
     init_board();
@@ -29,6 +29,7 @@ void init(void) {
         
     } else {
         init_b_box_demand_response();
+        init_b_box_data_logger();
         init_display();
     }
         
@@ -42,6 +43,8 @@ void init_cron_schedule() {
     cron_repeat_every_s(1,  display_step);
     cron_repeat_every_s(1,  balance_step);
     cron_repeat_every_s(1,  b_box_demand_response_step);
+    
+    cron_repeat_every_s(LOG_DATA_EVERY_S, b_box_data_logger_step);
 }
 
 int main() {

@@ -7,7 +7,8 @@ typedef enum {
     STORAGE_NODE_TYPE = 5,         // byte
     STORAGE_TIME = 6,              // uint32   
     STORAGE_BALANCE = 10,          // uint32
-    STORAGE_DATA_LOGGER = 200,
+    STORAGE_DATA_LOGGER = 200,     // all tge storage above this address
+                                   // is dedicated for data_logger
 } StorageAddress;
 
 void init_storage();

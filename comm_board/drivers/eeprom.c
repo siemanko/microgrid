@@ -227,10 +227,11 @@ int eeprom_write_byte(unsigned short address, unsigned char inputData){
     return 0;
 }
 
-int eeprom_write_float(unsigned short address, void * inputData){
+int eeprom_write_float(unsigned short address, float input){
 
     int i;
-    unsigned char * p = inputData;
+    uint8_t buffer[4];
+    float_to_bytes(input, buffer);
 
     waitBusy();
 
@@ -255,7 +256,7 @@ int eeprom_write_float(unsigned short address, void * inputData){
             SPI2_transfer( (address+i) >> 8 );
             SPI2_transfer( address+i );
         }
-        SPI2_transfer(*p++);
+        SPI2_transfer(buffer[i]);
     }
     
     SS2 = 1;                         // Release EEPROM

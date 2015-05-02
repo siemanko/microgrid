@@ -9,6 +9,9 @@
 
 float bytes_to_float(uint8_t raw[]);
 
+void float_to_bytes(float source, uint8_t* destination);
+
+
 void int_to_bytes(int source, uint8_t* destination);
 
 int bytes_to_int(uint8_t* source);
@@ -34,6 +37,12 @@ void internal_assert(int condition, char* format, ...);
 void* internal_safe_malloc(uint16_t size, char* format, ...);
 
 void set_assert_callback(void (*callback)(char*, va_list));
+
+
+// Initial should normally be zero, but 
+// can be an output of another checksum call
+// to computer joint checksum for multiple pieces of data.
+uint32_t checksum(uint32_t initial, const uint8_t* data, int len);
 
 #endif	/* LIBRARYFUNCTIONS_H */
 

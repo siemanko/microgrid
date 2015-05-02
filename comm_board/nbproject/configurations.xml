@@ -28,6 +28,12 @@
         <itemPath>communication/messages.c</itemPath>
         <itemPath>communication/messages.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="data_logger" displayName="data_logger" projectFiles="true">
+        <itemPath>data_logger/data_logger.c</itemPath>
+        <itemPath>data_logger/data_logger.h</itemPath>
+        <itemPath>data_logger/b_box.c</itemPath>
+        <itemPath>data_logger/b_box.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="demand_response"
                      displayName="demand_response"
                      projectFiles="true">
@@ -93,8 +99,6 @@
       <itemPath>constants.h</itemPath>
       <itemPath>storage.c</itemPath>
       <itemPath>storage.h</itemPath>
-      <itemPath>data_logger.c</itemPath>
-      <itemPath>data_logger.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -111,6 +115,7 @@
     <Elem>utils</Elem>
     <Elem>power</Elem>
     <Elem>demand_response</Elem>
+    <Elem>data_logger</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

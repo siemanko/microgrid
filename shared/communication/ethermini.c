@@ -27,17 +27,14 @@ void make_ethermini(Ethermini* e,
     e->msg_receive_buffer = 0;
 }
 
-uint32_t checksum(Message* msg) {
+uint32_t message_checksum(Message* msg) {
     uint32_t res = 0;
 
-    res = res*333 + msg->source;
-    res = res*333 + msg->destination;
-    res = res*333 + msg->length;
+    res = checksum(res, &(msg->source), 1);
+    res = checksum(res, &(msg->destination), 1);
+    res = checksum(res, &(msg->length), 1);
+    res = checksum(res, msg->content, msg->length);
 
-    int midx;
-    for (midx = 0; midx < msg->length; ++midx) {
-        res = res*333 + msg->content[midx];
-    }
     return res;
 }
 
@@ -66,7 +63,7 @@ void ethermini_send_immediately(Ethermini *e, Message *msg) {
         e->put(msg->content[msg_idx]);
     }
     uint8_t cc[4];
-    uint32_to_bytes(checksum(msg), cc);
+    uint32_to_bytes(message_checksum(msg), cc);
     int ccidx;
     for (ccidx = 0; ccidx < 4; ++ccidx) {
         e->put(cc[ccidx]);
@@ -126,7 +123,7 @@ void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
         e->checksum_buffer[e->state_aux++] = symbol;
         if (e->state_aux == 4) {
             uint32_t cc_received = bytes_to_uint32(e->checksum_buffer);
-            uint32_t cc_computed = checksum(e->msg_receive_buffer);
+            uint32_t cc_computed = message_checksum(e->msg_receive_buffer);
             if (cc_received == cc_computed) {
                 if (!cb_push(e->inbound_messages, e->msg_receive_buffer)) {
                     // buffer full.

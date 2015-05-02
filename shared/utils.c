@@ -16,6 +16,15 @@ float bytes_to_float(uint8_t raw[]){
     return un.fp;
 }
 
+void float_to_bytes(float source, uint8_t* destination) {
+    union {
+        uint8_t bytes[4];
+        float fp;
+    } un;
+    un.fp = source;
+    memcpy(destination, un.bytes, 4);
+}
+
 
 void int_to_bytes(int source, uint8_t* destination) {
     destination[0] = source & 0xFF;
@@ -105,4 +114,12 @@ void* internal_safe_malloc(uint16_t size, char* format, ...) {
 
 void set_assert_callback(void (*callback)(char*, va_list)) {
     assert_callback = callback;
+}
+
+uint32_t checksum(uint32_t initial, const uint8_t* data, int len) {
+    int didx;
+    for (didx = 0; didx < len; ++didx) {
+        initial = initial*333 + data[didx];
+    }
+    return initial;
 }
