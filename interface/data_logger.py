@@ -117,20 +117,23 @@ class DataPuller(object):
         self.entry = [None for _ in range(self.n_entries)]
 
         for batch_start in range(0, self.n_entries, BATCH_SIZE):
+            print 'batch_start'
             batch_end = min(batch_start + BATCH_SIZE, self.n_entries)
             while not all(self.entry_done[batch_start:batch_end]) and not self.please_stop:
                 for entry in range(batch_start, batch_end):
                     if not self.entry_done[entry]:
+                        print 'msg_start'
                         mb = MessageBuilder(ToUlink.DATA_LOGGER)
                         mb.add_byte(DataLoggerMessages.EXTRACT_DATA)
                         mb.add_uint32(entry)
                         self.send(mb.to_bytes())
+                        print 'msg_end'
                         time.sleep(MSG_TIMEOUT)
                 time.sleep(BATCH_TIMEOUT)
 
             for entry in range(batch_start, batch_end):
                 self.log(self.entry_line(entry))
-
+            print 'batch_end'
     def general_info(self):
         return [
             '# schema: %s' % self.schema_name,
@@ -193,3 +196,31 @@ class DataLogger(object):
                 else:
                     self.save_data()
                 self.data_puller = None
+
+
+
+if __name__ == '__main__':
+    import sys
+    import time
+    from messages import ToComputer
+    from serial_adapter import SerialAdapter
+
+    if len(sys.argv) != 2:
+        print 'Usage: %s <device>' % (sys.argv[0],)
+        sys.exit(1)
+
+    def log(msg):
+        print msg
+
+    d = DataPuller(None, log)
+
+    def msg_callback(msg):
+        if ord(msg[0]) == ToComputer.DATA_LOGGER_REPLY:
+            d.on_message(msg)
+
+    s = SerialAdapter(sys.argv[1], msg_callback)
+    d.send = s.send
+
+    d.start()
+    while True:
+        time.sleep(1.0)

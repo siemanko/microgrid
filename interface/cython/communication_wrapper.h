@@ -28,8 +28,14 @@ void c_send_message(char* content, int length) {
     msg.length = length;
     msg.source = 254;
     msg.destination = 255;
-    msg.content = content;
+    unsigned char* buffer = (unsigned char*)malloc(sizeof(char) * length);
+    int i;
+    for (i=0; i<length; ++i) {
+        buffer[i] = content[i];
+    }
+    msg.content = buffer;
     ethermini_send_immediately(&network, &msg);
+    free(buffer);
 }
 
 void on_message(Message* msg) {
@@ -38,7 +44,7 @@ void on_message(Message* msg) {
 
 void c_init_communication() {
     make_ethermini(&network, put_char, on_message);
-    make_cb(&outgoing_characters, 10000);
+    make_cb(&outgoing_characters, 10000LL);
 }
 
 void c_on_symbol(unsigned char symbol) {
@@ -58,6 +64,7 @@ unsigned char* c_receive_message(int* length) {
         }
         ret[msg->length] = 0;
         *length = msg->length;
+        message_free(msg);
         return ret;
     } else {
         *length = 0;
