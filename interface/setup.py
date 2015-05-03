@@ -28,8 +28,6 @@ sources.append(join(CPATH, "communication.pyx"))
 
 sources.extend(find_files(join(CPATH, "shared"), "*.c"))
 
-print sources
-
 ext_modules.append(Extension(
     "bindings.communication",
     sources,

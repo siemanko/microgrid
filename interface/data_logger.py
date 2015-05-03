@@ -4,12 +4,9 @@ from threading import Thread
 
 from messages import ToUlink
 from utils import MessageBuilder
-from utils import parse_uint32, parse_float
+from utils import parse_uint32, parse_float, stringify
 
 VERBOSE = False
-
-def stringify(msg):
-    return ''.join([chr(x) for x in msg])
 
 class DataLoggerMessages(object):
     GET_STATUS        =  1

@@ -47,3 +47,5 @@ def parse_uint32(uint32_bytes):
     else:
         return 666
 
+def stringify(msg):
+    return ''.join([chr(x) for x in msg])

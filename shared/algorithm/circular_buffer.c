@@ -39,12 +39,12 @@ int cb_push(CircularBuffer *buffer, void *data) {
     if (cb_full(buffer)) {
         return 0;
     } else {
-        index = buffer->start + buffer->count+1;
+        index = buffer->start + buffer->count;
         if (index >= buffer->size) {
             index = 0;
         }
         buffer->element[index] = data;
-        ++buffer->count;
+        buffer->count += 1;
 
         assert(buffer->count <= buffer->size);
         assert(buffer->start < buffer->size);
