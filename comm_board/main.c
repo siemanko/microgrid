@@ -37,13 +37,13 @@ void init(void) {
     debug(DEBUG_INFO, "Initialization sequence complete.");
 }
 
+
 void init_cron_schedule() {    
     cron_repeat_rapidly(communication_step);
     cron_repeat_every_s(10, storage_backup);
     cron_repeat_every_s(1,  display_step);
     cron_repeat_every_s(1,  balance_step);
     cron_repeat_every_s(1,  b_box_demand_response_step);
-    
     cron_repeat_every_s(LOG_DATA_EVERY_S, b_box_data_logger_step);
 }
 
