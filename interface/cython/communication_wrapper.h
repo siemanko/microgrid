@@ -23,7 +23,7 @@ void put_char(uint8_t symbol) {
     cb_push(&outgoing_characters, (void*)symbol);
 }
 
-void c_send_message(char* content, int length) {
+void c_send_message(unsigned char* content, int length) {
     Message msg;
     msg.length = length;
     msg.source = 254;
@@ -64,7 +64,7 @@ unsigned char* c_receive_message(int* length) {
         }
         ret[msg->length] = 0;
         *length = msg->length;
-        message_free(msg);
+        // message_free(msg);
         return ret;
     } else {
         *length = 0;

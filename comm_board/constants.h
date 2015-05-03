@@ -4,7 +4,7 @@
 #define ASSERTS_ENABLED  1
 //#define CRON_STATS
 
-#define LOG_DATA_EVERY_S 60
+#define LOG_DATA_EVERY_S 10
 
 
 #endif

@@ -6,6 +6,10 @@ from messages import ToUlink
 from utils import MessageBuilder
 from utils import parse_uint32, parse_float
 
+VERBOSE = False
+
+def stringify(msg):
+    return ''.join([chr(x) for x in msg])
 
 class DataLoggerMessages(object):
     GET_STATUS        =  1
@@ -39,17 +43,17 @@ class DataPuller(object):
 
     def on_message(self, msg):
         try:
-            dl_msg_type = ord(msg[1])
+            dl_msg_type = msg[1]
             if dl_msg_type == DataLoggerMessages.EXTRACT_GENERAL:
-                self.uid = ord(msg[2])
+                self.uid = msg[2]
                 self.n_columns = parse_uint32(msg[3:7])
                 self.n_entries = parse_uint32(msg[7:11])
-                self.schema_name = msg[11:]
+                self.schema_name = stringify(msg[11:])
             elif dl_msg_type == DataLoggerMessages.EXTRACT_COLUMN:
-                column_idx = ord(msg[2])
+                column_idx = msg[2]
                 self.column_done[column_idx] = True
-                self.column_type[column_idx] = ord(msg[3])
-                self.column_name[column_idx] = msg[4:]
+                self.column_type[column_idx] = msg[3]
+                self.column_name[column_idx] = stringify(msg[4:])
             elif dl_msg_type == DataLoggerMessages.EXTRACT_DATA:
                 entry_idx = parse_uint32(msg[2:6])
                 self.entry_done[entry_idx] = True
@@ -82,8 +86,8 @@ class DataPuller(object):
         self.thread.join()
 
     def pull(self):
-        MSG_TIMEOUT = 0.4
-        BATCH_TIMEOUT = 1.0
+        MSG_TIMEOUT = 0.1
+        BATCH_TIMEOUT = 0.5
         BATCH_SIZE = 4
 
         while self.schema_name is None and not self.please_stop:
@@ -117,23 +121,23 @@ class DataPuller(object):
         self.entry = [None for _ in range(self.n_entries)]
 
         for batch_start in range(0, self.n_entries, BATCH_SIZE):
-            print 'batch_start'
+            if VERBOSE: print 'batch_start'
             batch_end = min(batch_start + BATCH_SIZE, self.n_entries)
             while not all(self.entry_done[batch_start:batch_end]) and not self.please_stop:
                 for entry in range(batch_start, batch_end):
                     if not self.entry_done[entry]:
-                        print 'msg_start'
+                        if VERBOSE: print 'msg_start'
                         mb = MessageBuilder(ToUlink.DATA_LOGGER)
                         mb.add_byte(DataLoggerMessages.EXTRACT_DATA)
                         mb.add_uint32(entry)
                         self.send(mb.to_bytes())
-                        print 'msg_end'
+                        if VERBOSE: print 'msg_end'
                         time.sleep(MSG_TIMEOUT)
                 time.sleep(BATCH_TIMEOUT)
 
             for entry in range(batch_start, batch_end):
                 self.log(self.entry_line(entry))
-            print 'batch_end'
+            if VERBOSE: print 'batch_end'
     def general_info(self):
         return [
             '# schema: %s' % self.schema_name,
@@ -205,6 +209,9 @@ if __name__ == '__main__':
     from messages import ToComputer
     from serial_adapter import SerialAdapter
 
+    import faulthandler
+    faulthandler.enable()
+
     if len(sys.argv) != 2:
         print 'Usage: %s <device>' % (sys.argv[0],)
         sys.exit(1)
@@ -215,9 +222,10 @@ if __name__ == '__main__':
     d = DataPuller(None, log)
 
     def msg_callback(msg):
-        if ord(msg[0]) == ToComputer.DATA_LOGGER_REPLY:
+        if msg[0] == ToComputer.DATA_LOGGER_REPLY:
             d.on_message(msg)
-
+            if d.done:
+                print 'done'
     s = SerialAdapter(sys.argv[1], msg_callback)
     d.send = s.send
 

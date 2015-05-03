@@ -1,6 +1,6 @@
 import serial
 import time
-from Queue import Queue, Empty
+
 from threading import Thread
 
 from bindings.communication import (
@@ -54,6 +54,7 @@ class SerialAdapter(object):
                         on_symbol(x[0])
                     msg = receive_message()
                     if msg is not None:
+
                         self.message_callback(msg)
                 except Exception as e:
                     print e
@@ -74,7 +75,7 @@ class SerialAdapter(object):
                         outgoing_char = get_outgoing_char()
 
                     if len(msg) > 0:
-                        self.s.write(msg)
+                        self.s.write(bytearray(msg))
                     else:
                         time.sleep(0.03)
 
