@@ -1,18 +1,31 @@
 #include "b_box.h"
 
 #include "data_logger/data_logger.h"
+#include "communication/other_boards/load_board.h"
+#include "drivers/timer.h"
+#include "utils/debug.h"
+
+#define NAN 0.0/0.0
+
 
 DataLoggerSchema b_box_schema;
 
 static const char* name = "B box logs";
-static const uint8_t num_column = 2;
+static const uint8_t num_column = 5;
 static const DataLoggerType column_type[] = {
     DATA_LOGGER_TYPE_UINT32,
-    DATA_LOGGER_TYPE_FLOAT 
+    DATA_LOGGER_TYPE_FLOAT,
+    DATA_LOGGER_TYPE_FLOAT,
+    DATA_LOGGER_TYPE_FLOAT,
+    DATA_LOGGER_TYPE_FLOAT,
+
 };
-static const char* column_name[2] = {
-    "number",
-    "num_square",  
+static const char* column_name[] = {
+    "timestamp",
+    "output current",
+    "network voltage",
+    "output voltage",
+    "phone_voltage"
 };
 
 void init_b_box_data_logger() {
@@ -25,9 +38,29 @@ void init_b_box_data_logger() {
     data_logger_load_schema(&b_box_schema);
 }
 
-static uint32_t last_num = 5;
-
 void b_box_data_logger_step() {
-    data_logger_log(0, last_num, 0.5 + last_num*last_num);
-    ++last_num;
+    float output_current;
+    float network_voltage;
+    float output_voltage;
+    float phone_voltage;
+
+    int success =
+            load_board_output_current(&output_current) &&
+            load_board_network_voltage(&network_voltage) &&
+            load_board_output_voltage(&output_voltage) &&
+            load_board_phone_voltage(&phone_voltage);
+
+    if (!success) {
+        output_current = NAN;
+        network_voltage = NAN;
+        output_voltage = NAN;
+        phone_voltage = NAN;
+    }
+    
+    data_logger_log(0,
+                    time_seconds_since_epoch(),
+                    output_current,
+                    network_voltage,
+                    output_voltage,
+                    phone_voltage);
 }
