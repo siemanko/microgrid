@@ -59,8 +59,8 @@ class Ctrl(object):
             mb.add_byte(node_type)
             self.send(mb.to_bytes())
         except Exception as e:
-            print e
-            print 'WARNING: invalid uid or node type value.'
+            print (e)
+            print ('WARNING: invalid uid or node type value.')
 
     def set_balance(self):
         try:
@@ -69,8 +69,8 @@ class Ctrl(object):
             mb.add_uint32(balance)
             self.send(mb.to_bytes())
         except Exception as e:
-            print e
-            print 'WARNING: invalid balance value.'
+            print (e)
+            print ('WARNING: invalid balance value.')
 
     def reset_pic(self):
         mb = MessageBuilder(ToUlink.RESET_PIC)
@@ -83,8 +83,9 @@ class Ctrl(object):
         addr = None
         try:
             addr = int(self.ui_root.debug_panel.eeprom_addr.text)
-        except Exception:
-            print 'WARNING: invalid eeprom_addr'
+        except Exception as e:
+            print (e)
+            print ('WARNING: invalid eeprom_addr')
 
         mb = MessageBuilder(ToUlink.READ_EEPROM)
         mb.add_byte(mem_type_idx)

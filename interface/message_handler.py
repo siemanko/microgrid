@@ -62,7 +62,7 @@ class MessageHandler(object):
 
     def handle(self, msg):
         if len(msg) == 0:
-            print 'WARNING: Empty message'
+            print ('WARNING: Empty message')
             return
         msg_type = msg[0]
         if msg_type == ToComputer.DEBUG:
@@ -73,9 +73,9 @@ class MessageHandler(object):
                 'CRON',
             ]
             if (0 > msg[1] or msg[1] >= len(subsystems)):
-                print  "WARNING: Unknown debug category: %d.." % (msg[1],)
+                print  ("WARNING: Unknown debug category: %d.." % (msg[1],))
                 subsystem = 'UNKNOWN'
-                print stringify(msg[2:])
+                print (stringify(msg[2:]))
             else:
                 subsystem = subsystems[msg[1]]
 
@@ -98,4 +98,4 @@ class MessageHandler(object):
         elif msg_type == ToComputer.DATA_LOGGER_REPLY:
             controller.get.data_logger.on_message(msg)
         else:
-            print 'WARNING: Uknown message type :', msg[0]
+            print( 'WARNING: Uknown message type :', msg[0])

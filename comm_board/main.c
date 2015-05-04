@@ -18,6 +18,7 @@
 void init(void) {
     init_board();
     init_timer();
+    delay_ms(500);
     init_assert();
     init_storage();
     init_cron();

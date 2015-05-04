@@ -70,7 +70,7 @@ class DataPuller(object):
                     all(self.entry_done)):
                 self.done = True
         except Exception as e:
-            print e
+            print(e)
             self.failure = True
 
     def start(self):
@@ -83,7 +83,7 @@ class DataPuller(object):
         self.thread.join()
 
     def pull(self):
-        MSG_TIMEOUT = 0.1
+        MSG_TIMEOUT = 0.0001
         BATCH_TIMEOUT = 0.5
         BATCH_SIZE = 4
 
@@ -118,23 +118,23 @@ class DataPuller(object):
         self.entry = [None for _ in range(self.n_entries)]
 
         for batch_start in range(0, self.n_entries, BATCH_SIZE):
-            if VERBOSE: print 'batch_start'
+            if VERBOSE: print ('batch_start')
             batch_end = min(batch_start + BATCH_SIZE, self.n_entries)
             while not all(self.entry_done[batch_start:batch_end]) and not self.please_stop:
                 for entry in range(batch_start, batch_end):
                     if not self.entry_done[entry]:
-                        if VERBOSE: print 'msg_start'
+                        if VERBOSE: print ('msg_start')
                         mb = MessageBuilder(ToUlink.DATA_LOGGER)
                         mb.add_byte(DataLoggerMessages.EXTRACT_DATA)
                         mb.add_uint32(entry)
                         self.send(mb.to_bytes())
-                        if VERBOSE: print 'msg_end'
+                        if VERBOSE: print ('msg_end')
                         time.sleep(MSG_TIMEOUT)
                 time.sleep(BATCH_TIMEOUT)
 
             for entry in range(batch_start, batch_end):
                 self.log(self.entry_line(entry))
-            if VERBOSE: print 'batch_end'
+            if VERBOSE: print ('batch_end')
     def general_info(self):
         return [
             '# schema: %s' % self.schema_name,
@@ -193,7 +193,7 @@ class DataLogger(object):
             if self.data_puller.done:
                 self.data_puller.stop()
                 if self.data_puller.failure:
-                    print 'pulling failed'
+                    print ('pulling failed')
                 else:
                     self.save_data()
                 self.data_puller = None
@@ -210,11 +210,11 @@ if __name__ == '__main__':
     faulthandler.enable()
 
     if len(sys.argv) != 2:
-        print 'Usage: %s <device>' % (sys.argv[0],)
+        print ('Usage: %s <device>' % (sys.argv[0],))
         sys.exit(1)
 
     def log(msg):
-        print msg
+        print (msg)
 
     d = DataPuller(None, log)
 
@@ -222,7 +222,7 @@ if __name__ == '__main__':
         if msg[0] == ToComputer.DATA_LOGGER_REPLY:
             d.on_message(msg)
             if d.done:
-                print 'done'
+                print( 'done')
     s = SerialAdapter(sys.argv[1], msg_callback)
     d.send = s.send
 

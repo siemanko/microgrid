@@ -40,16 +40,16 @@ class SerialAdapter(object):
                                 parity=serial.PARITY_EVEN,
                                 timeout=1.0)  # open first serial port
         except Exception:
-            print 'Error connecting to %s' % (self.port)
+            print('Error connecting to %s' % (self.port))
 
     def start_threads(self):
         def reading_loop():
             while not self.thread_should_stop:
                 try:
-                    x = [ ord(x) for x in self.s.read(1)]
+                    x = self.s.read(1) #[ ord(x) for x in self.s.read(1)]
                     if len(x) > 0:
                         if debug_bytes:
-                            print 'INCOMING traffic: ', x[0]
+                            print ('INCOMING traffic: ', x[0])
                         self.recent_traffic[0] = x[0]
                         on_symbol(x[0])
                     msg = receive_message()
@@ -57,8 +57,8 @@ class SerialAdapter(object):
 
                         self.message_callback(msg)
                 except Exception as e:
-                    print e
-                    print 'WARNING: Exception in serial (reading) - reconnecting...'
+                    print (e)
+                    print ('WARNING: Exception in serial (reading) - reconnecting...')
                     time.sleep(1.0)
                     self.reconnect()
 
@@ -71,7 +71,7 @@ class SerialAdapter(object):
                         msg.append(outgoing_char)
                         self.recent_traffic[1] = outgoing_char
                         if debug_bytes:
-                            print 'OUTGOING traffic: ', outgoing_char
+                            print ('OUTGOING traffic: ', outgoing_char)
                         outgoing_char = get_outgoing_char()
 
                     if len(msg) > 0:
@@ -83,8 +83,8 @@ class SerialAdapter(object):
                         msg = self.outgoing_messages.pop()
                         send_message(msg)
                 except Exception as e:
-                    print e
-                    print 'WARNING: Exception in serial (writing) - reconnecting...'
+                    print (e)
+                    print ('WARNING: Exception in serial (writing) - reconnecting...')
                     time.sleep(1.0)
 
         self.reading_thread = Thread(target=reading_loop)
