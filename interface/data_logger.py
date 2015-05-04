@@ -13,6 +13,7 @@ class DataLoggerMessages(object):
     EXTRACT_GENERAL   =  2
     EXTRACT_COLUMN    =  3
     EXTRACT_DATA      =  4
+    RESET             =  5
 
 class ColumnType(object):
     FLOAT = 1
@@ -171,6 +172,11 @@ class DataLogger(object):
     def status(self):
         mb = MessageBuilder(ToUlink.DATA_LOGGER)
         mb.add_byte(DataLoggerMessages.GET_STATUS)
+        self.send(mb.to_bytes())
+
+    def reset(self):
+        mb = MessageBuilder(ToUlink.DATA_LOGGER)
+        mb.add_byte(DataLoggerMessages.RESET)
         self.send(mb.to_bytes())
 
     def load_data(self):

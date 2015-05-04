@@ -81,7 +81,10 @@ void data_logger_log(int ignored, ...) {
     uint32_t offset = dls(DLS_DATA);
     uint32_t num_data = eeprom_read_uint32(dls(DLS_NUM_LOGGED));
     offset += num_data * current_entry_size;
-
+    
+    if (offset + current_entry_size >= EEPROM_TOTAL_MEMORY)
+        return;
+    
     va_list args;
     va_start(args, ignored);
     int idx;
@@ -113,6 +116,7 @@ typedef enum {
     DLM_EXTRACT_GENERAL   =  2,
     DLM_EXTRACT_COLUMN    =  3,
     DLM_EXTRACT_DATA      =  4,
+    DLM_RESET             =  5,
 } DataLoggerMessages;
 
 
@@ -177,6 +181,9 @@ void dl_message_handler(Message* msg) {
             }
         }
         send_mb(&mb3, COMPUTER);
+    } else if (msg->content[1] == DLM_RESET) {
+        debug(DEBUG_INFO, "Resetting data logger");
+        data_logger_reset();  
     } else {
         assert(0);
     }

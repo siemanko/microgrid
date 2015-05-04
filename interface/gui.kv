@@ -161,6 +161,10 @@
             on_press: c.get.data_logger.status()
         Button:
             size_hint: (1, 0.1)
+            text: 'Wipe data logs'
+            on_press: c.get.data_logger.reset()
+        Button:
+            size_hint: (1, 0.1)
             text: 'Cron stats'
             on_press: c.get.cron_stats()
         Button:
