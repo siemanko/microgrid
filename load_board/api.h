@@ -12,7 +12,7 @@
 
 void set_communication_enable(int enabled);
 
-uint8_t handle_message(uint8_t msg);
+uint8_t load_board_handle_message(uint8_t msg);
 
 #endif	/* COMM_BOARD_INTERFACE_H */
 

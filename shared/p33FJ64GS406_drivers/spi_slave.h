@@ -13,8 +13,11 @@
 #define LOAD_REQUEST_DATA                           0
 #define LOAD_READ_AGAIN                             1
 
-void initSPICommBoard();
-void putByte(uint8_t );
+void init_spi_slave();
+
+void spi_slave_put_byte(uint8_t );
+
+void spi_slave_set_handle_message(uint8_t (*handler)(uint8_t));
 
 #endif	/* SPI_COMM_BOARD_H */
 

@@ -1,8 +1,10 @@
 #include <p33FJ64GS406.h>
 
-#include "drivers/board.h"
-#include "drivers/pwm.h"
-#include "drivers/adc.h"
+#include "shared/p33FJ64GS406_drivers/board.h"
+#include "shared/p33FJ64GS406_drivers/pwm.h"
+#include "shared/p33FJ64GS406_drivers/adc.h"
+#include "shared/p33FJ64GS406_drivers/timer.h"
+#include "shared/p33FJ64GS406_drivers/spi_slave.h"
 #include "api.h"
 #include "enable_model.h"
 
@@ -15,7 +17,8 @@ int main()
     init_ADC();
 
     initializePorts();
-    initSPICommBoard();
+    init_spi_slave();
+    spi_slave_set_handle_message(load_board_handle_message);
 
     long long i;
     for(i=0; i<1000000LL; ++i);

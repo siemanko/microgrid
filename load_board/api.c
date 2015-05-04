@@ -1,6 +1,6 @@
 #include "api.h"
 
-#include "drivers/spi_slave.h"
+#include "shared/p33FJ64GS406_drivers/spi_slave.h"
 #include "enable_model.h"
 #include "reading_model.h"
 
@@ -41,7 +41,7 @@ void put_float_in_buffer(float f) {
     next_index = 0;
 }
 
-uint8_t handle_message(uint8_t msg){
+uint8_t load_board_handle_message(uint8_t msg){
     if(communications_on == 0) return 132;
     switch(msg){
         case LOAD_REQUEST_DATA:

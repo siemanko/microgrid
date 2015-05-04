@@ -1,11 +1,13 @@
 #include "spi_slave.h"
+
 #include <xc.h>
 #include <spi.h>
 #include <stdlib.h>
 
+uint8_t (*handle_message)(uint8_t);
 
 
-void initSPICommBoard(){
+void init_spi_slave(){
 
     INTCON2 = 0;
     INTCON1 = 0;
@@ -41,6 +43,10 @@ void initSPICommBoard(){
     SPI1STATbits.SPIEN=1;
 }
 
+void spi_slave_set_handle_message(uint8_t (*handler)(uint8_t)) {
+    handle_message = handler;
+}
+
 static uint8_t request_message = 0;
 static uint8_t reponse_message = 0;
 int request_fulfilled;
@@ -53,7 +59,7 @@ void initate_send(uint8_t request, uint8_t response) {
     send_state = 0;
 }
 
-void putByte(uint8_t i) {
+void spi_slave_put_byte(uint8_t i) {
     uint8_t trahsbit = SPI1BUF;
     SPI1BUF = i;
 }
@@ -68,10 +74,10 @@ void __attribute__((__interrupt__,auto_psv)) _SPI1Interrupt(void){
         SPI1STATbits.SPIROV	= 0;			// clear overflow
 
         int trash = SPI1BUF;
-        putByte(55);
+        spi_slave_put_byte(55);
         IFS0bits.SPI1IF = 0;
     } else if (!SPI1STATbits.SPIRBF) {
-        putByte(41);
+        spi_slave_put_byte(41);
         IFS0bits.SPI1IF = 0;
     } else {
         // SPI1STATbits.SPIROV = 0;
@@ -81,17 +87,17 @@ void __attribute__((__interrupt__,auto_psv)) _SPI1Interrupt(void){
         while (SPI1STATbits.SPITBF);
         if (buffer == LOAD_READ_AGAIN) {
             if (0 <= send_state && send_state < 20) {
-               putByte(69);
+               spi_slave_put_byte(69);
                 ++send_state;
             } else if (20 <= send_state && send_state < 30 ) {
                 if (reponse_message + 1 == 69) {
-                    putByte(70);
+                    spi_slave_put_byte(70);
                 } else {
-                    putByte(reponse_message+1);
+                    spi_slave_put_byte(reponse_message+1);
                 }
                 ++send_state;
             } else if (30 <= send_state) {
-                putByte(reponse_message);
+                spi_slave_put_byte(reponse_message);
                 request_fulfilled = 1;
             }
         } else {
@@ -102,16 +108,16 @@ void __attribute__((__interrupt__,auto_psv)) _SPI1Interrupt(void){
                 // stateful, so recomputing is bad.
                 send_state = 0;
             } else {
-                int message = handle_message(buffer);
+                uint8_t message = handle_message(buffer);
                 initate_send(buffer, message);
-                putByte(69);
+                spi_slave_put_byte(69);
             }
         }
 
         IFS0bits.SPI1IF = 0;
     }
     if (ctr++>1000LL){
-        initSPICommBoard();
+        init_spi_slave();
         ctr = 0;
     }
 }

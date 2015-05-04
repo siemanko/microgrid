@@ -12,17 +12,43 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <logicalFolder name="drivers" displayName="drivers" projectFiles="true">
-        <itemPath>drivers/spi_slave.c</itemPath>
-        <itemPath>drivers/spi_slave.h</itemPath>
-        <itemPath>drivers/adc.c</itemPath>
-        <itemPath>drivers/adc.h</itemPath>
-        <itemPath>drivers/pwm.c</itemPath>
-        <itemPath>drivers/pwm.h</itemPath>
-        <itemPath>drivers/timer.c</itemPath>
-        <itemPath>drivers/timer.h</itemPath>
-        <itemPath>drivers/board.c</itemPath>
-        <itemPath>drivers/board.h</itemPath>
+      <logicalFolder name="shared" displayName="shared" projectFiles="true">
+        <logicalFolder name="algorithm" displayName="algorithm" projectFiles="true">
+          <itemPath>../shared/algorithm/vector.h</itemPath>
+          <itemPath>../shared/algorithm/vector.c</itemPath>
+          <itemPath>../shared/algorithm/set.h</itemPath>
+          <itemPath>../shared/algorithm/circular_buffer.h</itemPath>
+          <itemPath>../shared/algorithm/set.c</itemPath>
+          <itemPath>../shared/algorithm/circular_buffer.c</itemPath>
+        </logicalFolder>
+        <logicalFolder name="communication"
+                       displayName="communication"
+                       projectFiles="true">
+          <logicalFolder name="utils" displayName="utils" projectFiles="true">
+            <itemPath>../shared/communication/utils/message_builder.c</itemPath>
+            <itemPath>../shared/communication/utils/message_builder.h</itemPath>
+          </logicalFolder>
+          <itemPath>../shared/communication/ethermini.h</itemPath>
+          <itemPath>../shared/communication/message.h</itemPath>
+          <itemPath>../shared/communication/ethermini.c</itemPath>
+          <itemPath>../shared/communication/message.c</itemPath>
+        </logicalFolder>
+        <logicalFolder name="p33FJ64GS406_drivers"
+                       displayName="p33FJ64GS406_drivers"
+                       projectFiles="true">
+          <itemPath>../shared/p33FJ64GS406_drivers/timer.c</itemPath>
+          <itemPath>../shared/p33FJ64GS406_drivers/adc.c</itemPath>
+          <itemPath>../shared/p33FJ64GS406_drivers/pwm.c</itemPath>
+          <itemPath>../shared/p33FJ64GS406_drivers/adc.h</itemPath>
+          <itemPath>../shared/p33FJ64GS406_drivers/spi_slave.h</itemPath>
+          <itemPath>../shared/p33FJ64GS406_drivers/spi_slave.c</itemPath>
+          <itemPath>../shared/p33FJ64GS406_drivers/board.c</itemPath>
+          <itemPath>../shared/p33FJ64GS406_drivers/pwm.h</itemPath>
+          <itemPath>../shared/p33FJ64GS406_drivers/board.h</itemPath>
+          <itemPath>../shared/p33FJ64GS406_drivers/timer.h</itemPath>
+        </logicalFolder>
+        <itemPath>../shared/utils.c</itemPath>
+        <itemPath>../shared/utils.h</itemPath>
       </logicalFolder>
       <itemPath>api.c</itemPath>
       <itemPath>api.h</itemPath>
@@ -42,6 +68,7 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>drivers</Elem>
+    <Elem>../shared</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -92,7 +119,7 @@
         <property key="enable-short-double" value="false"/>
         <property key="enable-symbols" value="true"/>
         <property key="enable-unroll-loops" value="false"/>
-        <property key="extra-include-directories" value="."/>
+        <property key="extra-include-directories" value=".;.."/>
         <property key="isolate-each-function" value="false"/>
         <property key="keep-inline" value="false"/>
         <property key="oXC16gcc-align-arr" value="false"/>
@@ -224,7 +251,6 @@
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="UART 1" value="true"/>
         <property key="UART 2" value="true"/>
-        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

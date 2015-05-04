@@ -1,9 +1,6 @@
 #include "enable_model.h"
 
-#include "p33FJ64GS406.h"
-#include <libq.h>
-#include <dsp.h>
-#include <math.h>
+#include <p33FJ64GS406.h>
 
 #include "utils.h"
 
