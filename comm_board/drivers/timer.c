@@ -2,7 +2,7 @@
 
 #include <p33EP512GM710.h>
 
-#define CYCLES_PER_SECOND 35000000L
+#define CYCLES_PER_SECOND 36850000L
 
 void init_timer(void) {
     // Set up 32 bit clock for high resolution delays.

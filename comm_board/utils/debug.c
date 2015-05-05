@@ -28,7 +28,7 @@ void debug(char subsystem, char* format, ...) {
 void debug_args(char subsystem, char* format, va_list args) {
     MessageBuilder mb;
     make_debug_mb(&mb, subsystem, format, args);
-    send((uint8_t*)mb.message, mb.next_char, COMPUTER);
+    send((uint8_t*)mb.message, mb.next_char, COMPUTER_UID);
 }
 
 void debug_unsafe(char subsystem, char* format, ...) {
@@ -44,7 +44,7 @@ void debug_unsafe_args(char subsystem, char* format, va_list args) {
     Message* msg = (Message*) safe_malloc(sizeof(Message));
     
     msg->source = 1;
-    msg->destination = COMPUTER;
+    msg->destination = COMPUTER_UID;
     msg->length = (uint8_t)mb.next_char;
     msg->content = (uint8_t*)mb.message;
     computer_send_message_unsafe(msg);

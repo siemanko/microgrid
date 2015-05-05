@@ -6,9 +6,11 @@
 #include "communication/messages.h"
 #include "shared/communication/utils/message_builder.h"
 #include "shared/utils.h"
+#include "phone_line.h"
 
 void init_communication() {
     init_computer_communication();
+    init_phone_line_communication();
     register_misc_message_handlers();
 }
 
@@ -25,10 +27,10 @@ void send(uint8_t* content, uint8_t length, uint8_t destination) {
     msg->length = length;
     msg->content = content;
     
-    if (destination == COMPUTER) {
+    if (destination == COMPUTER_UID) {
         computer_send_message(msg);
     } else {
-        // not yet implemented
+        phone_line_send_message(msg);
     }
 }
 
@@ -36,7 +38,14 @@ void send_mb(MessageBuilder* mb, uint8_t destination) {
     send((uint8_t*)mb->message, mb->next_char, destination);
 }
 
+void ping(uint8_t target) {
+    MessageBuilder mb;
+    make_mb(&mb, 1);
+    mb_add_char(&mb, UMSG_PING);
+    send_mb(&mb, target);
+}
 
 void communication_step() {
     computer_step();
+    phone_line_step();
 }

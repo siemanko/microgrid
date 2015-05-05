@@ -28,7 +28,6 @@ for cython_file in find_files(CPATH, '*.pyx'):
 
 # communication bindings
 sources.append(join(CPATH, "communication.pyx"))
-sources.extend(find_files(CPATH, "*.c"))
 include_dirs.append(CPATH)
 
 # shared library

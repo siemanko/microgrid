@@ -14,6 +14,7 @@ typedef enum {
     UMSG_SET_BALANCE = 7,
     UMSG_READ_EEPROM = 8,
     UMSG_DATA_LOGGER = 9,
+    UMSG_PONG = 10,
     // leave last (also make sure no gaps above)
     UMSG_TOTAL_MESSAGES 
 } MessageToUlink; 

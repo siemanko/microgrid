@@ -29,6 +29,8 @@
         <itemPath>communication/interface.h</itemPath>
         <itemPath>communication/messages.c</itemPath>
         <itemPath>communication/messages.h</itemPath>
+        <itemPath>communication/phone_line.c</itemPath>
+        <itemPath>communication/phone_line.h</itemPath>
       </logicalFolder>
       <logicalFolder name="data_logger" displayName="data_logger" projectFiles="true">
         <itemPath>data_logger/data_logger.c</itemPath>
@@ -324,6 +326,7 @@
         <property key="UART 2" value="true"/>
         <property key="UART 3" value="true"/>
         <property key="UART 4" value="true"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

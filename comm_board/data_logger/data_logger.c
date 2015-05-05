@@ -143,7 +143,7 @@ void dl_message_handler(Message* msg) {
         mb_add_uint32_noprefix(&mb, num_logged2);
         
         mb_add_string(&mb, current_schema->name);
-        send_mb(&mb, COMPUTER);
+        send_mb(&mb, COMPUTER_UID);
     } else if (msg->content[1] == DLM_EXTRACT_COLUMN) {
         assert(msg->length == 3);
         uint8_t column = msg->content[2];
@@ -154,7 +154,7 @@ void dl_message_handler(Message* msg) {
         mb_add_char(&mb2, column);
         mb_add_char(&mb2, (uint8_t)current_schema->column_type[column]);
         mb_add_string(&mb2, current_schema->column_name[column]);
-        send_mb(&mb2, COMPUTER);
+        send_mb(&mb2, COMPUTER_UID);
     } else if (msg->content[1] == DLM_EXTRACT_DATA) {
         assert(msg->length == 6);
         uint32_t entry_no = bytes_to_uint32(msg->content + 2);
@@ -180,7 +180,7 @@ void dl_message_handler(Message* msg) {
                 offset += 4;
             }
         }
-        send_mb(&mb3, COMPUTER);
+        send_mb(&mb3, COMPUTER_UID);
     } else if (msg->content[1] == DLM_RESET) {
         debug(DEBUG_INFO, "Resetting data logger");
         data_logger_reset();  

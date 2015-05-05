@@ -11,7 +11,8 @@
 #include "communication/computer.h"
 #include "shared/communication/utils/message_builder.h"
 
-#define COMPUTER ((uint8_t)254)
+#define COMPUTER_UID ((uint8_t)254)
+#define BOARDCAST_UID ((uint8_t)255)
 
 void init_communication();
 
@@ -24,6 +25,8 @@ void send_mb(MessageBuilder* mb, uint8_t destination);
 
 // takes ownership of content.
 void send(uint8_t* msg, uint8_t length, uint8_t destination);
+
+void ping(uint8_t target);
 
 void communication_step();
 

@@ -19,6 +19,11 @@
 #include "data_logger/b_box.h"
 
 
+void pinging() {
+    debug(DEBUG_INFO, "Pinging");
+    ping(2);
+}
+
 void init(void) {
     init_board();
     init_timer();
@@ -55,6 +60,10 @@ void init_cron_schedule() {
     } else {
         cron_repeat_every_s(1,  b_box_demand_response_step);
         cron_repeat_every_s(LOG_DATA_EVERY_S, b_box_data_logger_step);
+    }
+    
+    if (eeprom_read_byte(STORAGE_UID) == 1) {
+        cron_repeat_every_s(5, pinging);
     }
 }
 
