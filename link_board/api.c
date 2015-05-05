@@ -1,8 +1,6 @@
 #include "api.h"
 
-#include "ReadingModel.h"
-#include "SPI_DRIVER.h"
-#include "LinkBoardMessageConsts.h"
+#include "reading_model.h"
 
 #define SPI_REQUEST_DATA                                 0
 

@@ -20,6 +20,8 @@
                        projectFiles="true">
           <itemPath>communication/other_boards/load_board.h</itemPath>
           <itemPath>communication/other_boards/load_board.c</itemPath>
+          <itemPath>communication/other_boards/link_board.c</itemPath>
+          <itemPath>communication/other_boards/link_board.h</itemPath>
         </logicalFolder>
         <itemPath>communication/computer.c</itemPath>
         <itemPath>communication/computer.h</itemPath>
@@ -33,6 +35,8 @@
         <itemPath>data_logger/data_logger.h</itemPath>
         <itemPath>data_logger/b_box.c</itemPath>
         <itemPath>data_logger/b_box.h</itemPath>
+        <itemPath>data_logger/a_box.c</itemPath>
+        <itemPath>data_logger/a_box.h</itemPath>
       </logicalFolder>
       <logicalFolder name="demand_response"
                      displayName="demand_response"

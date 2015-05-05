@@ -1,10 +1,10 @@
 #include <p33FJ64GS406.h>
 
-#include "shared/p33FJ64GS406_drivers/board.h"
+#include "p33FJ64GS406_drivers/board.h"
 #include "drivers/pwm.h"
-#include "shared/p33FJ64GS406_drivers/adc.h"
-#include "shared/p33FJ64GS406_drivers/timer.h"
-#include "shared/p33FJ64GS406_drivers/spi_slave.h"
+#include "p33FJ64GS406_drivers/adc.h"
+#include "p33FJ64GS406_drivers/timer.h"
+#include "p33FJ64GS406_drivers/spi_slave.h"
 #include "api.h"
 #include "enable_model.h"
 

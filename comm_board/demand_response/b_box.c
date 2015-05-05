@@ -33,9 +33,7 @@ float b_box_get_power() {
     return output_current * output_voltage;
 }
 
-void init_b_box_demand_response() {
-    init_load_board_interface();
-    
+void init_b_box_demand_response() {    
     grid_management_last_update = 0;
     should_results_be_used = 0;
     num_bad_readings_in_row = 0;

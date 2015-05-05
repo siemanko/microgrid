@@ -1,4 +1,4 @@
-#include "ReadingModel.h"
+#include "reading_model.h"
 
 #include <math.h>
 #include <stdlib.h>

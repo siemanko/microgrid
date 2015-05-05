@@ -1,6 +1,6 @@
 #include "api.h"
 
-#include "shared/p33FJ64GS406_drivers/spi_slave.h"
+#include "p33FJ64GS406_drivers/spi_slave.h"
 #include "enable_model.h"
 #include "reading_model.h"
 

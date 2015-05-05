@@ -16,6 +16,18 @@
         <itemPath>drivers/pwm.c</itemPath>
         <itemPath>drivers/pwm.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="p33FJ64GS406_drivers"
+                     displayName="p33FJ64GS406_drivers"
+                     projectFiles="true">
+        <itemPath>../p33FJ64GS406_drivers/timer.c</itemPath>
+        <itemPath>../p33FJ64GS406_drivers/adc.c</itemPath>
+        <itemPath>../p33FJ64GS406_drivers/adc.h</itemPath>
+        <itemPath>../p33FJ64GS406_drivers/spi_slave.h</itemPath>
+        <itemPath>../p33FJ64GS406_drivers/spi_slave.c</itemPath>
+        <itemPath>../p33FJ64GS406_drivers/board.c</itemPath>
+        <itemPath>../p33FJ64GS406_drivers/board.h</itemPath>
+        <itemPath>../p33FJ64GS406_drivers/timer.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="shared" displayName="shared" projectFiles="true">
         <logicalFolder name="algorithm" displayName="algorithm" projectFiles="true">
           <itemPath>../shared/algorithm/vector.h</itemPath>
@@ -37,28 +49,16 @@
           <itemPath>../shared/communication/ethermini.c</itemPath>
           <itemPath>../shared/communication/message.c</itemPath>
         </logicalFolder>
-        <logicalFolder name="p33FJ64GS406_drivers"
-                       displayName="p33FJ64GS406_drivers"
-                       projectFiles="true">
-          <itemPath>../shared/p33FJ64GS406_drivers/timer.c</itemPath>
-          <itemPath>../shared/p33FJ64GS406_drivers/adc.c</itemPath>
-          <itemPath>../shared/p33FJ64GS406_drivers/adc.h</itemPath>
-          <itemPath>../shared/p33FJ64GS406_drivers/spi_slave.h</itemPath>
-          <itemPath>../shared/p33FJ64GS406_drivers/spi_slave.c</itemPath>
-          <itemPath>../shared/p33FJ64GS406_drivers/board.c</itemPath>
-          <itemPath>../shared/p33FJ64GS406_drivers/board.h</itemPath>
-          <itemPath>../shared/p33FJ64GS406_drivers/timer.h</itemPath>
-        </logicalFolder>
         <itemPath>../shared/utils.c</itemPath>
         <itemPath>../shared/utils.h</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>isr.c</itemPath>
       <itemPath>ReadingModel.c</itemPath>
-      <itemPath>LINK_INTERFACE.c</itemPath>
-      <itemPath>LINK_INTERFACE.h</itemPath>
       <itemPath>ReadingModel.h</itemPath>
       <itemPath>isr.h</itemPath>
+      <itemPath>api.c</itemPath>
+      <itemPath>api.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -69,6 +69,7 @@
   <sourceRootList>
     <Elem>../shared</Elem>
     <Elem>drivers</Elem>
+    <Elem>../p33FJ64GS406_drivers</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -252,6 +253,7 @@
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="UART 1" value="true"/>
         <property key="UART 2" value="true"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

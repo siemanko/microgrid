@@ -1,11 +1,11 @@
 #include "isr.h"
 
-#include "p33FJ64GS406.h"
+#include <p33FJ64GS406.h>
 #include <libq.h>
 #include <dsp.h>
 #include <stdint.h>
 
-#include "ReadingModel.h"
+#include "reading_model.h"
 #define refv 2.4f
 
 float kp=0.00021231;

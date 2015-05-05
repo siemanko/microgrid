@@ -5,8 +5,8 @@
  * Created on December 20, 2014, 4:54 PM
  */
 
-#ifndef POWER_LOAD_BOARD_INTERFACE_H
-#define	POWER_LOAD_BOARD_INTERFACE_H
+#ifndef COMMUNICATION_OTHER_BOARDS_LOAD_BOARD_H
+#define	COMMUNICATION_OTHER_BOARDS_LOAD_BOARD_H
 
 
 void init_load_board_interface();
