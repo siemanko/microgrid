@@ -15,23 +15,30 @@ def find_files(path, pattern):
 cmdclass = {}
 ext_modules = []
 sources = []
+include_dirs = []
 
 SCRIPT_DIR = dirname(realpath(__file__))
 CPATH = join(SCRIPT_DIR, 'cython')
+SHARED_DIR = join(dirname(SCRIPT_DIR), 'shared')
 
 # touch all pyx file to force recompile
 for cython_file in find_files(CPATH, '*.pyx'):
     # touch
     utime(cython_file, None)
 
+# communication bindings
 sources.append(join(CPATH, "communication.pyx"))
+sources.extend(find_files(CPATH, "*.c"))
+include_dirs.append(CPATH)
 
-sources.extend(find_files(join(CPATH, "shared"), "*.c"))
+# shared library
+sources.extend(find_files(SHARED_DIR, "*.c"))
+include_dirs.append(dirname(SHARED_DIR))
 
 ext_modules.append(Extension(
     "bindings.communication",
     sources,
-    include_dirs = [CPATH],
+    include_dirs=include_dirs,
 ))
 build_ext.cython_c_in_temp = True
 cmdclass.update({ 'build_ext': build_ext })
