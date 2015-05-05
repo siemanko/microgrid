@@ -53,13 +53,11 @@ void init_cron_schedule() {
     cron_repeat_every_s(1,  balance_step);
     if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
         cron_repeat_every_s(LOG_DATA_EVERY_S,  a_box_data_logger_step);
+        cron_repeat_every_s(5, discover_nodes);
+
     } else {
         cron_repeat_every_s(1,  b_box_demand_response_step);
         cron_repeat_every_s(LOG_DATA_EVERY_S, b_box_data_logger_step);
-    }
-    
-    if (eeprom_read_byte(STORAGE_UID) == 1) {
-        cron_repeat_every_s(5, discover_nodes);
     }
 }
 
