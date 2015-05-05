@@ -54,11 +54,11 @@
       </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>isr.c</itemPath>
-      <itemPath>ReadingModel.c</itemPath>
-      <itemPath>ReadingModel.h</itemPath>
       <itemPath>isr.h</itemPath>
       <itemPath>api.c</itemPath>
       <itemPath>api.h</itemPath>
+      <itemPath>reading_model.c</itemPath>
+      <itemPath>reading_model.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
