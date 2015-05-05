@@ -20,6 +20,7 @@ void set_increase_capacity(Set* s) {
     s->capacity = new_capacity;
     int i;
     for (i=0; i<s->size; ++i) s->contents[i] = old_contents[i];
+    free(old_contents);
 }
 
 int set_in(Set* s, uint8_t el) {

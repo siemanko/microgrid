@@ -10,6 +10,8 @@ class ToUlink(object):
     SET_BALANCE = 7
     READ_EEPROM = 8
     DATA_LOGGER = 9
+    PONG = 10
+    GET_CONNECTED_NODES = 11
 
 class ToComputer(object):
     DEBUG = 0

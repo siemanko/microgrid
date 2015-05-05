@@ -76,6 +76,10 @@ class Ctrl(object):
         mb = MessageBuilder(ToUlink.RESET_PIC)
         self.send(mb.to_bytes())
 
+    def get_connected_nodes(self):
+        mb = MessageBuilder(ToUlink.GET_CONNECTED_NODES)
+        self.send(mb.to_bytes())
+
     def read_eeprom(self, mem_type):
         mem_types = [ 'float', 'uint32', 'byte']
         assert mem_type in mem_types

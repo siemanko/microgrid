@@ -14,6 +14,8 @@
 #define COMPUTER_UID ((uint8_t)254)
 #define BOARDCAST_UID ((uint8_t)255)
 
+extern int my_uid;
+
 void init_communication();
 
 // only works for messages with zero at the end.
@@ -25,8 +27,6 @@ void send_mb(MessageBuilder* mb, uint8_t destination);
 
 // takes ownership of content.
 void send(uint8_t* msg, uint8_t length, uint8_t destination);
-
-void ping(uint8_t target);
 
 void communication_step();
 

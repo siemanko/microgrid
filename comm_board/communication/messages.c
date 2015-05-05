@@ -14,7 +14,7 @@ void (*message_handler[UMSG_TOTAL_MESSAGES])(Message*);
 
 void handle_message(Message* msg) {
     // TODO(szymon): cache UID..
-    if (msg->destination != eeprom_read_byte(STORAGE_UID) &&
+    if (msg->destination != my_uid &&
             msg->destination != BOARDCAST_UID)
         return;
     if (msg->length < 1)
@@ -30,21 +30,6 @@ void handle_message(Message* msg) {
 void set_message_handler(MessageToUlink msg_type,
                           void (*handler)(Message*)) {
     message_handler[msg_type] = handler;
-}
-
-void ping_handler(Message* msg) {
-    if (msg->source == COMPUTER_UID) {
-        debug(DEBUG_INFO, "pong");
-    } else {
-        MessageBuilder mb;
-        make_mb(&mb, 1);
-        mb_add_char(&mb, UMSG_PONG);
-        send_mb(&mb, msg->source);
-    }
-}
-
-void pong_handler(Message* msg) {
-    debug(DEBUG_INFO, "got pong from %d", (int)msg->source);
 }
 
 void get_settings_handler(Message* msg) {
@@ -127,7 +112,6 @@ void read_eeprom_handler(Message* msg) {
 }
 
 void register_misc_message_handlers() {
-    set_message_handler(UMSG_PING, ping_handler);
     set_message_handler(UMSG_GET_SETTINGS, get_settings_handler);
     set_message_handler(UMSG_SET_TIME, set_time_handler);
     set_message_handler(UMSG_RESET_PIC, reset_pic_handler);
@@ -135,6 +119,5 @@ void register_misc_message_handlers() {
     set_message_handler(UMSG_SET_UID_NODE_TYPE, set_uid_node_type_handler);
     set_message_handler(UMSG_SET_BALANCE, set_balance_handler);
     set_message_handler(UMSG_READ_EEPROM, read_eeprom_handler);
-    set_message_handler(UMSG_PONG, pong_handler);
 }
 

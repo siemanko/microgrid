@@ -24,8 +24,6 @@
 #define TRIS_D6 TRISBbits.TRISB14
 #define TRIS_D7 TRISBbits.TRISB15
 
-#define SYS_FREQUENCY 36850000
-
 // Internal FRC Oscillator
 _FOSCSEL(FNOSC_FRCPLL);  // FRC Oscillator
 _FOSC(FCKSM_CSECMD & OSCIOFNC_OFF  & POSCMD_NONE);   // Clock Switching is enabled and Fail Safe Clock Monitor is disabled
@@ -70,7 +68,7 @@ static void init_oscillator(){
     //PLLFBD=41;                  // pll multiplier (M) = +2
     //PLLFBD = 41;  //PUT BACK TO 41!
 
-    PLLFBD = 38;  //PUT BACK TO 41
+    PLLFBD = 36;  //PUT BACK TO 41
     //20 is good value
     CLKDIVbits.PLLPOST=0;       // PLLPOST (N1) 0=/2 
     RCONbits.SWDTEN = 0;

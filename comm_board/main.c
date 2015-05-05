@@ -17,12 +17,8 @@
 #include "demand_response/b_box.h"
 #include "data_logger/a_box.h"
 #include "data_logger/b_box.h"
-
-
-void pinging() {
-    debug(DEBUG_INFO, "Pinging");
-    ping(2);
-}
+#include "tests.h"
+#include "communication/network_utils.h"
 
 void init(void) {
     init_board();
@@ -63,14 +59,13 @@ void init_cron_schedule() {
     }
     
     if (eeprom_read_byte(STORAGE_UID) == 1) {
-        cron_repeat_every_s(5, pinging);
+        cron_repeat_every_s(5, discover_nodes);
     }
 }
 
 int main() {
     init();
     init_cron_schedule();
-    
     while(1) {
         cron_step();
     }

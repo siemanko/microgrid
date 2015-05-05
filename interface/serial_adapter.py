@@ -38,7 +38,8 @@ class SerialAdapter(object):
                                 bytesize=8,
                                 stopbits=2,
                                 parity=serial.PARITY_EVEN,
-                                timeout=1.0)  # open first serial port
+                                timeout=1.0,
+                                rtscts=False)  # open first serial port
         except Exception:
             print('Error connecting to %s' % (self.port))
 

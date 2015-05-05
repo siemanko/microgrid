@@ -4,7 +4,7 @@
 
 #include "shared/utils.h"
 
-#define FP 36850000
+#define FP 35007500L
 #define BAUDRATE 9600
 #define BRGVAL ((FP/BAUDRATE)/16)-1
 
@@ -26,8 +26,8 @@ void init_uart(uart_device u) {
 
         U1MODEbits.STSEL = 1; // 2-Stop bit
         U1MODEbits.PDSEL = 1; // Even Parity, 8-Data bits
-        U1MODEbits.ABAUD = 0; // Auto-Baud disabled
-        U1MODEbits.BRGH = 0; // Standard-Speed mode
+        U1MODEbits.ABAUD = 1; // Auto-Baud disabled
+        U1MODEbits.BRGH  = 0; // Standard-Speed mode
 
         IFS0bits.U1RXIF = 0;
         IEC0bits.U1RXIE = 1;
