@@ -4,7 +4,7 @@
 #include "reading_model.h"
 
 
-void init_ADC() {
+void init_ADC(int trigger) {
     ADCONbits.FORM    = 0;       // Integer data format
     ADCONbits.EIE     = 0;       // Early Interrupt disabled
     ADCONbits.ORDER   = 0;       // Convert even channel first
@@ -27,11 +27,11 @@ void init_ADC() {
 
     //ADSTATbits.P0RDY   = 0; 	 // Clear Pair 0 data ready bit
     //ADCPC0bits.IRQEN0  = 1;      // Enable ADC Interrupt
-    ADCPC0bits.TRGSRC0 = 12; 	 // ADC Pair 0 triggered by PWM4
+    ADCPC0bits.TRGSRC0 = trigger; 	 // ADC Pair 0 triggered by PWM4
 
     ADSTATbits.P1RDY   = 0; 	 // Clear Pair 1 data ready bit
     ADCPC0bits.IRQEN1  = 1;      // Enable ADC Interrupt for pair 1
-    ADCPC0bits.TRGSRC1 = 12; 	 // ADC Pair 1 triggered by timer1
+    ADCPC0bits.TRGSRC1 = trigger; 	 // ADC Pair 1 triggered by timer1
 
     ADCONbits.ADON = 1;		 // Enable the ADC Module early for ADC Settling Time
 }
@@ -45,7 +45,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _ADCP1Interrupt()
     uint16_t output_adc = ADCBUF1;
     uint16_t phone_adc = ADCBUF2;
 
-    
+
     double current_reading = ((double)current_adc*3.3/1024.0*(20.0/22.0));
     on_output_current_reading(current_reading);
 

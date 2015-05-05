@@ -1,7 +1,7 @@
 #include <p33FJ64GS406.h>
 
 #include "shared/p33FJ64GS406_drivers/board.h"
-#include "shared/p33FJ64GS406_drivers/pwm.h"
+#include "drivers/pwm.h"
 #include "shared/p33FJ64GS406_drivers/adc.h"
 #include "shared/p33FJ64GS406_drivers/timer.h"
 #include "shared/p33FJ64GS406_drivers/spi_slave.h"
@@ -14,7 +14,7 @@ int main()
     init_board();
     init_PWM();
     init_timer();
-    init_ADC();
+    init_ADC(12);
 
     initializePorts();
     init_spi_slave();

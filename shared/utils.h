@@ -20,6 +20,10 @@ void uint32_to_bytes(uint32_t source, uint8_t* destination);
 
 uint32_t bytes_to_uint32(uint8_t* source);
 
+double double_abs(double a);
+
+double double_max(double a, double b);
+
 void init_random();
 
 uint16_t get_random_int();

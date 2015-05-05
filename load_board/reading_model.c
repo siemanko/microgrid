@@ -3,7 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "utils.h"
+#include "shared/utils.h"
 #include "enable_model.h"
 
 

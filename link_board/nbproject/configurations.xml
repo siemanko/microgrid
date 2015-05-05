@@ -52,13 +52,13 @@
         <itemPath>../shared/utils.c</itemPath>
         <itemPath>../shared/utils.h</itemPath>
       </logicalFolder>
-      <itemPath>api.c</itemPath>
-      <itemPath>api.h</itemPath>
-      <itemPath>enable_model.c</itemPath>
-      <itemPath>enable_model.h</itemPath>
       <itemPath>main.c</itemPath>
-      <itemPath>reading_model.c</itemPath>
-      <itemPath>reading_model.h</itemPath>
+      <itemPath>isr.c</itemPath>
+      <itemPath>ReadingModel.c</itemPath>
+      <itemPath>LINK_INTERFACE.c</itemPath>
+      <itemPath>LINK_INTERFACE.h</itemPath>
+      <itemPath>ReadingModel.h</itemPath>
+      <itemPath>isr.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -67,8 +67,8 @@
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
-    <Elem>drivers</Elem>
     <Elem>../shared</Elem>
+    <Elem>drivers</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -188,7 +188,7 @@
         <property key="general-code-protect" value="no_code_protect"/>
         <property key="general-write-protect" value="no_write_protect"/>
         <property key="generate-cross-reference-file" value="false"/>
-        <property key="heap-size" value="2000"/>
+        <property key="heap-size" value="1000"/>
         <property key="input-libraries" value=""/>
         <property key="linker-stack" value="true"/>
         <property key="linker-symbols" value=""/>
@@ -218,9 +218,10 @@
         <property key="generic-16-bit" value="false"/>
         <property key="legacy-libc" value="false"/>
         <property key="oXC16glb-macros" value=""/>
-        <property key="output-file-format" value="elf"/>
+        <property key="output-file-format" value="coff"/>
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
+        <appendMe value=" -menable-fixed"/>
       </C30Global>
       <PICkit3PlatformTool>
         <property key="ADC 1" value="true"/>
@@ -251,7 +252,6 @@
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="UART 1" value="true"/>
         <property key="UART 2" value="true"/>
-        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

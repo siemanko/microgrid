@@ -2,7 +2,7 @@
 
 #include <p33FJ64GS406.h>
 
-#include "utils.h"
+#include "shared/utils.h"
 
 
 double light_port_intensity;
