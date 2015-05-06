@@ -31,6 +31,8 @@
         <itemPath>communication/messages.h</itemPath>
         <itemPath>communication/phone_line.c</itemPath>
         <itemPath>communication/phone_line.h</itemPath>
+        <itemPath>communication/network_utils.c</itemPath>
+        <itemPath>communication/network_utils.h</itemPath>
       </logicalFolder>
       <logicalFolder name="data_logger" displayName="data_logger" projectFiles="true">
         <itemPath>data_logger/data_logger.c</itemPath>
@@ -68,6 +70,8 @@
           <itemPath>../shared/algorithm/circular_buffer.h</itemPath>
           <itemPath>../shared/algorithm/set.c</itemPath>
           <itemPath>../shared/algorithm/circular_buffer.c</itemPath>
+          <itemPath>../shared/algorithm/map.c</itemPath>
+          <itemPath>../shared/algorithm/map.h</itemPath>
         </logicalFolder>
         <logicalFolder name="communication"
                        displayName="communication"
@@ -134,7 +138,7 @@
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC16</languageToolchain>
         <languageToolchainVersion>1.24</languageToolchainVersion>
-        <platform>2</platform>
+        <platform>3</platform>
       </toolsSet>
       <compileType>
         <linkerTool>
