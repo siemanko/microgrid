@@ -1,3 +1,5 @@
+import glob
+
 from kivy.app import App
 from kivy.properties import (
     ObjectProperty,
@@ -15,6 +17,7 @@ from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.textinput import TextInput
 from kivy.adapters.simplelistadapter import SimpleListAdapter
 from kivy.lang import Builder
+
 import controller
 
 from message_handler import MessageHandler
@@ -61,6 +64,7 @@ class DataLoggerView(BoxLayout):
 
 class RootView(BoxLayout):
     def __init__(self, *args, **kwargs):
+
         super(RootView, self).__init__(*args, **kwargs)
 
         self.message_handler = MessageHandler(self)
@@ -68,6 +72,7 @@ class RootView(BoxLayout):
         self.serial = None
 
         self.last_serial_choices = set()
+
 
         self.update_serial_choices()
 
@@ -86,7 +91,11 @@ class RootView(BoxLayout):
 
 
     def update_serial_choices(self, *largs):
+        extra_mac_ports = set(glob.glob('/dev/tty.usbserial*'))
         new_serial_choices = set([port for port, _, _ in comports()])
+        for i_hate_macs in extra_mac_ports:
+            new_serial_choices.add(i_hate_macs)
+
         if not sets_equal(self.last_serial_choices, new_serial_choices):
             self.indicators.serial_choices.clear_widgets()
             self.last_serial_choices = new_serial_choices
@@ -115,6 +124,7 @@ SaneLabel:
 
 class MicrogridApp(App):
     def build(self):
+
         self.root_view = RootView()
         controller.get = controller.Ctrl(self.root_view)
         return self.root_view
