@@ -5,7 +5,7 @@
 #include "shared/utils.h"
 
 #define FP 35007500L
-#define BAUDRATE 9600
+#define BAUDRATE 57600
 #define BRGVAL ((FP/BAUDRATE)/16)-1
 
 #define BAUDRATE2 57600
@@ -31,7 +31,7 @@ void init_uart(uart_device u) {
 
         IFS0bits.U1RXIF = 0;
         IEC0bits.U1RXIE = 1;
-        IPC2bits.U1RXIP = 1;
+        IPC2bits.U1RXIP = 3;
 
         U1STAbits.URXISEL = 0; // 1 received bit enough to trigger 
                                // interrupt

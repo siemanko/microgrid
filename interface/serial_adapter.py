@@ -34,7 +34,7 @@ class SerialAdapter(object):
             self.s.close()
         try:
             self.s = serial.Serial(port=self.port,
-                                baudrate=9600,
+                                baudrate=57600,
                                 bytesize=8,
                                 stopbits=2,
                                 parity=serial.PARITY_EVEN,

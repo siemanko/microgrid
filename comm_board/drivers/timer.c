@@ -40,7 +40,7 @@ void init_timer(void) {
     T1CONbits.TON = 1;
     T1CONbits.TCKPS = 0b11; // PRESCALER: 256
 
-    IPC0bits.T1IP = 6;
+    IPC0bits.T1IP = 1;
     IFS0bits.T1IF = 0;
     IEC0bits.T1IE = 1;
 }
