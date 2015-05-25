@@ -4,8 +4,8 @@
 
 #include "shared/utils.h"
 
-void init_serial() {
-    assert(sp_get_port_by_name("/dev/ttyUSB0", &port) == SP_OK);
+void init_serial(char* portName) {
+    assert(sp_get_port_by_name(portName, &port) == SP_OK);
     assert(sp_open(port, SP_MODE_READ_WRITE) == SP_OK);
 
     assert(SP_OK == sp_set_baudrate(port, 57600));

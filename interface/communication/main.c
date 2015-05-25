@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <libserialport.h>
 
 #include "communication_wrapper.h"
 #include "serial.h"
@@ -64,10 +63,12 @@ void ui_step() {
 }
 
 
-int main() {
+int main(int argc, char** argv) {
     set_assert_callback(assert_callback);
 
-    init_serial();
+    assert(argc == 2);
+
+    init_serial(argv[1]);
     init_comm();
 
     while(1) {

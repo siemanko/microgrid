@@ -11,8 +11,9 @@ COMMUNICATION_BIN = join(SCRIPT_DIR, "communication", "communication")
 print(COMMUNICATION_BIN)
 
 class SerialBindings(object):
-    def __init__(self, msg_callback):
-        self.p = Popen([COMMUNICATION_BIN,], bufsize=1, stdin=PIPE, stdout=PIPE, close_fds=True)
+    def __init__(self, port, msg_callback):
+        self.port = port
+        self.p = Popen([COMMUNICATION_BIN, str(port)], bufsize=1, stdin=PIPE, stdout=PIPE, close_fds=True)
         (self.child_stdout, self.child_stdin) = (self.p.stdout, self.p.stdin)
         self.thread_should_stop = False
         self.callback = msg_callback
@@ -39,6 +40,9 @@ class SerialBindings(object):
     def send_message(self, msg):
         self.outgoing_messages.append(msg)
 
+    def pop_recent_traffic(self):
+        return [None, None]
+
     def close(self):
         self.thread_should_stop = True
         self.thread.join()
@@ -49,7 +53,7 @@ if __name__ == '__main__':
     def msg_callback(x):
         assert x == [0, 0, 112, 111, 110, 103]
         print(x)
-    serial = SerialBindings(msg_callback)
+    serial = SerialBindings('/dev/ttyUSB0', msg_callback)
     try:
         while True:
             serial.send_message([0])
