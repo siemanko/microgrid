@@ -1,7 +1,7 @@
 OUT = communication
 CC = gcc
 ODIR = build
-SDIR = ..
+SDIR = ../../
 CFLAGS=-Wall -I/home/sidor/projects/microgrid/ -Ilibserialport
 
 OBJECTS=build/shared/algorithm/circular_buffer.o \
@@ -12,13 +12,29 @@ OBJECTS=build/shared/algorithm/circular_buffer.o \
 		build/shared/communication/ethermini.o \
 		build/shared/communication/message.o \
 		build/shared/communication/utils/message_builder.o \
-		build/interface2/serial.o
+		build/interface/communication/serial.o
 
 
-#OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
+all: $(OUT)
 
-$(OUT): $(OBJECTS)
+$(OUT): libserialport/libserialport.la $(OBJECTS)
 	libtool --mode=link $(CC) $(CFLAGS) main.c $(OBJECTS)  libserialport/libserialport.la -o $(OUT)
+
+libserialport/libserialport.la: | libserialport_build
+	touch $@
+
+libserialport_build:
+	echo updating libserialport git repo; \
+	git submodule init; \
+	git submodule update; \
+	echo entering libserialport dir; \
+	cd libserialport; \
+	echo autogen; \
+	./autogen.sh; \
+	./configure; \
+	make; \
+	cd ..
+
 
 $(ODIR)/%.o: $(SDIR)/%.c
 	@mkdir -p $(@D)
@@ -27,4 +43,4 @@ $(ODIR)/%.o: $(SDIR)/%.c
 .PHONY: clean
 
 clean:
-	rm -rf $(ODIR)/*
+	rm -rf $(ODIR)/* communication libserialport/libserialport.la
