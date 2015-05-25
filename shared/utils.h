@@ -36,14 +36,14 @@ char* copy_array(const char*, int length);
 // returns 1 if equal zero otherwise.
 int str_prefix_equal(char* s1, char* s2, int prefix);
 
-void internal_assert(int condition, char* format, ...);
+void internal_assert(int condition, const char* format, ...);
 
-void* internal_safe_malloc(uint16_t size, char* format, ...);
+void* internal_safe_malloc(uint16_t size, const char* format, ...);
 
-void set_assert_callback(void (*callback)(char*, va_list));
+void set_assert_callback(void (*callback)(const char*, va_list));
 
 
-// Initial should normally be zero, but 
+// Initial should normally be zero, but
 // can be an output of another checksum call
 // to computer joint checksum for multiple pieces of data.
 uint32_t checksum(uint32_t initial, const uint8_t* data, int len);

@@ -11,7 +11,7 @@ void make_cb(CircularBuffer *buffer, uint16_t size) {
     buffer->start = 0;
     buffer->count = 0;
     if (buffer->size >= 0) {
-        buffer->element = safe_malloc(sizeof(void*)*size);
+        buffer->element = (void**)safe_malloc(sizeof(void*)*size);
     }
     /* allocated array of void pointers. Same as below */
     //buffer->element = safe_malloc(sizeof(void *) * size);

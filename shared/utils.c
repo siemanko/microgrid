@@ -97,9 +97,9 @@ int str_prefix_equal(char* s1, char* s2, int prefix) {
     return i == prefix;
 }
 
-static void (*assert_callback)(char*, va_list);
+static void (*assert_callback)(const char*, va_list);
 
-void internal_assert(int condition, char* format, ...) {
+void internal_assert(int condition, const char* format, ...) {
     if (!condition && assert_callback != 0) {
         va_list args;
         va_start(args, format);
@@ -108,7 +108,7 @@ void internal_assert(int condition, char* format, ...) {
     }
 }
 
-void* internal_safe_malloc(uint16_t size, char* format, ...) {
+void* internal_safe_malloc(uint16_t size, const char* format, ...) {
     void *ret = malloc(size);
     if (ret == 0) {
         va_list args;
@@ -121,7 +121,7 @@ void* internal_safe_malloc(uint16_t size, char* format, ...) {
     }
 }
 
-void set_assert_callback(void (*callback)(char*, va_list)) {
+void set_assert_callback(void (*callback)(const char*, va_list)) {
     assert_callback = callback;
 }
 

@@ -51,8 +51,6 @@ void discover_nodes() {
 }
 
 
-
-
 void ping_handler(Message* msg) {
     if (msg->source == COMPUTER_UID) {
         debug(DEBUG_INFO, "pong");
