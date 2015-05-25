@@ -66,7 +66,10 @@ void ui_step() {
 int main(int argc, char** argv) {
     set_assert_callback(assert_callback);
 
-    assert(argc == 2);
+    if (argc != 2) {
+        printf("Usage: %s DEVICE\n", argv[0]);
+        exit(2);
+    }
 
     init_serial(argv[1]);
     init_comm();

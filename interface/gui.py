@@ -21,7 +21,7 @@ from kivy.lang import Builder
 import controller
 
 from message_handler import MessageHandler
-from serial_adapter import SerialAdapter
+from serial_bindings import SerialBindings
 
 def sets_equal(a,b):
     return len(a.intersection(b)) == len(a.union(b)) == len(a) == len(b)
@@ -77,7 +77,7 @@ class RootView(BoxLayout):
         self.update_serial_choices()
 
     def on_message(self, msg):
-        self.message_handler.handle(msg)
+        self.message_handler.handle(bytes(msg))
 
     def on_serial_choice(self, checkbox, value):
         if self.serial is not None:
@@ -86,7 +86,7 @@ class RootView(BoxLayout):
             self.serial.close()
             self.serial = None
         if value:
-            self.serial = SerialAdapter(checkbox.port,
+            self.serial = SerialBindings(checkbox.port,
                     self.on_message)
 
 
@@ -119,7 +119,6 @@ SaneLabel:
                     btn.active = True
                 self.indicators.serial_choices.add_widget(btn)
                 self.indicators.serial_choices.add_widget(lbl)
-
 
 
 class MicrogridApp(App):
