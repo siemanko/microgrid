@@ -56,6 +56,12 @@ void a_box_data_logger_step() {
         network_voltage = NAN;
         battery_voltage = NAN;
     }
+    
+    debug(DEBUG_INFO, "A box: %f %f %f %f", 
+            battery_input_current,
+            battery_output_current,
+            network_voltage,
+            battery_voltage);
     data_logger_log(0,
                     time_seconds_since_epoch(),
                     battery_input_current,

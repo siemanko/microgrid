@@ -127,7 +127,7 @@ void dl_message_handler(Message* msg) {
         uint32_t num_logged = eeprom_read_uint32(dls(DLS_NUM_LOGGED));
         uint32_t num_possible =
                 (EEPROM_TOTAL_MEMORY - STORAGE_DATA_LOGGER) / 
-                current_entry_size;
+                current_entry_size - 1;
         debug(DEBUG_INFO, "Logging schema %s. Logged %l of %l possible).",
                 current_schema->name, num_logged, num_possible);
     } else if (msg->content[1] == DLM_EXTRACT_GENERAL) {
@@ -147,6 +147,7 @@ void dl_message_handler(Message* msg) {
     } else if (msg->content[1] == DLM_EXTRACT_COLUMN) {
         assert(msg->length == 3);
         uint8_t column = msg->content[2];
+        assert(column <= current_schema->num_column);
         MessageBuilder mb2;
         make_mb(&mb2, 4 + strlen(current_schema->column_name[column]));
         mb_add_char(&mb2, CMSG_DATA_LOGGER_REPLY);
@@ -156,11 +157,13 @@ void dl_message_handler(Message* msg) {
         mb_add_string(&mb2, current_schema->column_name[column]);
         send_mb(&mb2, COMPUTER_UID);
     } else if (msg->content[1] == DLM_EXTRACT_DATA) {
+        
         assert(msg->length == 6);
         uint32_t entry_no = bytes_to_uint32(msg->content + 2);
-        
+        uint32_t num_logged2 = eeprom_read_uint32(dls(DLS_NUM_LOGGED));
+        assert(entry_no < num_logged2);
         uint32_t offset = dls(DLS_DATA) + entry_no * current_entry_size;
-        
+        assert (offset + current_entry_size < EEPROM_TOTAL_MEMORY);
         MessageBuilder mb3;
         make_mb(&mb3, 6 + current_entry_size);
         mb_add_char(&mb3, CMSG_DATA_LOGGER_REPLY);

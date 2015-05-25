@@ -21,6 +21,7 @@ class SerialBindings(object):
         self.thread = Thread(target=self.thread_loop)
         self.thread.setDaemon(True)
         self.thread.start()
+        self.indicators = [None, None]
 
     def thread_loop(self):
         while not self.thread_should_stop:
@@ -34,13 +35,17 @@ class SerialBindings(object):
             self.child_stdin.flush()
             reply = self.child_stdout.readline()[:-1]
             if not b"none" in reply:
+                self.indicators[0] = ' :-)'
                 self.callback([ int(x) for x in reply.split(b' ') if x != b'']);
 
     def send(self, msg):
+        self.indicators[1] = ' :-)'
         self.outgoing_messages.append(msg)
 
     def pop_recent_traffic(self):
-        return [None, None]
+        ret = self.indicators
+        self.indicators = [None, None]
+        return ret
 
     def close(self):
         self.thread_should_stop = True

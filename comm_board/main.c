@@ -28,7 +28,7 @@ void init(void) {
     init_storage();
     init_cron();
     init_communication();
-    
+
     storage_load_settings();
 
     if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
@@ -46,7 +46,7 @@ void init(void) {
 }
 
 
-void init_cron_schedule() {    
+void init_cron_schedule() {
     cron_repeat_rapidly(communication_step);
     cron_repeat_every_s(10, storage_backup);
     cron_repeat_every_s(1,  display_step);
