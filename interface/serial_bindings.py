@@ -12,7 +12,6 @@ print(COMMUNICATION_BIN)
 
 class SerialBindings(object):
     def __init__(self, port, msg_callback):
-        sp_set_debug_handler(printf);
         self.port = port
         self.p = Popen([COMMUNICATION_BIN, str(port)], bufsize=1, stdin=PIPE, stdout=PIPE, close_fds=True)
         (self.child_stdout, self.child_stdin) = (self.p.stdout, self.p.stdin)

@@ -12,7 +12,8 @@ OBJECTS=build/shared/algorithm/circular_buffer.o \
 		build/shared/communication/ethermini.o \
 		build/shared/communication/message.o \
 		build/shared/communication/utils/message_builder.o \
-		build/interface/communication/serial.o
+		build/interface/communication/serial.o \
+		build/interface/communication/rs232.o
 
 .PHONY: libserialport clean
 
