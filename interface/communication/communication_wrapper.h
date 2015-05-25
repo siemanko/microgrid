@@ -43,7 +43,7 @@ void init_comm() {
     make_ethermini(&network, put_char, on_message);
 }
 
-int comm_receive_message(char* buf) {
+int comm_receive_message(unsigned char* buf) {
     Message* msg =
             (Message*)ethermini_receive_message(&network);
     if (msg) {

@@ -14,14 +14,13 @@ OBJECTS=build/shared/algorithm/circular_buffer.o \
 		build/shared/communication/utils/message_builder.o \
 		build/interface/communication/serial.o
 
+.PHONY: libserialport clean
 
-all: $(OUT)
+all: libserialport_build $(OUT)
 
-$(OUT): libserialport/libserialport.la $(OBJECTS)
+$(OUT): $(OBJECTS)
 	libtool --mode=link $(CC) $(CFLAGS) main.c $(OBJECTS)  libserialport/libserialport.la -o $(OUT)
 
-libserialport/libserialport.la: | libserialport_build
-	touch $@
 
 libserialport_build:
 	echo updating libserialport git repo; \
@@ -40,7 +39,5 @@ $(ODIR)/%.o: $(SDIR)/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-.PHONY: clean
-
 clean:
-	rm -rf $(ODIR)/* communication libserialport/libserialport.la
+	rm -rf $(ODIR)/* communication
