@@ -129,7 +129,7 @@ void mb_add_uint32(MessageBuilder* mb, uint32_t ld) {
     mb_add_uint32_noprefix(mb, ld);
 }
 
-void mb_add_formated(MessageBuilder* mb, char* format, ...) {
+void mb_add_formated(MessageBuilder* mb, const char* format, ...) {
 
 
     va_list args;
@@ -139,7 +139,7 @@ void mb_add_formated(MessageBuilder* mb, char* format, ...) {
     va_end(args);
 }
 
-void mb_add_formated_args(MessageBuilder* mb, char* format, va_list args) {
+void mb_add_formated_args(MessageBuilder* mb, const char* format, va_list args) {
     int num_ints = 0;
     int num_floats = 0;
     int str_length = strlen(format);

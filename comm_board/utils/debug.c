@@ -10,7 +10,7 @@
 
 static void make_debug_mb(MessageBuilder* mb,
                           char subsystem,
-                          char* format,
+                          const char* format,
                           va_list args) {
     make_mb(mb, 2);
     mb_add_char(mb, CMSG_DEBUG); // indicate debug message
@@ -18,26 +18,26 @@ static void make_debug_mb(MessageBuilder* mb,
     mb_add_formated_args(mb, format, args);
 }
 
-void debug(char subsystem, char* format, ...) {
+void debug(char subsystem, const char* format, ...) {
     va_list args;
     va_start(args, format);
     debug_args(subsystem, format, args);
     va_end(args);
 }
 
-void debug_args(char subsystem, char* format, va_list args) {
+void debug_args(char subsystem, const char* format, va_list args) {
     MessageBuilder mb;
     make_debug_mb(&mb, subsystem, format, args);
     send((uint8_t*)mb.message, mb.next_char, COMPUTER_UID);
 }
 
-void debug_unsafe(char subsystem, char* format, ...) {
+void debug_unsafe(char subsystem, const char* format, ...) {
     va_list args;
     va_start(args, format);
     debug_unsafe_args(subsystem, format, args);
     va_end(args);
 }
-void debug_unsafe_args(char subsystem, char* format, va_list args) {
+void debug_unsafe_args(char subsystem, const char* format, va_list args) {
     MessageBuilder mb;
     make_debug_mb(&mb, subsystem, format, args);
     

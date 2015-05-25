@@ -48,11 +48,11 @@ void mb_add_uint32(MessageBuilder* mb, uint32_t ld);
 void mb_add_uint32_noprefix(MessageBuilder* mb, uint32_t ld);
 
 // Accepts print like syntax
-void mb_add_formated(MessageBuilder* mb, char* format, ...);
+void mb_add_formated(MessageBuilder* mb, const char* format, ...);
 
 // Accepts already initiated arguments - useful for wrapping
 // build function.- 
-void mb_add_formated_args(MessageBuilder* mb, char* format, va_list args);
+void mb_add_formated_args(MessageBuilder* mb, const char* format, va_list args);
 
 #endif	/* MESSAGEBUILDER_H */
 

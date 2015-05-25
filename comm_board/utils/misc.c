@@ -14,7 +14,7 @@
 // out of memory error
 static void *reserved; 
 
-void display_assert_message(char* format, va_list args) {
+void display_assert_message(const char* format, va_list args) {
     if (ASSERTS_ENABLED) {
         while(1) {
             free(reserved);

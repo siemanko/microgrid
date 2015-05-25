@@ -7,10 +7,10 @@
 #define DEBUG_ERROR 1
 #define DEBUG_CRON  2
 
-void debug(char subsystem, char* format, ...);
-void debug_args(char subsystem, char* format, va_list args);
+void debug(char subsystem, const char* format, ...);
+void debug_args(char subsystem, const char* format, va_list args);
 
-void debug_unsafe(char subsystem, char* format, ...);
-void debug_unsafe_args(char subsystem, char* format, va_list args);
+void debug_unsafe(char subsystem, const char* format, ...);
+void debug_unsafe_args(char subsystem, const char* format, va_list args);
 
 #endif
