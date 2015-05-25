@@ -50,9 +50,11 @@ void discover_nodes() {
     ping(BOARDCAST_UID);
 }
 
+#include "drivers/lcd.h"
 
 void ping_handler(Message* msg) {
     if (msg->source == COMPUTER_UID) {
+        LCD_blink("ping", LCD_ROW_TOP, 200);
         debug(DEBUG_INFO, "pong");
     } else {
         MessageBuilder mb;

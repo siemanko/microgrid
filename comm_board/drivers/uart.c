@@ -28,7 +28,7 @@ void init_uart(uart_device u) {
         U1MODEbits.PDSEL = 1; // Even Parity, 8-Data bits
         U1MODEbits.ABAUD = 1; // Auto-Baud disabled
         U1MODEbits.BRGH  = 0; // Standard-Speed mode
-
+        
         IFS0bits.U1RXIF = 0;
         IEC0bits.U1RXIE = 1;
         IPC2bits.U1RXIP = 3;

@@ -19,7 +19,7 @@ int message_length = 0;
 void receiving_step() {
     while(1) {
         unsigned char ret;
-        if (serial_read_blocking_1ms(&ret)) {
+        if (serial_read_byte(&ret)) {
             comm_on_symbol(ret);
         } else {
             break;

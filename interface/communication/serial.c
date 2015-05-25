@@ -26,9 +26,10 @@ void serial_send_byte(unsigned char byte) {
     assert(sp_blocking_write (port, buf, 1, 0) == 1);
 }
 
-int serial_read_blocking_1ms(unsigned char* ret) {
+int serial_read_byte(unsigned char* ret) {
     unsigned char buf[1];
-    int num_read = sp_blocking_read(port, buf, 1, 1);
-    *ret = buf[0];
+    int num_read = sp_nonblocking_read(port, buf, 1);
+    if (num_read >= 1)
+        *ret = buf[0];
     return num_read == 1;
 }
