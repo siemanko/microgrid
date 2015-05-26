@@ -2,6 +2,7 @@
 
 #include <p33EP512GM710.h>
 
+#include "drivers/timer.h"
 #include "shared/utils.h"
 
 /* If you can read MIT logo,
@@ -24,6 +25,8 @@
 #define PIN_LED_YELLOW             LATCbits.LATC3
 #define PIN_LED_RED                LATAbits.LATA9
 
+static int leds_states[LED_TYPE_TOTAL];
+
 void init_leds() {
     // set the pins as output pins
     TRIS_LED_GREEN             =  0;
@@ -32,12 +35,13 @@ void init_leds() {
     // make the simulated ground do it's job
     
     // switch the leds off initially.
-    led_sets(LED_TYPE_GREEN,  LED_STATE_OFF);
-    led_sets(LED_TYPE_YELLOW, LED_STATE_OFF);
-    led_sets(LED_TYPE_RED,    LED_STATE_OFF);
+    leds_set(LED_TYPE_GREEN,  LED_STATE_OFF);
+    leds_set(LED_TYPE_YELLOW, LED_STATE_OFF);
+    leds_set(LED_TYPE_RED,    LED_STATE_OFF);
 }
 
-void led_sets(LedType led_type, LedState state) {
+void leds_set(LedType led_type, LedState state) {
+    leds_states[led_type] = state;
     if (led_type == LED_TYPE_GREEN) {
         PIN_LED_GREEN = state;
     } else if (led_type == LED_TYPE_YELLOW) {
@@ -46,5 +50,21 @@ void led_sets(LedType led_type, LedState state) {
         PIN_LED_RED = state;
     } else {
         assert(0);
+    }
+}
+
+static void flip_leds() {
+    int lidx;
+    for (lidx=0; lidx < LED_TYPE_TOTAL; ++lidx) {
+        leds_set(lidx, 1 - leds_states[lidx]);
+    }
+}
+
+void leds_blink(int times) {
+    while(times--) {
+        flip_leds();
+        delay_ms(100);
+        flip_leds();
+        delay_ms(100);
     }
 }

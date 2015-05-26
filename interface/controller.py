@@ -27,6 +27,10 @@ class Ctrl(object):
         mb = MessageBuilder(ToUlink.PING)
         self.send(mb.to_bytes())
 
+    def test_leds(self):
+        mb = MessageBuilder(ToUlink.TEST_LEDS)
+        self.send(mb.to_bytes())
+
     def cron_stats(self):
         mb = MessageBuilder(ToUlink.CRON_STATS)
         self.send(mb.to_bytes())

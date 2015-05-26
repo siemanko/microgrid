@@ -2,9 +2,11 @@
 #define DRIVER_LEDS_H
 
 typedef enum {
-    LED_TYPE_GREEN = 1,
-    LED_TYPE_YELLOW = 2,
-    LED_TYPE_RED = 3,
+    LED_TYPE_GREEN = 0,
+    LED_TYPE_YELLOW = 1,
+    LED_TYPE_RED = 2,
+            
+    LED_TYPE_TOTAL,
 } LedType;
 
 typedef enum {
@@ -14,7 +16,10 @@ typedef enum {
 
 void init_leds();
 
-void led_sets(LedType led_type, LedState state);
+void leds_set(LedType led_type, LedState state);
 
+// one blink lasts 200ms
+// leds are guaranteed to return to previous state after blinking.
+void leds_blink(int times);
 
 #endif

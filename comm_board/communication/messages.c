@@ -9,6 +9,7 @@
 #include "drivers/eeprom.h"
 #include "storage.h"
 #include "user_interface/balance.h"
+#include "drivers/leds.h"
 
 void (*message_handler[UMSG_TOTAL_MESSAGES])(Message*);
 
@@ -111,6 +112,10 @@ void read_eeprom_handler(Message* msg) {
     }
 }
 
+void test_leds_handler(Message* msg) {
+    leds_blink(5);
+}
+
 void register_misc_message_handlers() {
     set_message_handler(UMSG_GET_SETTINGS, get_settings_handler);
     set_message_handler(UMSG_SET_TIME, set_time_handler);
@@ -119,5 +124,6 @@ void register_misc_message_handlers() {
     set_message_handler(UMSG_SET_UID_NODE_TYPE, set_uid_node_type_handler);
     set_message_handler(UMSG_SET_BALANCE, set_balance_handler);
     set_message_handler(UMSG_READ_EEPROM, read_eeprom_handler);
+    set_message_handler(UMSG_TEST_LEDS, test_leds_handler);
 }
 

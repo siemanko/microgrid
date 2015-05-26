@@ -16,6 +16,7 @@ typedef enum {
     UMSG_DATA_LOGGER = 9,
     UMSG_PONG = 10,
     UMSG_GET_CONNECTED_NODES = 11,
+    UMSG_TEST_LEDS = 12,
     // leave last (also make sure no gaps above)
     UMSG_TOTAL_MESSAGES 
 } MessageToUlink; 

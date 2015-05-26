@@ -63,6 +63,8 @@
         <itemPath>drivers/spi.h</itemPath>
         <itemPath>drivers/leds.c</itemPath>
         <itemPath>drivers/leds.h</itemPath>
+        <itemPath>drivers/button.c</itemPath>
+        <itemPath>drivers/button.h</itemPath>
       </logicalFolder>
       <logicalFolder name="shared" displayName="shared" projectFiles="true">
         <logicalFolder name="algorithm" displayName="algorithm" projectFiles="true">

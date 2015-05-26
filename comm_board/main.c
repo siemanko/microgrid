@@ -2,6 +2,7 @@
 #include "communication/other_boards/load_board.h"
 #include "communication/other_boards/link_board.h"
 #include "drivers/board.h"
+#include "drivers/button.h"
 #include "drivers/timer.h"
 #include "drivers/lcd.h"
 #include "drivers/leds.h"
@@ -37,6 +38,7 @@ void init(void) {
         init_a_box_data_logger();
     } else {
         init_leds();
+        init_button();
         init_load_board_interface();
         init_b_box_demand_response();
         init_b_box_data_logger();
@@ -47,18 +49,16 @@ void init(void) {
     debug(DEBUG_INFO, "Initialization sequence complete.");
 }
 
-int last_state = 0;
-#include <p33EP512GM710.h>
-
-void flip_leds() {
-    last_state = 1 - last_state;
-    led_sets(LED_TYPE_GREEN,  last_state);
-    led_sets(LED_TYPE_YELLOW, last_state);
-    led_sets(LED_TYPE_RED,    last_state);
+void lol() {
+    if (button_check()) {
+        debug(DEBUG_INFO, "Button pressed");
+        button_reset();
+    }
 }
 
 void init_cron_schedule() {
     cron_repeat_rapidly(communication_step);
+    cron_repeat_every_s(1, lol);
     cron_repeat_every_s(10, storage_backup);
     cron_repeat_every_s(1,  display_step);
     cron_repeat_every_s(1,  balance_step);
@@ -66,7 +66,7 @@ void init_cron_schedule() {
         cron_repeat_every_s(LOG_DATA_EVERY_S,  a_box_data_logger_step);
         cron_repeat_every_s(5, discover_nodes);
     } else {
-        cron_repeat_every_s(1, flip_leds);
+        cron_repeat_rapidly(button_step);
         cron_repeat_every_s(1,  b_box_demand_response_step);
         cron_repeat_every_s(LOG_DATA_EVERY_S, b_box_data_logger_step);
     }

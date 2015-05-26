@@ -12,6 +12,7 @@ class ToUlink(object):
     DATA_LOGGER = 9
     PONG = 10
     GET_CONNECTED_NODES = 11
+    TEST_LEDS = 12
 
 class ToComputer(object):
     DEBUG = 0
