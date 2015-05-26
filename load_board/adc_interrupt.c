@@ -18,17 +18,17 @@ void __attribute__((__interrupt__, no_auto_psv)) _ADCP1Interrupt()
 
 
     if (network_adc > 0) {
-        double network_voltage = -15.0*((double)network_adc*3.3/1024.0-1.75)+30.0;
+        double network_voltage = -15.0*((double)network_adc*3.3/1024.0-1.75);
         on_network_voltage_reading(network_voltage);
     }
 
     if (output_adc > 0) {
-        double output_voltage = (double)output_adc*3.3/1024.0*(7.2);
+        double output_voltage = (double)output_adc*3.3/1024.0*(6.2);
         on_output_voltage_reading(output_voltage);
     }
 
     if (phone_adc > 0) {
-        double phone_voltage = (double)phone_adc*3.3/1024.0*(69.0/22.0);
+        double phone_voltage = (double)phone_adc*3.3/1024.0*(3.7);
         on_phone_voltage_reading(phone_voltage);
     }
 
