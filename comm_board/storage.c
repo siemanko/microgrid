@@ -5,7 +5,7 @@
 #include "drivers/timer.h"
 #include "user_interface/balance.h"
 
-#define STORAGE_INTEGRITY_CONSTANT 3LL
+#define STORAGE_INTEGRITY_CONSTANT 5LL
 
 #define INITIAL_BALANCE 10000
 

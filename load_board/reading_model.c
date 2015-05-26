@@ -21,7 +21,7 @@ void on_output_current_reading(double reading) {
                      (1.0 - ADC_FORGET) * output_current) ;
 
     // only update it when no appliances are one.
-   if (outputs_disabled()) {
+    if (outputs_disabled()) {
         base_line_output_current = ADC_FORGET * reading +
                                   (1.0 - ADC_FORGET) * base_line_output_current;
     }
@@ -45,6 +45,7 @@ void on_phone_voltage_reading(double reading) {
 
 
 double get_output_current() {
+    // return output_current;
     return  double_max(0.0, output_current - base_line_output_current);
 }
 

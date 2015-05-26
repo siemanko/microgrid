@@ -17,10 +17,10 @@ OBJECTS=build/shared/algorithm/circular_buffer.o \
 
 .PHONY: libserialport clean
 
-all: libserialport_build $(OUT)
+all: $(OUT)
 
 $(OUT): $(OBJECTS)
-	libtool --mode=link $(CC) $(CFLAGS) main.c $(OBJECTS)  libserialport/libserialport.la -o $(OUT)
+	libtool --mode=link $(CC) $(CFLAGS) main.c $(OBJECTS) -o $(OUT)
 
 
 libserialport_build:

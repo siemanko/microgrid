@@ -57,6 +57,13 @@ void b_box_data_logger_step() {
         phone_voltage = NAN;
     }
     
+    debug(DEBUG_INFO, "B box(%d): %f %f %f %f", 
+        success,
+        output_current,
+        network_voltage,
+        output_voltage,
+        phone_voltage);
+    
     data_logger_log(0,
                     time_seconds_since_epoch(),
                     output_current,
