@@ -2,7 +2,7 @@
 #ifndef READINGMODEL_H
 #define	READINGMODEL_H
 
-#define ADC_FORGET 0.003
+#define ADC_FORGET 0.1
 
 void update_readings();
 

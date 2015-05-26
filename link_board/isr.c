@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 #include "reading_model.h"
-#define refv 2.4f
+#define refv 2.2f
 
 float kp=0.00021231;
 float TsTi=4.2;

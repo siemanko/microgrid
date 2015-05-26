@@ -14,8 +14,8 @@ void init_PWM()
     IOCON3bits.SWAP = 1;
 
     PDC3 = 900;                 			/* PDC = (PTPER / DutyCycle)  */
-    DTR3    = 15;               			/* Deadtime = (80ns / 1.04ns) where 65ns is desired deadtime */
-    ALTDTR3 = 15;    						/* ALTDeadtime = (65ns / 1.04ns) where 65ns is desired deadtime */
+    DTR3    = 20;               			/* Deadtime = (80ns / 1.04ns) where 65ns is desired deadtime */
+    ALTDTR3 = 30;    						/* ALTDeadtime = (65ns / 1.04ns) where 65ns is desired deadtime */
     PHASE3 = 0;     			            /* No phase shift */
 
     TRGCON3bits.TRGDIV  =15;       // Trigger interrupt generated once every 15 PWM cycle
