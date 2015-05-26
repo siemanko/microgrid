@@ -4,6 +4,7 @@
 #include "drivers/board.h"
 #include "drivers/timer.h"
 #include "drivers/lcd.h"
+#include "drivers/leds.h"
 #include "drivers/uart.h"
 #include "shared/utils.h"
 #include "shared/communication/utils/message_builder.h"
@@ -35,6 +36,7 @@ void init(void) {
         init_link_board_interface();
         init_a_box_data_logger();
     } else {
+        init_leds();
         init_load_board_interface();
         init_b_box_demand_response();
         init_b_box_data_logger();
@@ -45,6 +47,15 @@ void init(void) {
     debug(DEBUG_INFO, "Initialization sequence complete.");
 }
 
+int last_state = 0;
+#include <p33EP512GM710.h>
+
+void flip_leds() {
+    last_state = 1 - last_state;
+    led_sets(LED_TYPE_GREEN,  last_state);
+    led_sets(LED_TYPE_YELLOW, last_state);
+    led_sets(LED_TYPE_RED,    last_state);
+}
 
 void init_cron_schedule() {
     cron_repeat_rapidly(communication_step);
@@ -54,8 +65,8 @@ void init_cron_schedule() {
     if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
         cron_repeat_every_s(LOG_DATA_EVERY_S,  a_box_data_logger_step);
         cron_repeat_every_s(5, discover_nodes);
-
     } else {
+        cron_repeat_every_s(1, flip_leds);
         cron_repeat_every_s(1,  b_box_demand_response_step);
         cron_repeat_every_s(LOG_DATA_EVERY_S, b_box_data_logger_step);
     }

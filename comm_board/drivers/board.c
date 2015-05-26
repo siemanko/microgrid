@@ -6,10 +6,6 @@
 #define TRIS_INPUT 1
 #define TRIS_OUTPUT 0
 
-#define TRIS_AUX TRISAbits.TRISA0
-#define TRIS_AUX2 TRISAbits.TRISA11
-#define TRIS_AUX3 TRISAbits.TRISA12
-
 #define TRIS_RS TRISEbits.TRISE15
 #define TRIS_RW TRISDbits.TRISD5
 #define TRIS_EN TRISCbits.TRISC8
@@ -36,9 +32,6 @@ _FICD(ICS_PGD2 & JTAGEN_OFF) // Select Debug/Program Lines and JTAG OFF
 
 static void init_pins(void) {
     // auxilary output for testing
-    TRIS_AUX = TRIS_OUTPUT;
-    TRIS_AUX2 = TRIS_OUTPUT;
-    TRIS_AUX3 = TRIS_OUTPUT;
 
     // LCD
     TRIS_RS = TRIS_OUTPUT;

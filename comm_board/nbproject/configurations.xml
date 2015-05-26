@@ -61,6 +61,8 @@
         <itemPath>drivers/eeprom.h</itemPath>
         <itemPath>drivers/spi.c</itemPath>
         <itemPath>drivers/spi.h</itemPath>
+        <itemPath>drivers/leds.c</itemPath>
+        <itemPath>drivers/leds.h</itemPath>
       </logicalFolder>
       <logicalFolder name="shared" displayName="shared" projectFiles="true">
         <logicalFolder name="algorithm" displayName="algorithm" projectFiles="true">
