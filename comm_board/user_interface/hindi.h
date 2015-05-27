@@ -63,7 +63,16 @@ unsigned char hindi_chars[] = {
     0b11101,
     0b01101,
     0b10101,
-    0b00101
+    0b00101,
+    // clock(6)
+    0b00000,
+    0b01110,
+    0b10101,
+    0b10101,
+    0b11001,
+    0b10001,
+    0b01110,
+    0b00000
 };
 
 unsigned int energy_hindi[] = {3,4,5,0};

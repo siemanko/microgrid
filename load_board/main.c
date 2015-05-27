@@ -8,6 +8,14 @@
 #include "api.h"
 #include "enable_model.h"
 
+// Causes all ports to be enabled by default when 
+// load board boots.
+// This wariable should only be set to 1 for the purpose
+// of testing loadboard. For production system it should
+// be set to 0.
+#define ENABLED_BY_DEFAULT 0
+
+
 int main()
 {
     set_communication_enable(0);
@@ -24,6 +32,11 @@ int main()
     for(i=0; i<1000000LL; ++i);
     set_communication_enable(1);
 
+    if (ENABLED_BY_DEFAULT) {
+        set_light_port_intensity(0.75);
+        set_port1(1);
+        set_port2(1);
+    }
 
     while(1){}
 }
