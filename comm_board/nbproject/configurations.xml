@@ -50,6 +50,7 @@
         <itemPath>demand_response/common.h</itemPath>
         <itemPath>demand_response/a_box.c</itemPath>
         <itemPath>demand_response/a_box.h</itemPath>
+        <itemPath>demand_response/common.c</itemPath>
       </logicalFolder>
       <logicalFolder name="drivers" displayName="drivers" projectFiles="true">
         <itemPath>drivers/board.c</itemPath>

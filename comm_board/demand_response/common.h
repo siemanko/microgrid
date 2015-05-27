@@ -10,4 +10,6 @@ typedef enum {
     DR_STATE_TOTAL
 } DemandResponeState;
 
+const char* dr_state_as_string(DemandResponeState state);
+
 #endif

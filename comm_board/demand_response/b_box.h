@@ -8,7 +8,7 @@ void init_b_box_demand_response();
 int b_box_readings_ready();
 float b_box_get_power();
 
-DemandResponeState demand_reponse_current_state();
+DemandResponeState b_box_demand_reponse_current_state();
 
 void b_box_demand_response_step();
 

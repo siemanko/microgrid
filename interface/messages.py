@@ -14,6 +14,8 @@ class ToUlink(object):
     GET_CONNECTED_NODES = 11
     TEST_LEDS = 12
     PRINT_LOCAL_TIME = 13
+    DEMAND_REPONSE = 14
+    OVERRIDE_DEMAND_REPONSE = 15
 
 class ToComputer(object):
     DEBUG = 0

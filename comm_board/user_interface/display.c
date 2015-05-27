@@ -21,22 +21,9 @@ void init_display() {
 
 static int step = 0;
 
-static const char* dr_state_as_string(DemandResponeState state) {
-    if (state == DR_STATE_GREEN) {
-        return "green";
-    } else if (state == DR_STATE_YELLOW) {
-        return "yellow";
-    } else if (state == DR_STATE_RED) {
-        return "red";
-    } else if (state == DR_STATE_OFF) {
-        return "off";
-    } else {
-        return "ERROR";
-    }
-}
 
 static void update_leds() {
-    DemandResponeState state = demand_reponse_current_state();
+    DemandResponeState state = b_box_demand_reponse_current_state();
     leds_set(LED_TYPE_RED, LED_STATE_OFF);
     leds_set(LED_TYPE_YELLOW, LED_STATE_OFF);
     leds_set(LED_TYPE_GREEN, LED_STATE_OFF);
@@ -60,7 +47,7 @@ void display_step() {
     update_leds();
     
     LCD_replace_row("State: ", LCD_ROW_TOP);
-    LCD_print(dr_state_as_string(demand_reponse_current_state()));
+    LCD_print(dr_state_as_string(b_box_demand_reponse_current_state()));
     if (step++  & 1) LCD_char('*');
     LCD_replace_row("", LCD_ROW_BOTTOM);
     LCD_print_custom(energy_hindi);

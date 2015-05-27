@@ -19,6 +19,7 @@ typedef enum {
     UMSG_TEST_LEDS = 12,
     UMSG_PRINT_LOCAL_TIME = 13,
     UMSG_DEMAND_REPONSE = 14,
+    UMSG_OVERRIDE_DEMAND_REPONSE = 15,
     // leave last (also make sure no gaps above)
     UMSG_TOTAL_MESSAGES 
 } MessageToUlink; 

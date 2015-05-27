@@ -35,6 +35,24 @@ class Ctrl(object):
         mb = MessageBuilder(ToUlink.PRINT_LOCAL_TIME)
         self.send(mb.to_bytes())
 
+    def override_demand_response_state(self):
+        mb = MessageBuilder(ToUlink.OVERRIDE_DEMAND_REPONSE)
+        state_to_command = {
+            'none':   [0, 0],
+            'green':  [1, 0],
+            'yellow': [1, 1],
+            'red':    [1, 2],
+            'off':    [1, 3],
+        }
+        target_state = self.ui_root.debug_panel.dr_state.text
+        if target_state not in state_to_command.keys():
+            print ('%s not acceptable. Must be one of %s..' % (target_state, state_to_command.keys()))
+            return
+        for b in state_to_command[target_state]:
+            mb.add_byte(b)
+        self.send(mb.to_bytes())
+
+
     def cron_stats(self):
         mb = MessageBuilder(ToUlink.CRON_STATS)
         self.send(mb.to_bytes())

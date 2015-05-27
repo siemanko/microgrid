@@ -118,6 +118,7 @@
 <DebugView>:
     logs: id_logs.logs_list
     eeprom_addr: id_eeprom_addr
+    dr_state: id_dr_state
 
     orientation: 'horizontal'
     spacing: 10
@@ -127,23 +128,23 @@
         orientation: 'vertical'
         spacing: 10
         Button:
-            size_hint: (1, 0.1)
+            size_hint: (1, 0.15)
             text: 'Clear screen'
             on_press: c.get.clear_logs()
         Button:
-            size_hint: (1, 0.1)
+            size_hint: (1, 0.15)
             text: 'Ping'
             on_press: c.get.send_ping()
         Button:
-            size_hint: (1, 0.1)
+            size_hint: (1, 0.15)
             text: 'Test LEDs'
             on_press: c.get.test_leds()
         Button:
-            size_hint: (1, 0.1)
+            size_hint: (1, 0.15)
             text: 'Print local time'
             on_press: c.get.print_local_time()
         BoxLayout:
-            size_hint: (1, 0.1)
+            size_hint: (1, 0.15)
             orientation: 'horizontal'
             TextInput:
                 id: id_eeprom_addr
@@ -164,27 +165,40 @@
                 text: 'byte'
                 on_press: c.get.read_eeprom('byte')
         Button:
-            size_hint: (1, 0.1)
+            size_hint: (1, 0.15)
             text: 'Data Logger Status'
             on_press: c.get.data_logger.status()
         Button:
-            size_hint: (1, 0.1)
+            size_hint: (1, 0.15)
             text: 'Wipe data logs'
             on_press: c.get.data_logger.reset()
         Button:
-            size_hint: (1, 0.1)
+            size_hint: (1, 0.15)
             text: 'Cron stats'
             on_press: c.get.cron_stats()
         Button:
-            size_hint: (1, 0.1)
+            size_hint: (1, 0.15)
             text: 'Probe memory'
             on_press: c.get.get_memory()
+        BoxLayout:
+            size_hint: (1, 0.15)
+            orientation: 'horizontal'
+            TextInput:
+                id: id_dr_state
+                size_hint: (0.6, 1)
+                padding_y: (self.height - self.line_height) / 2
+                multiline: False
+                hint_text: 'red, green, ...'
+            Button:
+                size_hint: (0.4, 1)
+                text: 'Override DR'
+                on_press: c.get.override_demand_response_state()
         Button:
-            size_hint: (1, 0.1)
+            size_hint: (1, 0.15)
             text: 'Get connected nodes'
             on_press: c.get.get_connected_nodes()
         Button:
-            size_hint: (1, 0.1)
+            size_hint: (1, 0.15)
             text: 'Reboot'
             on_press: c.get.reset_pic()
         Label:

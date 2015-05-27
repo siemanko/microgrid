@@ -42,12 +42,12 @@ float b_box_get_power() {
 }
 
 static void demand_reponse_handler(Message* msg) {
-    assert(0 <= msg->content[1] && msg->content[2] < DR_STATE_TOTAL);
+    assert(0 <= msg->content[1] && msg->content[1] < DR_STATE_TOTAL);
     current_state = msg->content[1];
     last_state_broadcast = time_seconds_since_epoch();
 }
 
-DemandResponeState demand_reponse_current_state() {
+DemandResponeState b_box_demand_reponse_current_state() {
     return current_state;
 }
 
