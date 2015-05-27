@@ -15,17 +15,6 @@ void balance_set(uint32_t value) {
     balance = value;
 }
 
-static int state_to_price_coefficient(DemandResponeState state) {
-    if (state == DR_STATE_GREEN) {
-        return PRICE_COEFF_GREEN;
-    } else if (state == DR_STATE_YELLOW) {
-        return PRICE_COEFF_YELLOW;
-    } else if (state == DR_STATE_RED) {
-        return PRICE_COEFF_RED;
-    }
-    return -1;
-}
-
 void balance_step() {
     if (balance > 0) {
         if (b_box_readings_ready()) {

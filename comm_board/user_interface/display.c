@@ -45,12 +45,16 @@ static void update_leds() {
 
 void display_step() {
     update_leds();
-    
-    LCD_replace_row("State: ", LCD_ROW_TOP);
-    LCD_print(dr_state_as_string(b_box_demand_reponse_current_state()));
-    if (step++  & 1) LCD_char('*');
-    LCD_replace_row("", LCD_ROW_BOTTOM);
-    LCD_print_custom(energy_hindi);
-    LCD_print(": ");
-    LCD_int(balance_get());
+    if (waiting_for_confirmation()) {
+        LCD_replace_row("Price went up :(",   LCD_ROW_TOP);
+        LCD_replace_row("Push to continue", LCD_ROW_BOTTOM);
+    } else {
+        LCD_replace_row("State: ", LCD_ROW_TOP);
+        LCD_print(dr_state_as_string(b_box_demand_reponse_current_state()));
+        if (step++  & 1) LCD_char('*');
+        LCD_replace_row("", LCD_ROW_BOTTOM);
+        LCD_print_custom(energy_hindi);
+        LCD_print(": ");
+        LCD_int(balance_get());
+    }
 }

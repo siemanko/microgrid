@@ -9,6 +9,8 @@
 
 #define INITIAL_BALANCE 10000
 
+#define FORCE_RESET 0
+
 void init_storage() {
     init_eeprom();
 }
@@ -19,6 +21,10 @@ void storage_integrity_check() {
                STORAGE_INTEGRITY_CONSTANT;
     if (!ok) {
         debug(DEBUG_ERROR, "Storage integrity check failed - resetting.");
+        storage_factory_reset();
+    }
+    if (FORCE_RESET) {
+        debug(DEBUG_INFO, "Forced storage reset - update the code.");
         storage_factory_reset();
     }
     

@@ -7,16 +7,25 @@
 #include "communication/messages.h"
 #include "shared/utils.h"
 #include "drivers/timer.h"
+#include "shared/algorithm/circular_buffer.h"
+#include "drivers/button.h"
+
+// don't display annoying push button message for first
+// <DR_CHILLAX> seconds.
+#define DR_CHILLAX 5
 
 #define BAD_READINGS_BEFORE_SWITCHOFF 5
 #define MAX_TIME_BETWEEN_BROADCASTS_S 5
 
-uint32_t last_state_broadcast = 0;
+// we don't want to wait for button push 
+static uint32_t estimated_boot_time;
+static int awaiting_price_ack = 0;
+static uint32_t last_state_broadcast = 0;
 static DemandResponeState current_state;
 
-int should_results_be_used = 0;
+static int should_results_be_used = 0;
 
-int num_bad_readings_in_row = 0;
+static int num_bad_readings_in_row = 0;
 
 // current at the output of load converter
 // the current reading does include all loads but does not include
@@ -33,6 +42,10 @@ float phone_voltage;
 
 uint32_t grid_management_last_update;
 
+int waiting_for_confirmation() {
+    return awaiting_price_ack;
+}
+
 int b_box_is_power_consumed() {
     return output_current > 0.02;
 }
@@ -41,9 +54,20 @@ float b_box_get_power() {
     return output_current * output_voltage;
 }
 
+static void dr_update_state(DemandResponeState new_state) {
+    int higher_price = state_to_price_coefficient(new_state) >
+            state_to_price_coefficient(current_state);
+    int enough_time_passed =  estimated_boot_time +
+            DR_CHILLAX < time_seconds_since_epoch();
+    if (higher_price && enough_time_passed) {
+        awaiting_price_ack = 1;
+    }
+    current_state = new_state;
+}
+
 static void demand_reponse_handler(Message* msg) {
     assert(0 <= msg->content[1] && msg->content[1] < DR_STATE_TOTAL);
-    current_state = msg->content[1];
+    dr_update_state(msg->content[1]);
     last_state_broadcast = time_seconds_since_epoch();
 }
 
@@ -56,6 +80,8 @@ void init_b_box_demand_response() {
     grid_management_last_update = 0;
     should_results_be_used = 0;
     num_bad_readings_in_row = 0;
+    awaiting_price_ack = 0;
+    estimated_boot_time = time_seconds_since_epoch();
     current_state = DR_STATE_OFF;
     set_message_handler(UMSG_DEMAND_REPONSE, demand_reponse_handler);
 }
@@ -95,6 +121,18 @@ void update_readings() {
 }
 
 void b_box_demand_response_step() {
+    if (awaiting_price_ack) {
+        if (button_check()) {
+            awaiting_price_ack = 0;
+            button_reset();
+        } else {
+            load_board_ports_off();
+            return; 
+        }
+    } else {
+        button_reset();
+    }
+    
     if (last_state_broadcast + MAX_TIME_BETWEEN_BROADCASTS_S < 
             time_seconds_since_epoch()) {
         current_state = DR_STATE_OFF;
