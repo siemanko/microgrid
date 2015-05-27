@@ -1,10 +1,18 @@
 #include "b_box.h"
 
 #include "communication/other_boards/load_board.h"
+#include "demand_response/common.h"
 #include "user_interface/balance.h"
 #include "utils/debug.h"
+#include "communication/messages.h"
+#include "shared/utils.h"
+#include "drivers/timer.h"
 
 #define BAD_READINGS_BEFORE_SWITCHOFF 5
+#define MAX_TIME_BETWEEN_BROADCASTS_S 5
+
+uint32_t last_state_broadcast = 0;
+static DemandResponeState current_state;
 
 int should_results_be_used = 0;
 
@@ -33,10 +41,33 @@ float b_box_get_power() {
     return output_current * output_voltage;
 }
 
+static void demand_reponse_handler(Message* msg) {
+    assert(0 <= msg->content[1] && msg->content[2] < DR_STATE_TOTAL);
+    current_state = msg->content[1];
+    last_state_broadcast = time_seconds_since_epoch();
+}
+
+const char* dr_state_as_string() {
+    if (current_state == DR_STATE_GREEN) {
+        return "green";
+    } else if (current_state == DR_STATE_YELLOW) {
+        return "yellow";
+    } else if (current_state == DR_STATE_RED) {
+        return "red";
+    } else if (current_state == DR_STATE_OFF) {
+        return "off";
+    } else {
+        assert(0);
+        return "ERROR";
+    }
+}
+
 void init_b_box_demand_response() {    
     grid_management_last_update = 0;
     should_results_be_used = 0;
     num_bad_readings_in_row = 0;
+    current_state = DR_STATE_OFF;
+    set_message_handler(UMSG_DEMAND_REPONSE, demand_reponse_handler);
 }
 
 // Basic sanity checks on readings be get from load board
@@ -74,8 +105,17 @@ void update_readings() {
 }
 
 void b_box_demand_response_step() {
+    if (last_state_broadcast + MAX_TIME_BETWEEN_BROADCASTS_S < 
+            time_seconds_since_epoch()) {
+        current_state = DR_STATE_OFF;
+    }
     update_readings();
 
+    if (current_state == DR_STATE_OFF) {
+        load_board_ports_off();
+        return;
+    }
+    
     if (b_box_readings_ready()) {
         if (balance_get() == 0 && b_box_is_power_consumed()) {
             load_board_ports_off();

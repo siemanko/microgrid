@@ -21,6 +21,7 @@
 #include "data_logger/b_box.h"
 #include "tests.h"
 #include "communication/network_utils.h"
+#include "demand_response/a_box.h"
 
 void init(void) {
     init_board();
@@ -35,6 +36,7 @@ void init(void) {
 
     if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
         init_link_board_interface();
+        init_a_box_demand_response();
         init_a_box_data_logger();
     } else {
         init_leds();
@@ -55,6 +57,7 @@ void init_cron_schedule() {
     if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
         cron_repeat_every_s(LOG_DATA_EVERY_S,  a_box_data_logger_step);
         cron_repeat_every_s(5, discover_nodes);
+        cron_repeat_every_s(1,  a_box_demand_response_step);
     } else {
         cron_repeat_rapidly(button_step);
         cron_repeat_every_s(1,  display_step);

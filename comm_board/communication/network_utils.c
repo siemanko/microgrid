@@ -47,7 +47,7 @@ void discover_nodes() {
             map_remove(&nodes_online, disconnect_uid);
         }
     }
-    ping(BOARDCAST_UID);
+    ping(BROADCAST_UID);
 }
 
 #include "drivers/lcd.h"

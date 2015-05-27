@@ -215,7 +215,7 @@ void LCD_replace_row(char letters[], lcd_row row) {
     LCD_print(letters);
 }
 
-void LCD_print(char letters[]) {
+void LCD_print(const char* letters) {
     // set cursor to appropriate position.
     int string_index = 0;
 

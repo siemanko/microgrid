@@ -75,7 +75,7 @@ void LCD_move_cursor(lcd_direction which_way);
 void LCD_char(unsigned char ch);
 
 // print a string at current cursor position
-void LCD_print(char letters[]);
+void LCD_print(const char* letters);
 
 
 /////////////////////// PRINTING VARIOUS OBJECTS ///////////////////////////////

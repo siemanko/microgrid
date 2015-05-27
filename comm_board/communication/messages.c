@@ -1,4 +1,5 @@
 #include "messages.h"
+
 #include "communication/interface.h"
 #include "shared/utils.h"
 #include "utils/debug.h"
@@ -16,7 +17,7 @@ void (*message_handler[UMSG_TOTAL_MESSAGES])(Message*);
 void handle_message(Message* msg) {
     // TODO(szymon): cache UID..
     if (msg->destination != my_uid &&
-            msg->destination != BOARDCAST_UID)
+            msg->destination != BROADCAST_UID)
         return;
     if (msg->length < 1)
         return;

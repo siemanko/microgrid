@@ -12,7 +12,7 @@
 #include "shared/communication/utils/message_builder.h"
 
 #define COMPUTER_UID ((uint8_t)254)
-#define BOARDCAST_UID ((uint8_t)255)
+#define BROADCAST_UID ((uint8_t)255)
 
 extern int my_uid;
 
