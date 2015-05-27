@@ -4,6 +4,9 @@
 
 #define CYCLES_PER_SECOND 35007500L
 
+#define TIMEZONE_JAMSHEDPUR -330
+#define CURRENT_TIMEZONE TIMEZONE_JAMSHEDPUR
+
 void init_timer(void) {
     // Set up 32 bit clock for high resolution delays.
     T8CONbits.TON = 0;       // Disable Timer
@@ -43,6 +46,8 @@ void init_timer(void) {
     IPC0bits.T1IP = 1;
     IFS0bits.T1IF = 0;
     IEC0bits.T1IE = 1;
+    
+    time_zone = CURRENT_TIMEZONE;
 }
 
 
@@ -122,4 +127,8 @@ uint64_t time_milliseconds_since_epoch() {
 
 void time_set_seconds_since_epoch(uint32_t value) {
     abs_time_s = value;
+}
+
+struct tm* ulink_local_time() {
+    return localtime(&abs_time_s);
 }

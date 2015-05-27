@@ -2,6 +2,7 @@
 #define	DRIVERS_TIMER_H
 
 #include <stdint.h>
+#include <time.h>
 
 // Must be called before using timer.
 void init_timer(void);
@@ -41,5 +42,9 @@ uint64_t time_milliseconds_since_epoch();
 
 // Time travel.
 void time_set_seconds_since_epoch(uint32_t value);
+
+// Returns a data structure representing current time.
+struct tm* ulink_local_time();
+
 #endif	/* DELAYS_H */
 
