@@ -116,6 +116,12 @@ void test_leds_handler(Message* msg) {
     leds_blink(5);
 }
 
+void print_local_time_handler(Message* msg) {
+    struct tm *lt; 
+    lt = ulink_local_time();
+    debug(DEBUG_INFO, "Local time: %s", asctime(lt));
+}
+
 void register_misc_message_handlers() {
     set_message_handler(UMSG_GET_SETTINGS, get_settings_handler);
     set_message_handler(UMSG_SET_TIME, set_time_handler);
@@ -125,5 +131,6 @@ void register_misc_message_handlers() {
     set_message_handler(UMSG_SET_BALANCE, set_balance_handler);
     set_message_handler(UMSG_READ_EEPROM, read_eeprom_handler);
     set_message_handler(UMSG_TEST_LEDS, test_leds_handler);
+    set_message_handler(UMSG_PRINT_LOCAL_TIME, print_local_time_handler);
 }
 

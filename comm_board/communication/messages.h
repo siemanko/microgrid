@@ -17,6 +17,7 @@ typedef enum {
     UMSG_PONG = 10,
     UMSG_GET_CONNECTED_NODES = 11,
     UMSG_TEST_LEDS = 12,
+    UMSG_PRINT_LOCAL_TIME = 13,
     // leave last (also make sure no gaps above)
     UMSG_TOTAL_MESSAGES 
 } MessageToUlink; 

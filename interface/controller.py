@@ -31,6 +31,10 @@ class Ctrl(object):
         mb = MessageBuilder(ToUlink.TEST_LEDS)
         self.send(mb.to_bytes())
 
+    def print_local_time(self):
+        mb = MessageBuilder(ToUlink.PRINT_LOCAL_TIME)
+        self.send(mb.to_bytes())
+
     def cron_stats(self):
         mb = MessageBuilder(ToUlink.CRON_STATS)
         self.send(mb.to_bytes())

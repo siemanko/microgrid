@@ -13,6 +13,7 @@ class ToUlink(object):
     PONG = 10
     GET_CONNECTED_NODES = 11
     TEST_LEDS = 12
+    PRINT_LOCAL_TIME = 13
 
 class ToComputer(object):
     DEBUG = 0

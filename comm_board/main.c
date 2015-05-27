@@ -49,20 +49,8 @@ void init(void) {
     debug(DEBUG_INFO, "Initialization sequence complete.");
 }
 
-
-void lol() {
-    /*if (button_check()) {
-        debug(DEBUG_INFO, "Button pressed");
-        button_reset();
-    }*/
-    struct tm* lt; 
-    lt = ulink_local_time();
-    debug(DEBUG_INFO, "Time: %s", asctime(lt));
-}
-
 void init_cron_schedule() {
     cron_repeat_rapidly(communication_step);
-    cron_repeat_every_s(1, lol);
     cron_repeat_every_s(10, storage_backup);
     if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
         cron_repeat_every_s(LOG_DATA_EVERY_S,  a_box_data_logger_step);
