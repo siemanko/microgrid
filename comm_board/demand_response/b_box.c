@@ -47,20 +47,10 @@ static void demand_reponse_handler(Message* msg) {
     last_state_broadcast = time_seconds_since_epoch();
 }
 
-const char* dr_state_as_string() {
-    if (current_state == DR_STATE_GREEN) {
-        return "green";
-    } else if (current_state == DR_STATE_YELLOW) {
-        return "yellow";
-    } else if (current_state == DR_STATE_RED) {
-        return "red";
-    } else if (current_state == DR_STATE_OFF) {
-        return "off";
-    } else {
-        assert(0);
-        return "ERROR";
-    }
+DemandResponeState demand_reponse_current_state() {
+    return current_state;
 }
+
 
 void init_b_box_demand_response() {    
     grid_management_last_update = 0;

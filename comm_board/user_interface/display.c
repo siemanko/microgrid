@@ -1,6 +1,7 @@
 #include "display.h"
 
 #include "drivers/lcd.h"
+#include "drivers/leds.h"
 #include "demand_response/b_box.h"
 #include "user_interface/hindi.h"
 #include "user_interface/balance.h"
@@ -18,11 +19,48 @@ void init_display() {
     LCD_print(": ?");
 }
 
-int step = 0;
+static int step = 0;
+
+static const char* dr_state_as_string(DemandResponeState state) {
+    if (state == DR_STATE_GREEN) {
+        return "green";
+    } else if (state == DR_STATE_YELLOW) {
+        return "yellow";
+    } else if (state == DR_STATE_RED) {
+        return "red";
+    } else if (state == DR_STATE_OFF) {
+        return "off";
+    } else {
+        return "ERROR";
+    }
+}
+
+static void update_leds() {
+    DemandResponeState state = demand_reponse_current_state();
+    leds_set(LED_TYPE_RED, LED_STATE_OFF);
+    leds_set(LED_TYPE_YELLOW, LED_STATE_OFF);
+    leds_set(LED_TYPE_GREEN, LED_STATE_OFF);
+
+    if (state == DR_STATE_GREEN) {
+        leds_set(LED_TYPE_GREEN, LED_STATE_ON);
+    }
+    
+    if (state == DR_STATE_YELLOW) {
+        leds_set(LED_TYPE_YELLOW, LED_STATE_ON);
+    }
+    
+    if (state == DR_STATE_RED) {
+        leds_set(LED_TYPE_RED, LED_STATE_ON);
+    }
+    
+    
+}
 
 void display_step() {
+    update_leds();
+    
     LCD_replace_row("State: ", LCD_ROW_TOP);
-    LCD_print(dr_state_as_string());
+    LCD_print(dr_state_as_string(demand_reponse_current_state()));
     if (step++  & 1) LCD_char('*');
     LCD_replace_row("", LCD_ROW_BOTTOM);
     LCD_print_custom(energy_hindi);

@@ -1,12 +1,14 @@
 #ifndef DEMAND_RESPONSE_B_BOX_H
 #define DEMAND_RESPONSE_B_BOX_H
 
-void init_b_box_demand_response();
+#include "demand_response/common.h"
 
-const char* dr_state_as_string();
+void init_b_box_demand_response();
 
 int b_box_readings_ready();
 float b_box_get_power();
+
+DemandResponeState demand_reponse_current_state();
 
 void b_box_demand_response_step();
 
