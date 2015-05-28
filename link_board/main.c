@@ -13,7 +13,7 @@
 int main()
 {
     init_board();
-    init_timer();
+    init_timer(512);
     init_PWM();
     init_ADC(6);
 

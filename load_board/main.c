@@ -15,13 +15,30 @@
 // be set to 0.
 #define ENABLED_BY_DEFAULT 0
 
+#define LED_TRIS TRISCbits.TRISC14
+#define LED_PIN  LATCbits.LATC14
+
+void blink(uint32_t delay, int num_blinks) {
+    uint32_t ctr;
+    while(num_blinks--) {
+        LED_PIN = 1;
+        for(ctr = 0; ctr < delay; ++ctr);
+        LED_PIN = 0;
+        for(ctr = 0; ctr < delay; ++ctr);
+    }
+}
 
 int main()
 {
+    // set led pin as output
+    LED_TRIS = 0;
+    
+    blink(30000L, 10);
+    
     set_communication_enable(0);
     init_board();
     init_PWM();
-    init_timer();
+    init_timer(20*512);
     init_ADC(12);
 
     initializePorts();
@@ -37,6 +54,7 @@ int main()
         set_port1(1);
         set_port2(1);
     }
-
-    while(1){}
+    while(1){
+        blink(1000000L, 1);
+    }
 }
