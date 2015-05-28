@@ -52,6 +52,9 @@ class Ctrl(object):
             mb.add_byte(b)
         self.send(mb.to_bytes())
 
+    def print_data_logs(self):
+        mb = MessageBuilder(ToUlink.PRINT_DATA_LOGS)
+        self.send(mb.to_bytes())
 
     def cron_stats(self):
         mb = MessageBuilder(ToUlink.CRON_STATS)

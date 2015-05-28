@@ -4,6 +4,7 @@
 #include "communication/other_boards/link_board.h"
 #include "drivers/timer.h"
 #include "utils/debug.h"
+#include "communication/messages.h"
 
 #define NAN 0.0/0.0
 
@@ -28,6 +29,46 @@ static const char* column_name[] = {
     "battery voltage"
 };
 
+static void pull_a_box_logs(int* success,
+                            float* battery_input_current,
+                            float* battery_output_current,
+                            float* network_voltage,
+                            float* battery_voltage) {
+    *success =
+            link_board_battery_input_current(battery_input_current) &&
+            link_board_battery_output_current(battery_output_current) &&
+            link_board_network_voltage(network_voltage) &&
+            link_board_battery_voltage(battery_voltage);
+
+    if (!(*success)) {
+        *battery_input_current = NAN;
+        *battery_output_current = NAN;
+        *network_voltage = NAN;
+        *battery_voltage = NAN;
+    }
+}
+
+void a_box_print_dl_message_handler(Message* msg) {
+    int success;
+    float battery_input_current;
+    float battery_output_current;
+    float network_voltage;
+    float battery_voltage;
+    
+    pull_a_box_logs(&success,
+                    &battery_input_current,
+                    &battery_output_current,
+                    &network_voltage,
+                    &battery_voltage);
+    
+    debug(DEBUG_INFO, "A box(%d): %f %f %f %f", 
+            success,
+            battery_input_current,
+            battery_output_current,
+            network_voltage,
+            battery_voltage);
+}
+
 void init_a_box_data_logger() {
     init_data_logger();
     //b_box_schema = (DataLoggerSchema){ name, num_column, column_type, column_name});
@@ -36,26 +77,21 @@ void init_a_box_data_logger() {
     a_box_schema.column_type = column_type;
     a_box_schema.column_name = column_name;
     data_logger_load_schema(&a_box_schema);
+    set_message_handler(UMSG_PRINT_DATA_LOGS, a_box_print_dl_message_handler);
 }
 
 void a_box_data_logger_step() {
+    int success;
     float battery_input_current;
     float battery_output_current;
     float network_voltage;
     float battery_voltage;
-
-    int success =
-            link_board_battery_input_current(&battery_input_current) &&
-            link_board_battery_output_current(&battery_output_current) &&
-            link_board_network_voltage(&network_voltage) &&
-            link_board_battery_voltage(&battery_voltage);
-
-    if (!success) {
-        battery_input_current = NAN;
-        battery_output_current = NAN;
-        network_voltage = NAN;
-        battery_voltage = NAN;
-    }
+    
+    pull_a_box_logs(&success,
+                    &battery_input_current,
+                    &battery_output_current,
+                    &network_voltage,
+                    &battery_voltage);
     
     debug(DEBUG_INFO, "A box(%d): %f %f %f %f", 
             success,

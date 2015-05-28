@@ -27,8 +27,6 @@ static uint16_t dls(uint16_t offset) {
     return STORAGE_DATA_LOGGER + offset;
 }
 
-
-
 void dl_message_handler(Message* msg);
 
 void init_data_logger() {

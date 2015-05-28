@@ -166,6 +166,10 @@
                 on_press: c.get.read_eeprom('byte')
         Button:
             size_hint: (1, 0.15)
+            text: 'Print data logs'
+            on_press: c.get.print_data_logs()
+        Button:
+            size_hint: (1, 0.15)
             text: 'Data Logger Status'
             on_press: c.get.data_logger.status()
         Button:

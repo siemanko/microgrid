@@ -16,6 +16,7 @@ class ToUlink(object):
     PRINT_LOCAL_TIME = 13
     DEMAND_REPONSE = 14
     OVERRIDE_DEMAND_REPONSE = 15
+    PRINT_DATA_LOGS = 16
 
 class ToComputer(object):
     DEBUG = 0
