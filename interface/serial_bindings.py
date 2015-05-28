@@ -13,8 +13,7 @@ print(COMMUNICATION_BIN)
 class SerialBindings(object):
     def __init__(self, port, msg_callback):
         self.port = port
-        self.p = Popen([COMMUNICATION_BIN, str(port)], bufsize=1, stdin=PIPE, stdout=PIPE, close_fds=True)
-        (self.child_stdout, self.child_stdin) = (self.p.stdout, self.p.stdin)
+        self.start_process()
         self.thread_should_stop = False
         self.callback = msg_callback
         self.outgoing_messages = deque()
@@ -23,20 +22,33 @@ class SerialBindings(object):
         self.thread.start()
         self.indicators = [None, None]
 
+    def start_process(self):
+        self.p = Popen([COMMUNICATION_BIN, str(self.port)], bufsize=1, stdin=PIPE, stdout=PIPE, close_fds=True)
+        (self.child_stdout, self.child_stdin) = (self.p.stdout, self.p.stdin)
+
     def thread_loop(self):
         while not self.thread_should_stop:
-            while len(self.outgoing_messages) > 0:
-                msg = self.outgoing_messages.popleft()
-                msg = ['s', str(len(msg))] + [str(x) for x in msg]
-                msg = ' '.join(msg) + '\n'
-                msg = msg.encode('ascii')
-                self.child_stdin.write(msg)
-            self.child_stdin.write(b'g\n')
-            self.child_stdin.flush()
-            reply = self.child_stdout.readline()[:-1]
-            if not b"none" in reply:
-                self.indicators[0] = ' :-)'
-                self.callback([ int(x) for x in reply.split(b' ') if x != b'']);
+            try:
+                self.p.poll()
+                if self.p.returncode is not None:
+                    print("Crash detected.. restarting")
+                    self.start_process()
+                while len(self.outgoing_messages) > 0:
+                    msg = self.outgoing_messages.popleft()
+                    msg = ['s', str(len(msg))] + [str(x) for x in msg]
+                    msg = ' '.join(msg) + '\n'
+                    msg = msg.encode('ascii')
+                    self.child_stdin.write(msg)
+                self.child_stdin.write(b'g\n')
+                self.child_stdin.flush()
+                reply = self.child_stdout.readline()[:-1]
+                if not b"none" in reply:
+                    self.callback([ int(x) for x in reply.split(b' ') if x != b'']);
+                    self.indicators[0] = ' :-)'
+            except Exception as e:
+                time.sleep(1.0)
+                print ("Caugth exception restarting: ", e)
+                self.start_process()
 
     def send(self, msg):
         self.indicators[1] = ' :-)'
