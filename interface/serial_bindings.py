@@ -39,6 +39,7 @@ class SerialBindings(object):
                     msg = ' '.join(msg) + '\n'
                     msg = msg.encode('ascii')
                     self.child_stdin.write(msg)
+                    self.indicators[1] = ' :-)'
                 self.child_stdin.write(b'g\n')
                 self.child_stdin.flush()
                 reply = self.child_stdout.readline()[:-1]
@@ -51,7 +52,6 @@ class SerialBindings(object):
                 self.start_process()
 
     def send(self, msg):
-        self.indicators[1] = ' :-)'
         self.outgoing_messages.append(msg)
 
     def pop_recent_traffic(self):

@@ -2,7 +2,7 @@ OUT = communication
 CC = gcc
 ODIR = build
 SDIR = ../../
-CFLAGS=-Wall -I/home/sidor/projects/microgrid/ -Ilibserialport
+CFLAGS=-Wall -I../../ -Ilibserialport
 
 OBJECTS=build/shared/algorithm/circular_buffer.o \
 		build/shared/algorithm/map.o \
