@@ -8,7 +8,7 @@
 #ifndef MODEL_H
 #define	MODEL_H
 
-#define ADC_FORGET 20.0*0.001L
+#define ADC_FORGET 0.003L
 
 void on_output_current_reading(double current);
 void on_network_voltage_reading(double network_voltage);
