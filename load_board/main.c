@@ -15,7 +15,9 @@
 // be set to 0.
 #define ENABLED_BY_DEFAULT 0
 
+// this bit controls wether the pin is input/output
 #define LED_TRIS TRISCbits.TRISC14
+// this ping actually turn led on/off
 #define LED_PIN  LATCbits.LATC14
 
 void blink(uint32_t delay, int num_blinks) {
