@@ -14,7 +14,7 @@
 // <DR_CHILLAX> seconds.
 #define DR_CHILLAX 5
 
-#define BAD_READINGS_BEFORE_SWITCHOFF 5
+#define BAD_READINGS_BEFORE_SWITCHOFF 15
 #define MAX_TIME_BETWEEN_BROADCASTS_S 5
 
 // we don't want to wait for button push 
@@ -88,10 +88,10 @@ void init_b_box_demand_response() {
 
 // Basic sanity checks on readings be get from load board
 int validate_readings() {
-    int output_current_normal = 0.0 <= output_current && output_current <= 1000.0;
-    int network_voltage_normal =  0.1 <= network_voltage && network_voltage <= 60.0;
-    int output_voltage_normal = 0.0 <= output_voltage && output_voltage <= 20.0;
-    int phone_voltage_normal = 0.0 <= phone_voltage && phone_voltage <= 10.0;
+    int output_current_normal  = -0.1 <= output_current && output_current <= 1000.0;
+    int network_voltage_normal = -0.1 <= network_voltage && network_voltage <= 60.0;
+    int output_voltage_normal  = -0.1 <= output_voltage && output_voltage <= 20.0;
+    int phone_voltage_normal   = -0.1 <= phone_voltage && phone_voltage <= 10.0;
     return output_current_normal &&
            network_voltage_normal &&
            output_voltage_normal &&

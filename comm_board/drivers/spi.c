@@ -117,26 +117,34 @@ int spi_request_byte(uint8_t message, uint8_t* result) {
         //debug_unsafe(DEBUG_MAIN, "Trying to send %d", message);
         uint8_t ret = 0;
         int ctr;
-        const int MAX_LOOPS = 250;
+        const int MAX_LOOPS = 125;
         ret = sendLoadBoardByteRaw(message);
         //debug_unsafe(DEBUG_MAIN, "Send message %d, first reply %d", message, ret);
         //debug_unsafe(DEBUG_MAIN, "Send message %d, second reply %d", message, ret);
 
+        // wait for sync bit (69)
         ctr = 0;
-        while(ret != 69 && ctr++ < MAX_LOOPS) ret = sendLoadBoardByteRaw(message);
+        while(ret != 69 && ctr++ < MAX_LOOPS) ret = 
+                sendLoadBoardByteRaw(message);
         if (ctr >= MAX_LOOPS) return 0;
 
-        //debug_unsafe(DEBUG_MAIN, "Send received 69");
-
+        // consume all the sync bits
         ctr = 0;
-        while(ret == 69 && ctr++ < MAX_LOOPS) ret = sendLoadBoardByteRaw(SPI_READ_AGAIN);
+        while(ret == 69 && ctr++ < MAX_LOOPS) ret = 
+                sendLoadBoardByteRaw(SPI_READ_AGAIN);
         if (ctr >= MAX_LOOPS) return 0;
 
+        // after enough sync bits are sent, the
+        // child puts a value different than
+        // 69 (sync symbol) and the actual message
+        // we are trying to receive. That value is 
+        // stored in <different_value>.
         uint8_t different_value = ret;
-        // debug_unsafe(DEBUG_MAIN, "Send got different: %d", ret);
 
+        // consume all the repeats of different value.
         ctr = 0;
-        while (ret == different_value  && ctr++ < MAX_LOOPS) ret = sendLoadBoardByteRaw(SPI_READ_AGAIN);
+        while (ret == different_value  && ctr++ < MAX_LOOPS) ret = 
+                sendLoadBoardByteRaw(SPI_READ_AGAIN);
         if (ctr >= MAX_LOOPS) return 0;
 
         // debug_unsafe(DEBUG_MAIN, "Send got actual value %d", ret);
