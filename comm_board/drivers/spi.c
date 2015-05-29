@@ -11,6 +11,9 @@
 #define SPI_READ_AGAIN                             1
 
 
+// sends <2 * REDUNDANCY + 1> bits per every bit od data.
+// (actually it's much more than that because of sync lol).
+#define REDUNDANCY                                 7
 
 // TODO(szymon): find out why regular delay does
 // not work here
@@ -111,6 +114,43 @@ uint8_t sendLoadBoardByteRaw(uint8_t message) {
     return ret;
 }
 
+uint8_t redundant_readings[2 * REDUNDANCY + 1];
+
+int extract_result(uint8_t* result) {
+    int best_candidate_idx = 0;
+    int best_num_occurences = 1;
+    int current_num_occurences;
+    
+    int total = 2 * REDUNDANCY + 1;
+    int current_candidate_idx;
+    int idx2;
+   
+    for (current_candidate_idx = 0;
+            current_candidate_idx < total; ++current_candidate_idx) {
+        current_num_occurences = 0;
+        for (idx2 = current_candidate_idx + 1; idx2 < total; ++idx2) {
+            if (redundant_readings[current_candidate_idx] ==
+                    redundant_readings[idx2]) {
+                ++current_num_occurences;
+            }
+        }
+        if (current_num_occurences > best_num_occurences) {
+            best_candidate_idx = current_candidate_idx;
+            best_num_occurences = current_num_occurences;
+        }
+    }
+    
+    // if majority of readings are the same we have success
+    if (best_num_occurences >= REDUNDANCY + 1) {
+        *result = redundant_readings[best_candidate_idx];
+        return 1;
+    } else {
+        return 0;
+    }
+    
+    
+}
+
 int spi_request_byte(uint8_t message, uint8_t* result) {
         SPI_SLAVE_SELECT = 0;
 
@@ -147,10 +187,21 @@ int spi_request_byte(uint8_t message, uint8_t* result) {
                 sendLoadBoardByteRaw(SPI_READ_AGAIN);
         if (ctr >= MAX_LOOPS) return 0;
 
-        // debug_unsafe(DEBUG_MAIN, "Send got actual value %d", ret);
+        // first reading we already got in previous loop.
+        int redundant_readings_num = 0;
+        redundant_readings[redundant_readings_num++] = ret;
+
+        while (redundant_readings_num < 2 * REDUNDANCY + 1) {
+            redundant_readings[redundant_readings_num++] =
+                    sendLoadBoardByteRaw(SPI_READ_AGAIN);
+        }
+        
+        // now we extract result that appeared at least
+        // <REDUNDANCY> times.
+        int success = extract_result(result);
+        
         SPI_SLAVE_SELECT = 1;
-        *result = ret;
-        return 1;
+        return success;
 }
 
 int spi_command(uint8_t command){
