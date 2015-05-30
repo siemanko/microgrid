@@ -11,6 +11,7 @@
 #include "storage.h"
 #include "user_interface/balance.h"
 #include "drivers/leds.h"
+#include "demand_response/state_of_charge.h"
 
 void (*message_handler[UMSG_TOTAL_MESSAGES])(Message*);
 
@@ -42,6 +43,8 @@ void get_settings_handler(Message* msg) {
     mb_add_char(&mb, eeprom_read_byte(STORAGE_UID));
     mb_add_char(&mb, eeprom_read_byte(STORAGE_NODE_TYPE));
     mb_add_uint32_noprefix(&mb, balance_get());
+    mb_add_float_noprefix(&mb, state_of_charge);
+    mb_add_float_noprefix(&mb, uncertertainty_of_charge);
 
     send_mb(&mb, COMPUTER_UID);
 }
@@ -124,14 +127,14 @@ void print_local_time_handler(Message* msg) {
 }
 
 void register_misc_message_handlers() {
-    set_message_handler(UMSG_GET_SETTINGS, get_settings_handler);
-    set_message_handler(UMSG_SET_TIME, set_time_handler);
-    set_message_handler(UMSG_RESET_PIC, reset_pic_handler);
-    set_message_handler(UMSG_GET_MEMORY, get_memory_handler);
-    set_message_handler(UMSG_SET_UID_NODE_TYPE, set_uid_node_type_handler);
-    set_message_handler(UMSG_SET_BALANCE, set_balance_handler);
-    set_message_handler(UMSG_READ_EEPROM, read_eeprom_handler);
-    set_message_handler(UMSG_TEST_LEDS, test_leds_handler);
-    set_message_handler(UMSG_PRINT_LOCAL_TIME, print_local_time_handler);
+    set_message_handler(UMSG_GET_SETTINGS,       get_settings_handler);
+    set_message_handler(UMSG_SET_TIME,           set_time_handler);
+    set_message_handler(UMSG_RESET_PIC,          reset_pic_handler);
+    set_message_handler(UMSG_GET_MEMORY,         get_memory_handler);
+    set_message_handler(UMSG_SET_UID_NODE_TYPE,  set_uid_node_type_handler);
+    set_message_handler(UMSG_SET_BALANCE,        set_balance_handler);
+    set_message_handler(UMSG_READ_EEPROM,        read_eeprom_handler);
+    set_message_handler(UMSG_TEST_LEDS,          test_leds_handler);
+    set_message_handler(UMSG_PRINT_LOCAL_TIME,   print_local_time_handler);
 }
 

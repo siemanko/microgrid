@@ -51,6 +51,8 @@
         <itemPath>demand_response/a_box.c</itemPath>
         <itemPath>demand_response/a_box.h</itemPath>
         <itemPath>demand_response/common.c</itemPath>
+        <itemPath>demand_response/state_of_charge.c</itemPath>
+        <itemPath>demand_response/state_of_charge.h</itemPath>
       </logicalFolder>
       <logicalFolder name="drivers" displayName="drivers" projectFiles="true">
         <itemPath>drivers/board.c</itemPath>

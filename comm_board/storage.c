@@ -4,6 +4,7 @@
 #include "utils/debug.h"
 #include "drivers/timer.h"
 #include "user_interface/balance.h"
+#include "demand_response/state_of_charge.h"
 
 #define STORAGE_INTEGRITY_CONSTANT 7LL
 
@@ -34,12 +35,18 @@ void storage_load_settings() {
     storage_integrity_check();
     time_set_seconds_since_epoch(eeprom_read_uint32(STORAGE_TIME));
     balance_set(eeprom_read_uint32(STORAGE_BALANCE));
+    state_of_charge = eeprom_read_float(STORAGE_STATE_OF_CHARGE);
+    uncertertainty_of_charge =
+            eeprom_read_float(STORAGE_UNCERTAINTY_OF_CHARGE);
 }
 
 void storage_backup() {
     eeprom_write_uint32(STORAGE_TIME, time_seconds_since_epoch());
     eeprom_write_uint32(STORAGE_BALANCE, balance_get());
-
+    eeprom_write_float(STORAGE_STATE_OF_CHARGE, state_of_charge);
+    eeprom_write_float(STORAGE_UNCERTAINTY_OF_CHARGE,
+            uncertertainty_of_charge);
+    
 }
 
 
@@ -50,4 +57,6 @@ void storage_factory_reset() {
     eeprom_write_byte(STORAGE_UID, 1);
     eeprom_write_byte(STORAGE_NODE_TYPE, 'B');
     eeprom_write_uint32(STORAGE_BALANCE, INITIAL_BALANCE);
+    eeprom_write_float(STORAGE_STATE_OF_CHARGE, 1);
+    eeprom_write_float(STORAGE_UNCERTAINTY_OF_CHARGE, 1000000.0);
 }

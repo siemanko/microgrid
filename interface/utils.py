@@ -18,6 +18,12 @@ class MessageBuilder(object):
         self.buffer += packed
         if VERBOSE: print ('add_uint32_end')
 
+    def add_float(self, number):
+        if VERBOSE: print ('add_float')
+        packed = list(struct.pack('<f', number))
+        self.buffer += packed
+        if VERBOSE: print ('add_float_end')
+
     def to_bytes(self):
         return bytearray([x for x in self.buffer])
 

@@ -89,12 +89,18 @@ class MessageHandler(object):
             box_uid = msg[5]
             box_node_type = chr(msg[6])
             box_balance = parse_uint32(msg[7:11])
+            state_of_charge       = parse_float(msg[11:15])
+            uncertainty_of_charge = parse_float(msg[15:19])
+
             #self.log('Time on device is ' + str(date))
 
             self.update_if_not_focused(self.ui_root.settings.box_time, str(date))
             self.update_if_not_focused(self.ui_root.settings.box_uid, str(box_uid))
             self.update_if_not_focused(self.ui_root.settings.box_node_type, str(box_node_type))
             self.update_if_not_focused(self.ui_root.settings.box_balance, str(box_balance))
+            self.update_if_not_focused(self.ui_root.settings.state_of_charge,       str(state_of_charge))
+            self.update_if_not_focused(self.ui_root.settings.uncertainty_of_charge, str(uncertainty_of_charge))
+
         elif msg_type == ToComputer.DATA_LOGGER_REPLY:
             controller.get.data_logger.on_message(msg)
         else:

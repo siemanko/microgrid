@@ -44,7 +44,6 @@ class Ctrl(object):
             'red':    [1, 2],
             'off':    [1, 3],
             'on':     [1, 4],
-
         }
         target_state = self.ui_root.debug_panel.dr_state.text
         if target_state not in state_to_command.keys():
@@ -103,6 +102,17 @@ class Ctrl(object):
             print (e)
             print ('WARNING: invalid balance value.')
 
+    def set_state_of_charge(self):
+        try:
+            mb = MessageBuilder(ToUlink.SET_STATE_OF_CHARGE)
+            state = float(self.ui_root.settings.state_of_charge.text)
+            uncertainty = float(self.ui_root.settings.uncertainty_of_charge.text)
+            mb.add_float(state)
+            mb.add_float(uncertainty)
+            self.send(mb.to_bytes())
+        except Exception as e:
+            print (e)
+            print ('WARNING: wrong state of charge value.')
     def reset_pic(self):
         mb = MessageBuilder(ToUlink.RESET_PIC)
         self.send(mb.to_bytes())
