@@ -7,8 +7,6 @@ extern float battery_capacity_q;
 
 void init_state_of_charge();
 
-void state_of_charge_step() {
-    
-}
+void state_of_charge_step();
 
 #endif

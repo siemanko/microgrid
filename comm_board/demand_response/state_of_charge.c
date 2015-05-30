@@ -35,16 +35,16 @@ void init_state_of_charge() {
 
 void state_of_charge_step() {
     int success;
-    float battery_input_current,
-          battery_output_current,
-          network_voltage,
-          battery_voltage;
+    float battery_input_current;
+    float battery_output_current;
+    float ignored1;
+    float ignored2;
     
-    void a_box_pull_data(&success,
-                     &battery_input_current,
-                     &battery_output_current,
-                     &network_voltage,
-                     &battery_voltage);
+    a_box_pull_data(&success,
+                    &battery_input_current,
+                    &battery_output_current,
+                    &ignored1,
+                    &ignored2);
     if (!success) return;
     state_of_charge_q += battery_input_current - battery_output_current;
     uncertertainty_of_charge +=

@@ -8,6 +8,9 @@
 
 #define NAN 0.0/0.0
 
+float off_threshold    =  0.5;
+float red_threshold    =  0.55;
+float yellow_threshold =  0.65;
 
 DataLoggerSchema a_box_schema;
 
