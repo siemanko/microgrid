@@ -6,6 +6,7 @@ typedef enum {
     DR_STATE_YELLOW = 1,
     DR_STATE_RED = 2,
     DR_STATE_OFF = 3,
+    DR_STATE_ON = 4,
             
     DR_STATE_TOTAL
 } DemandResponeState;

@@ -32,6 +32,7 @@ void blink(uint32_t delay, int num_blinks) {
 
 int main()
 {
+    initializePorts();
     // set led pin as output
     LED_TRIS = 0;
     
@@ -43,7 +44,6 @@ int main()
     init_timer(20*512);
     init_ADC(12);
 
-    initializePorts();
     init_spi_slave();
     spi_slave_set_handle_message(load_board_handle_message);
 

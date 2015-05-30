@@ -11,8 +11,10 @@ const char* dr_state_as_string(DemandResponeState state) {
         return "red";
     } else if (state == DR_STATE_OFF) {
         return "off";
+    } else if (state == DR_STATE_ON) {
+        return "on";
     } else {
-        return "ERROR";
+        return "unknown state";
     }
 }
 
@@ -24,6 +26,9 @@ int state_to_price_coefficient(DemandResponeState state) {
     } else if (state == DR_STATE_RED) {
         return PRICE_COEFF_RED;
     } else if (state == DR_STATE_OFF) {
+        return 0;
+    } else if (state == DR_STATE_ON) {
+        // this is a debug state.
         return 0;
     }
     return -1;

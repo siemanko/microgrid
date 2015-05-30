@@ -61,6 +61,7 @@ static void dr_update_state(DemandResponeState new_state) {
             DR_CHILLAX < time_seconds_since_epoch();
     if (higher_price && enough_time_passed) {
         awaiting_price_ack = 1;
+        debug(DEBUG_INFO, "Prices went up, waiting for button.");
     }
     current_state = new_state;
 }
@@ -121,8 +122,28 @@ void update_readings() {
 }
 
 void b_box_demand_response_step() {
+    // If comms with A-box are failing turn everything off.
+    if (last_state_broadcast + MAX_TIME_BETWEEN_BROADCASTS_S < 
+            time_seconds_since_epoch()) {
+        current_state = DR_STATE_OFF;
+    }
+    // update readings
+    update_readings();
+    
+    // unconditional on and off state.
+    if (current_state == DR_STATE_OFF) {
+        load_board_ports_off();
+        return;
+    } else if (current_state == DR_STATE_ON) {
+        load_board_ports_on();
+        return;
+    }
+    
+    // if waiting for button push, stop everything.
     if (awaiting_price_ack) {
         if (button_check()) {
+            debug(DEBUG_INFO, "Prices acknowledged.");
+
             awaiting_price_ack = 0;
             button_reset();
         } else {
@@ -133,18 +154,8 @@ void b_box_demand_response_step() {
         button_reset();
     }
     
-    if (last_state_broadcast + MAX_TIME_BETWEEN_BROADCASTS_S < 
-            time_seconds_since_epoch()) {
-        current_state = DR_STATE_OFF;
-    }
-    update_readings();
-
-    if (current_state == DR_STATE_OFF) {
-        load_board_ports_off();
-        return;
-    }
-    
     if (b_box_readings_ready()) {
+        // balance based switch off
         if (balance_get() == 0 && b_box_is_power_consumed()) {
             load_board_ports_off();
             // return;
@@ -153,6 +164,7 @@ void b_box_demand_response_step() {
             load_board_ports_on();
         }
     } else {
+        // if comms with load board fail turn everything off.
         if (num_bad_readings_in_row > BAD_READINGS_BEFORE_SWITCHOFF)
             load_board_ports_off();
     }

@@ -43,6 +43,8 @@ class Ctrl(object):
             'yellow': [1, 1],
             'red':    [1, 2],
             'off':    [1, 3],
+            'on':     [1, 4],
+
         }
         target_state = self.ui_root.debug_panel.dr_state.text
         if target_state not in state_to_command.keys():
