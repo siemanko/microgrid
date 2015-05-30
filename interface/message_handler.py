@@ -91,6 +91,7 @@ class MessageHandler(object):
             box_balance = parse_uint32(msg[7:11])
             state_of_charge       = parse_float(msg[11:15])
             uncertainty_of_charge = parse_float(msg[15:19])
+            battery_capacity = parse_float(msg[19:23])
 
             #self.log('Time on device is ' + str(date))
 
@@ -100,6 +101,7 @@ class MessageHandler(object):
             self.update_if_not_focused(self.ui_root.settings.box_balance, str(box_balance))
             self.update_if_not_focused(self.ui_root.settings.state_of_charge,       str(state_of_charge))
             self.update_if_not_focused(self.ui_root.settings.uncertainty_of_charge, str(uncertainty_of_charge))
+            self.update_if_not_focused(self.ui_root.settings.battery_capacity, str(battery_capacity))
 
         elif msg_type == ToComputer.DATA_LOGGER_REPLY:
             controller.get.data_logger.on_message(msg)

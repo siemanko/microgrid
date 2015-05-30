@@ -113,6 +113,17 @@ class Ctrl(object):
         except Exception as e:
             print (e)
             print ('WARNING: wrong state of charge value.')
+
+    def set_battery_capacity(self):
+        try:
+            mb = MessageBuilder(ToUlink.SET_BATTERY_CAPACITY)
+            battery_capacity = float(self.ui_root.settings.battery_capacity.text)
+            mb.add_float(battery_capacity)
+            self.send(mb.to_bytes())
+        except Exception as e:
+            print (e)
+            print ('WARNING: wrong battery capacity value.')
+
     def reset_pic(self):
         mb = MessageBuilder(ToUlink.RESET_PIC)
         self.send(mb.to_bytes())

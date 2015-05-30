@@ -78,7 +78,7 @@
     box_balance:   id_box_balance
     state_of_charge: id_state_of_charge
     uncertainty_of_charge: id_uncertainty_of_charge
-
+    battery_capacity: id_battery_capacity
 
     orientation: 'vertical'
     spacing: 10
@@ -107,7 +107,7 @@
             size_hint: (0.5, 1)
             text:'Set uid and node type'
             on_press: c.get.set_uid_node_type()
-    BoxLayout: # uid and box type
+    BoxLayout:
         size_hint: (1, 0.1)
         orientation: 'horizontal'
         SettingsText:
@@ -117,7 +117,7 @@
             size_hint: (0.5, 1)
             text:'Set balance'
             on_press: c.get.set_balance()
-    BoxLayout: # uid and box type
+    BoxLayout:
         size_hint: (1, 0.1)
         orientation: 'horizontal'
         SettingsText:
@@ -130,6 +130,17 @@
             size_hint: (0.5, 1)
             text:'Set state of charge and uncertainty'
             on_press: c.get.set_state_of_charge()
+
+    BoxLayout:
+        size_hint: (1, 0.1)
+        orientation: 'horizontal'
+        SettingsText:
+            size_hint: (0.5, 1)
+            id: id_battery_capacity
+        Button:
+            size_hint: (0.5, 1)
+            text:'Set battery capacity'
+            on_press: c.get.set_battery_capacity()
     Label:
 
 <DebugView>:

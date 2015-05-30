@@ -43,8 +43,9 @@ void get_settings_handler(Message* msg) {
     mb_add_char(&mb, eeprom_read_byte(STORAGE_UID));
     mb_add_char(&mb, eeprom_read_byte(STORAGE_NODE_TYPE));
     mb_add_uint32_noprefix(&mb, balance_get());
-    mb_add_float_noprefix(&mb, state_of_charge);
+    mb_add_float_noprefix(&mb, state_of_charge_q);
     mb_add_float_noprefix(&mb, uncertertainty_of_charge);
+    mb_add_float_noprefix(&mb, battery_capacity_q);
 
     send_mb(&mb, COMPUTER_UID);
 }

@@ -18,6 +18,7 @@ class ToUlink(object):
     OVERRIDE_DEMAND_REPONSE = 15
     PRINT_DATA_LOGS = 16
     SET_STATE_OF_CHARGE = 17
+    SET_BATTERY_CAPACITY = 18
 
 class ToComputer(object):
     DEBUG = 0

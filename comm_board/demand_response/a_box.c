@@ -5,6 +5,7 @@
 #include "communication/interface.h"
 #include "shared/utils.h"
 #include "utils/debug.h"
+#include "demand_response/state_of_charge.h"
 
 static int override_active;
 static DemandResponeState override_state;
@@ -29,6 +30,7 @@ void init_a_box_demand_response() {
     override_active = 0;
     set_message_handler(UMSG_OVERRIDE_DEMAND_REPONSE,
             override_demand_reponse_handler);
+    init_state_of_charge();
 }
 
 DemandResponeState a_box_demand_reponse_current_state() {
@@ -49,5 +51,6 @@ static void broadcast_state() {
 
 
 void a_box_demand_response_step() {
+    state_of_charge_step();
     broadcast_state();
 }
