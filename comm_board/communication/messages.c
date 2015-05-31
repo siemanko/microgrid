@@ -50,6 +50,9 @@ void get_settings_handler(Message* msg) {
     mb_add_float_noprefix(&mb, off_threshold);
     mb_add_float_noprefix(&mb, red_threshold);
     mb_add_float_noprefix(&mb, yellow_threshold);
+    mb_add_int_noprefix(&mb, balance_update_hours);
+    mb_add_int_noprefix(&mb, balance_update_minutes);
+    mb_add_uint32_noprefix(&mb, balance_update_ammount);
 
     send_mb(&mb, COMPUTER_UID);
 }
@@ -94,6 +97,7 @@ void set_uid_node_type_handler(Message* msg) {
     assert(msg->length == 3);
     eeprom_write_byte(STORAGE_UID, msg->content[1]);
     eeprom_write_byte(STORAGE_NODE_TYPE, msg->content[2]);
+    asm("RESET");
 }
 
 void set_balance_handler(Message* msg) {
@@ -131,6 +135,20 @@ void print_local_time_handler(Message* msg) {
     debug(DEBUG_INFO, "Local time: %s", asctime(lt));
 }
 
+void set_balance_update_handler(Message* msg) {
+    assert(msg->length == 9);
+    balance_update_hours = bytes_to_int(msg->content + 1);
+    balance_update_minutes = bytes_to_int(msg->content + 3);
+    balance_update_ammount = bytes_to_uint32(msg->content + 5);
+}
+
+void factory_reset_handler(Message* mgs) {
+    storage_factory_reset();
+    debug_unsafe(DEBUG_INFO, "Doing a factory reset and rebooting.");
+
+    asm("RESET");
+}
+
 void register_misc_message_handlers() {
     set_message_handler(UMSG_GET_SETTINGS,       get_settings_handler);
     set_message_handler(UMSG_SET_TIME,           set_time_handler);
@@ -141,5 +159,7 @@ void register_misc_message_handlers() {
     set_message_handler(UMSG_READ_EEPROM,        read_eeprom_handler);
     set_message_handler(UMSG_TEST_LEDS,          test_leds_handler);
     set_message_handler(UMSG_PRINT_LOCAL_TIME,   print_local_time_handler);
+    set_message_handler(UMSG_SET_BALANCE_UPDATE, set_balance_update_handler);
+    set_message_handler(UMSG_FACTORY_RESET,      factory_reset_handler);
 }
 

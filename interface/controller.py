@@ -141,6 +141,31 @@ class Ctrl(object):
             print (e)
             print ('WARNING: wrong state of charge value.')
 
+    def set_balance_update(self):
+        try:
+            mb = MessageBuilder(ToUlink.SET_BALANCE_UPDATE)
+
+            balance_update_hours   = int(self.ui_root.settings.balance_update_hours.text)
+            balance_update_minutes = int(self.ui_root.settings.balance_update_minutes.text)
+            balance_update_ammount = int(self.ui_root.settings.balance_update_ammount.text)
+
+            assert(balance_update_hours in range(24))
+            assert(balance_update_minutes in range(60))
+            assert(balance_update_ammount > 0)
+
+            mb.add_int(balance_update_hours)
+            mb.add_int(balance_update_minutes)
+            mb.add_uint32(balance_update_ammount)
+
+            self.send(mb.to_bytes())
+        except Exception as e:
+            print (e)
+            print ('WARNING: wrong values for balance update')
+
+    def factory_reset(self):
+        mb = MessageBuilder(ToUlink.FACTORY_RESET)
+        self.send(mb.to_bytes())
+
     def reset_pic(self):
         mb = MessageBuilder(ToUlink.RESET_PIC)
         self.send(mb.to_bytes())

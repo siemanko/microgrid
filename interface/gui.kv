@@ -85,6 +85,10 @@
     uncertainty_of_charge: id_uncertainty_of_charge
     battery_capacity: id_battery_capacity
 
+    balance_update_hours: id_balance_update_hours
+    balance_update_minutes: id_balance_update_minutes
+    balance_update_ammount: id_balance_update_ammount
+
     orientation: 'vertical'
     spacing: 10
     BoxLayout: # TIME
@@ -162,6 +166,22 @@
             size_hint: (0.5, 1)
             text:'Set thresholds (off, red, yellow respectively)'
             on_press: c.get.set_thresholds()
+    BoxLayout:
+        size_hint: (1, 0.1)
+        orientation: 'horizontal'
+        SettingsText:
+            size_hint: (0.125, 1)
+            id: id_balance_update_hours
+        SettingsText:
+            size_hint: (0.125, 1)
+            id: id_balance_update_minutes
+        SettingsText:
+            size_hint: (0.25, 1)
+            id: id_balance_update_ammount
+        Button:
+            size_hint: (0.5, 1)
+            text:'Set balance update (hours, minutes, amount)'
+            on_press: c.get.set_balance_update()
     Label:
 
 <DebugView>:
@@ -236,12 +256,18 @@
         BoxLayout:
             size_hint: (1, 0.15)
             orientation: 'horizontal'
-            TextInput:
+            Spinner:
                 id: id_dr_state
                 size_hint: (0.6, 1)
+                text: 'none'
                 padding_y: (self.height - self.line_height) / 2
-                multiline: False
-                hint_text: 'none, on, off, red, green, yellow, ...'
+                values: ('none', 'on', 'off', 'green', 'yellow', 'red')
+            # TextInput:
+            #     id: id_dr_state
+            #     size_hint: (0.6, 1)
+            #     padding_y: (self.height - self.line_height) / 2
+            #     multiline: False
+            #     hint_text: 'none, on, off, red, green, yellow, ...'
             Button:
                 size_hint: (0.4, 1)
                 text: 'Override DR'
@@ -250,6 +276,10 @@
             size_hint: (1, 0.15)
             text: 'Get connected nodes'
             on_press: c.get.get_connected_nodes()
+        Button:
+            size_hint: (1, 0.15)
+            text: 'Factory Reset'
+            on_press: c.get.factory_reset()
         Button:
             size_hint: (1, 0.15)
             text: 'Reboot'

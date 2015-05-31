@@ -18,6 +18,12 @@ class MessageBuilder(object):
         self.buffer += packed
         if VERBOSE: print ('add_uint32_end')
 
+    def add_int(self, number):
+        if VERBOSE: print ('add_int')
+        packed = list(struct.pack('<h', number))
+        self.buffer += packed
+        if VERBOSE: print ('add_int_end')
+
     def add_float(self, number):
         if VERBOSE: print ('add_float')
         packed = list(struct.pack('<f', number))

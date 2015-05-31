@@ -97,6 +97,9 @@ class MessageHandler(object):
             red_threshold = parse_float(msg[27:31])
             yellow_threshold = parse_float(msg[31:35])
 
+            balance_update_hours = parse_int(msg[35:37])
+            balance_update_minutes = parse_int(msg[37:39])
+            balance_update_ammount = parse_uint32(msg[39:43])
 
             #self.log('Time on device is ' + str(date))
 
@@ -108,9 +111,13 @@ class MessageHandler(object):
             self.update_if_not_focused(self.ui_root.settings.uncertainty_of_charge, str(uncertainty_of_charge))
             self.update_if_not_focused(self.ui_root.settings.battery_capacity, str(battery_capacity))
 
-            self.update_if_not_focused(self.ui_root.settings.off_threshold, str(off_threshold))
-            self.update_if_not_focused(self.ui_root.settings.red_threshold, str(red_threshold))
-            self.update_if_not_focused(self.ui_root.settings.yellow_threshold, str(yellow_threshold))
+            self.update_if_not_focused(self.ui_root.settings.off_threshold, str(off_threshold)[:6])
+            self.update_if_not_focused(self.ui_root.settings.red_threshold, str(red_threshold)[:6])
+            self.update_if_not_focused(self.ui_root.settings.yellow_threshold, str(yellow_threshold)[:6])
+
+            self.update_if_not_focused(self.ui_root.settings.balance_update_hours, str(balance_update_hours))
+            self.update_if_not_focused(self.ui_root.settings.balance_update_minutes, str(balance_update_minutes))
+            self.update_if_not_focused(self.ui_root.settings.balance_update_ammount, str(balance_update_ammount))
 
         elif msg_type == ToComputer.DATA_LOGGER_REPLY:
             controller.get.data_logger.on_message(msg)

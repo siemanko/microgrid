@@ -15,6 +15,10 @@ typedef enum {
     STORAGE_OFF_THRESHOLD = 26,         // float
     STORAGE_RED_THRESHOLD = 30,         // float
     STORAGE_YELLOW_THRESHOLD = 34,      // float
+    STORAGE_BALANCE_UPDATE_HOURS = 38,  // int
+    STORAGE_BALANCE_UPDATE_MINUTES = 40,// int
+    STORAGE_BALANCE_UPDATE_AMMOUNT = 42,// uint32
+            
     STORAGE_DATA_LOGGER = 200,          // all the storage above this address
                                         // is dedicated for data_logger
 } StorageAddress;

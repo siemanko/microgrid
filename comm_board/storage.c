@@ -6,6 +6,7 @@
 #include "user_interface/balance.h"
 #include "demand_response/state_of_charge.h"
 #include "demand_response/a_box.h"
+#include "user_interface/balance.h"
 
 
 void init_storage() {
@@ -18,7 +19,7 @@ void storage_integrity_check() {
                STORAGE_INTEGRITY_CONSTANT;
     if (!ok) {
         debug(DEBUG_ERROR, "Storage integrity check failed - resetting.");
-        storage_factory_reset();
+        asm("RESET");
     }
     if (FORCE_FACTORY_RESET) {
         debug(DEBUG_INFO, "Forced storage reset - update the code.");
@@ -41,6 +42,11 @@ void storage_load_settings() {
     off_threshold = eeprom_read_float(STORAGE_OFF_THRESHOLD);
     red_threshold = eeprom_read_float(STORAGE_RED_THRESHOLD);
     yellow_threshold = eeprom_read_float(STORAGE_YELLOW_THRESHOLD);
+    
+    balance_update_hours = eeprom_read_int(STORAGE_BALANCE_UPDATE_HOURS);
+    balance_update_minutes = eeprom_read_int(STORAGE_BALANCE_UPDATE_MINUTES);
+    balance_update_ammount = eeprom_read_uint32(STORAGE_BALANCE_UPDATE_AMMOUNT);
+
 }
 
 void storage_backup() {
@@ -58,6 +64,13 @@ void storage_backup() {
             red_threshold);    
     eeprom_write_float(STORAGE_YELLOW_THRESHOLD,
             yellow_threshold);    
+    
+    eeprom_write_int(STORAGE_BALANCE_UPDATE_HOURS,
+            balance_update_hours);
+    eeprom_write_int(STORAGE_BALANCE_UPDATE_MINUTES,
+            balance_update_minutes);
+    eeprom_write_uint32(STORAGE_BALANCE_UPDATE_AMMOUNT,
+            balance_update_ammount);
 }
 
 
@@ -82,5 +95,12 @@ void storage_factory_reset() {
     eeprom_write_float(STORAGE_YELLOW_THRESHOLD,
             DEFAULT_YELLOW_THRESHOLD);
 
+    eeprom_write_int(STORAGE_BALANCE_UPDATE_HOURS,
+            DEFAULT_BALANCE_UPDATE_HOURS);
     
+    eeprom_write_int(STORAGE_BALANCE_UPDATE_MINUTES,
+            DEFAULT_BALANCE_UPDATE_MINUTES);
+    
+    eeprom_write_uint32(STORAGE_BALANCE_UPDATE_AMMOUNT,
+            DEFAULT_BALANCE_UPDATE_AMMOUN);
 }
