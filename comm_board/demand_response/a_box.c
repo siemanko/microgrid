@@ -8,9 +8,12 @@
 #include "demand_response/state_of_charge.h"
 #include "constants.h"
 #include "storage.h"
+#include "drivers/timer.h"
 
 static int override_active;
 static DemandResponeState override_state;
+static DemandResponeState current_state = DR_STATE_OFF;
+uint32_t last_state_update = 0;
 
 float off_threshold    =  DEFAULT_OFF_THRESHOLD;
 float red_threshold    =  DEFAULT_RED_THRESHOLD;
@@ -51,20 +54,40 @@ void init_a_box_demand_response() {
     init_state_of_charge();
 }
 
+void update_state(DemandResponeState new_state) {
+    // to avoid hysterisis we delay switching states.
+    if (current_state != new_state) {
+        uint32_t min_delay = MIN_DELAY_BETWEEN_STATE_UPDATES_S;
+        if (new_state == DR_STATE_OFF) {
+            // we really don't want to discharge the battery too much,
+            // so we always switch it off with little delay
+            min_delay = 60;
+        } 
+        if (last_state_update + min_delay < 
+                time_seconds_since_epoch()) {
+            debug(DEBUG_INFO, "updated state to %s",
+                    dr_state_as_string(new_state));
+            current_state = new_state;
+            last_state_update = time_seconds_since_epoch();
+        }
+    }
+}
+
 DemandResponeState a_box_demand_reponse_current_state() {
     if (override_active) {
         return override_state;
     } else {
         float soc = get_state_of_charge_percentage();
         if (soc < off_threshold) {
-            return DR_STATE_OFF;
+            update_state(DR_STATE_OFF);
         } else if (soc < red_threshold) {
-            return DR_STATE_RED;
+            update_state(DR_STATE_RED);
         } else if (soc < yellow_threshold) {
-            return DR_STATE_YELLOW;
+            update_state(DR_STATE_YELLOW);
         } else {
-            return DR_STATE_GREEN;
+            update_state(DR_STATE_GREEN);
         }
+        return current_state;
     }
 }
 
