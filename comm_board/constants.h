@@ -15,4 +15,17 @@
 // uncertainty of a current sensor is 2%
 #define CURRENT_SENSOR_UNCERTAINTY 0.02
 
+#define INITIAL_BALANCE 10000
+
+// thresholds
+#define DEFAULT_OFF_THRESHOLD 0.5
+#define DEFAULT_RED_THRESHOLD 0.55
+#define DEFAULT_YELLOW_THRESHOLD 0.65
+
+
+#define STORAGE_INTEGRITY_CONSTANT 7LL
+
+
+#define FORCE_FACTORY_RESET 0
+
 #endif

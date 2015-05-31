@@ -5,12 +5,8 @@
 #include "drivers/timer.h"
 #include "user_interface/balance.h"
 #include "demand_response/state_of_charge.h"
+#include "demand_response/a_box.h"
 
-#define STORAGE_INTEGRITY_CONSTANT 7LL
-
-#define INITIAL_BALANCE 10000
-
-#define FORCE_RESET 0
 
 void init_storage() {
     init_eeprom();
@@ -24,7 +20,7 @@ void storage_integrity_check() {
         debug(DEBUG_ERROR, "Storage integrity check failed - resetting.");
         storage_factory_reset();
     }
-    if (FORCE_RESET) {
+    if (FORCE_FACTORY_RESET) {
         debug(DEBUG_INFO, "Forced storage reset - update the code.");
         storage_factory_reset();
     }
@@ -40,6 +36,11 @@ void storage_load_settings() {
             eeprom_read_float(STORAGE_UNCERTAINTY_OF_CHARGE);
     battery_capacity_q =
             eeprom_read_float(STORAGE_BATTERY_CAPACITY);
+    
+    
+    off_threshold = eeprom_read_float(STORAGE_OFF_THRESHOLD);
+    red_threshold = eeprom_read_float(STORAGE_RED_THRESHOLD);
+    yellow_threshold = eeprom_read_float(STORAGE_YELLOW_THRESHOLD);
 }
 
 void storage_backup() {
@@ -51,6 +52,12 @@ void storage_backup() {
     eeprom_write_float(STORAGE_BATTERY_CAPACITY,
             battery_capacity_q);
     
+    eeprom_write_float(STORAGE_OFF_THRESHOLD,
+            off_threshold);
+    eeprom_write_float(STORAGE_RED_THRESHOLD,
+            red_threshold);    
+    eeprom_write_float(STORAGE_YELLOW_THRESHOLD,
+            yellow_threshold);    
 }
 
 
@@ -61,9 +68,19 @@ void storage_factory_reset() {
     eeprom_write_byte(STORAGE_UID, 1);
     eeprom_write_byte(STORAGE_NODE_TYPE, 'B');
     eeprom_write_uint32(STORAGE_BALANCE, INITIAL_BALANCE);
+    // state of charge
     eeprom_write_float(STORAGE_STATE_OF_CHARGE, 1);
     eeprom_write_float(STORAGE_UNCERTAINTY_OF_CHARGE,
             DEFAULT_BATTERY_CAPACITY_Q);
     eeprom_write_float(STORAGE_BATTERY_CAPACITY,
             DEFAULT_BATTERY_CAPACITY_Q);
+    // thresholds
+    eeprom_write_float(STORAGE_OFF_THRESHOLD,
+            DEFAULT_OFF_THRESHOLD);
+    eeprom_write_float(STORAGE_RED_THRESHOLD,
+            DEFAULT_RED_THRESHOLD);
+    eeprom_write_float(STORAGE_YELLOW_THRESHOLD,
+            DEFAULT_YELLOW_THRESHOLD);
+
+    
 }

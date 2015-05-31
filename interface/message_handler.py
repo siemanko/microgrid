@@ -93,6 +93,11 @@ class MessageHandler(object):
             uncertainty_of_charge = parse_float(msg[15:19])
             battery_capacity = parse_float(msg[19:23])
 
+            off_threshold = parse_float(msg[23:27])
+            red_threshold = parse_float(msg[27:31])
+            yellow_threshold = parse_float(msg[31:35])
+
+
             #self.log('Time on device is ' + str(date))
 
             self.update_if_not_focused(self.ui_root.settings.box_time, str(date))
@@ -102,6 +107,10 @@ class MessageHandler(object):
             self.update_if_not_focused(self.ui_root.settings.state_of_charge,       str(state_of_charge))
             self.update_if_not_focused(self.ui_root.settings.uncertainty_of_charge, str(uncertainty_of_charge))
             self.update_if_not_focused(self.ui_root.settings.battery_capacity, str(battery_capacity))
+
+            self.update_if_not_focused(self.ui_root.settings.off_threshold, str(off_threshold))
+            self.update_if_not_focused(self.ui_root.settings.red_threshold, str(red_threshold))
+            self.update_if_not_focused(self.ui_root.settings.yellow_threshold, str(yellow_threshold))
 
         elif msg_type == ToComputer.DATA_LOGGER_REPLY:
             controller.get.data_logger.on_message(msg)

@@ -39,6 +39,12 @@ static void update_leds() {
     if (state == DR_STATE_RED) {
         leds_set(LED_TYPE_RED, LED_STATE_ON);
     }
+    
+    if (state == DR_STATE_ON) {
+        leds_set(LED_TYPE_GREEN,    LED_STATE_ON);
+        leds_set(LED_TYPE_YELLOW, LED_STATE_ON);
+        leds_set(LED_TYPE_RED,    LED_STATE_ON);
+    }
 }
 
 static uint32_t divider[]    = { 86400, 3600, 60,  1 };

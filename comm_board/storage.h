@@ -12,8 +12,11 @@ typedef enum {
     STORAGE_STATE_OF_CHARGE = 14,       // float
     STORAGE_UNCERTAINTY_OF_CHARGE = 18, // float
     STORAGE_BATTERY_CAPACITY      = 22, // float
-    STORAGE_DATA_LOGGER = 200,         // all tge storage above this address
-                                       // is dedicated for data_logger
+    STORAGE_OFF_THRESHOLD = 26,         // float
+    STORAGE_RED_THRESHOLD = 30,         // float
+    STORAGE_YELLOW_THRESHOLD = 34,      // float
+    STORAGE_DATA_LOGGER = 200,          // all the storage above this address
+                                        // is dedicated for data_logger
 } StorageAddress;
 
 void init_storage();

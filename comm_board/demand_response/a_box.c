@@ -6,10 +6,15 @@
 #include "shared/utils.h"
 #include "utils/debug.h"
 #include "demand_response/state_of_charge.h"
+#include "constants.h"
+#include "storage.h"
 
 static int override_active;
 static DemandResponeState override_state;
-static DemandResponeState current_state;
+
+float off_threshold    =  DEFAULT_OFF_THRESHOLD;
+float red_threshold    =  DEFAULT_RED_THRESHOLD;
+float yellow_threshold =  DEFAULT_YELLOW_THRESHOLD;
 
 
 static void override_demand_reponse_handler(Message* msg) {
@@ -25,11 +30,24 @@ static void override_demand_reponse_handler(Message* msg) {
     }
 }
 
+static void set_thresholds_handler(Message* msg) {
+    assert(msg->length == 13);
+    off_threshold =    bytes_to_float(msg->content + 1);
+    red_threshold =    bytes_to_float(msg->content + 5);
+    yellow_threshold = bytes_to_float(msg->content + 9);
+    
+    eeprom_write_float(STORAGE_OFF_THRESHOLD, off_threshold);
+    eeprom_write_float(STORAGE_RED_THRESHOLD, red_threshold);
+    eeprom_write_float(STORAGE_YELLOW_THRESHOLD, yellow_threshold);
+
+}
+
 void init_a_box_demand_response() {
-    current_state = DR_STATE_GREEN;
     override_active = 0;
     set_message_handler(UMSG_OVERRIDE_DEMAND_REPONSE,
             override_demand_reponse_handler);
+    set_message_handler(UMSG_SET_THRESHOLDS,
+            set_thresholds_handler);
     init_state_of_charge();
 }
 
@@ -37,7 +55,16 @@ DemandResponeState a_box_demand_reponse_current_state() {
     if (override_active) {
         return override_state;
     } else {
-        return current_state;
+        float soc = get_state_of_charge_percentage();
+        if (soc < off_threshold) {
+            return DR_STATE_OFF;
+        } else if (soc < red_threshold) {
+            return DR_STATE_RED;
+        } else if (soc < yellow_threshold) {
+            return DR_STATE_YELLOW;
+        } else {
+            return DR_STATE_GREEN;
+        }
     }
 }
 

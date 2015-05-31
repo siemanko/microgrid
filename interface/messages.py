@@ -19,6 +19,7 @@ class ToUlink(object):
     PRINT_DATA_LOGS = 16
     SET_STATE_OF_CHARGE = 17
     SET_BATTERY_CAPACITY = 18
+    SET_THRESHOLDS = 19
 
 class ToComputer(object):
     DEBUG = 0

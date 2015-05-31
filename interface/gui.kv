@@ -76,6 +76,11 @@
     box_uid:       id_box_uid
     box_node_type: id_box_node_type
     box_balance:   id_box_balance
+
+    off_threshold: id_off_threshold
+    red_threshold: id_red_threshold
+    yellow_threshold: id_yellow_threshold
+
     state_of_charge: id_state_of_charge
     uncertainty_of_charge: id_uncertainty_of_charge
     battery_capacity: id_battery_capacity
@@ -141,6 +146,22 @@
             size_hint: (0.5, 1)
             text:'Set battery capacity'
             on_press: c.get.set_battery_capacity()
+    BoxLayout:
+        size_hint: (1, 0.1)
+        orientation: 'horizontal'
+        SettingsText:
+            size_hint: (0.16, 1)
+            id: id_off_threshold
+        SettingsText:
+            size_hint: (0.17, 1)
+            id: id_red_threshold
+        SettingsText:
+            size_hint: (0.17, 1)
+            id: id_yellow_threshold
+        Button:
+            size_hint: (0.5, 1)
+            text:'Set thresholds (off, red, yellow respectively)'
+            on_press: c.get.set_thresholds()
     Label:
 
 <DebugView>:
@@ -220,7 +241,7 @@
                 size_hint: (0.6, 1)
                 padding_y: (self.height - self.line_height) / 2
                 multiline: False
-                hint_text: 'red, green, ...'
+                hint_text: 'none, on, off, red, green, yellow, ...'
             Button:
                 size_hint: (0.4, 1)
                 text: 'Override DR'

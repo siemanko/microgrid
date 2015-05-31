@@ -33,6 +33,11 @@ void init_state_of_charge() {
 
 }
 
+float get_state_of_charge_percentage() {
+    // TODO: consider using uncertainty as well.
+    return state_of_charge_q / battery_capacity_q;
+}
+
 void state_of_charge_step() {
     int success;
     float battery_input_current;

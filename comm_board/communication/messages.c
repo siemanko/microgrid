@@ -12,6 +12,7 @@
 #include "user_interface/balance.h"
 #include "drivers/leds.h"
 #include "demand_response/state_of_charge.h"
+#include "demand_response/a_box.h"
 
 void (*message_handler[UMSG_TOTAL_MESSAGES])(Message*);
 
@@ -46,6 +47,9 @@ void get_settings_handler(Message* msg) {
     mb_add_float_noprefix(&mb, state_of_charge_q);
     mb_add_float_noprefix(&mb, uncertertainty_of_charge);
     mb_add_float_noprefix(&mb, battery_capacity_q);
+    mb_add_float_noprefix(&mb, off_threshold);
+    mb_add_float_noprefix(&mb, red_threshold);
+    mb_add_float_noprefix(&mb, yellow_threshold);
 
     send_mb(&mb, COMPUTER_UID);
 }

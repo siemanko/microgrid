@@ -124,6 +124,23 @@ class Ctrl(object):
             print (e)
             print ('WARNING: wrong battery capacity value.')
 
+    def set_thresholds(self):
+        try:
+            mb = MessageBuilder(ToUlink.SET_THRESHOLDS)
+
+            off_threshold = float(self.ui_root.settings.off_threshold.text)
+            red_threshold = float(self.ui_root.settings.red_threshold.text)
+            yellow_threshold = float(self.ui_root.settings.yellow_threshold.text)
+
+            mb.add_float(off_threshold)
+            mb.add_float(red_threshold)
+            mb.add_float(yellow_threshold)
+
+            self.send(mb.to_bytes())
+        except Exception as e:
+            print (e)
+            print ('WARNING: wrong state of charge value.')
+
     def reset_pic(self):
         mb = MessageBuilder(ToUlink.RESET_PIC)
         self.send(mb.to_bytes())
