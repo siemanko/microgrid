@@ -70,8 +70,10 @@ void display_step() {
     } else {
         LCD_replace_row("", LCD_ROW_TOP);
         int32_t etr = balance_estimated_time_remaining();
-        if (etr == -1) {
-            LCD_print("Appliances off.");
+        if (b_box_demand_reponse_current_state() == DR_STATE_ON) {
+            LCD_print("# ON OVERRIDE");
+        } else if (etr == -1) {
+            LCD_print("calculating time");
         } else {
             LCD_char_custom(6);
             LCD_char(' ');

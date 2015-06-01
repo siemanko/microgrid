@@ -18,6 +18,7 @@
 
 // uncertainty of a current sensor is 2%
 #define CURRENT_SENSOR_UNCERTAINTY 0.02
+#define VOLTAGE_SENSOR_UNCERTAINTY 0.05
 
 #define INITIAL_BALANCE 10000
 

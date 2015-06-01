@@ -17,13 +17,13 @@ void storage_integrity_check() {
     int ok = 1;
     ok = ok && eeprom_read_uint32(STORAGE_INTEGRITY_CHECK) ==
                STORAGE_INTEGRITY_CONSTANT;
-    if (!ok) {
-        debug_unsafe(DEBUG_ERROR, "Storage integrity check failed - resetting.");
-        asm("RESET");
-    }
     if (FORCE_FACTORY_RESET) {
         debug_unsafe(DEBUG_INFO, "Forced storage reset - update the code.");
         storage_factory_reset();
+        asm("RESET");
+    }
+    if (!ok) {
+        debug_unsafe(DEBUG_ERROR, "Storage integrity check failed - resetting.");
         asm("RESET");
     }
     

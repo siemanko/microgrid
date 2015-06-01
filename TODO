@@ -1,4 +1,3 @@
--> avoid hysteresis (limit the frequency of state updates (example 15 minutes))
 -> avoid updating soc with crappy readings (more scrutine reading validaiton).
 -> kalman filter measurement step (try it with arrays)
 -> fix data logger readout bug
