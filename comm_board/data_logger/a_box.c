@@ -5,6 +5,7 @@
 #include "drivers/timer.h"
 #include "utils/debug.h"
 #include "communication/messages.h"
+#include "shared/algorithm/circular_buffer.h"
 
 #define NAN 0.0/0.0
 
@@ -28,6 +29,18 @@ static const char* column_name[] = {
     "battery voltage"
 };
 
+int validate_data(float battery_input_current,
+                  float battery_output_current,
+                  float network_voltage,
+                  float battery_voltage) {
+    int ok = 1;
+    ok = ok && -0.1 <= battery_input_current && battery_input_current <= 25.0;
+    ok = ok && -0.1 <= battery_output_current && battery_output_current <= 25.0;
+    ok = ok && 20.0 <= network_voltage && network_voltage <= 30.0;
+    ok = ok && 10.0 <= battery_voltage && battery_voltage <= 18.0;
+    return ok;
+}
+
 void a_box_pull_data(int* success,
                             float* battery_input_current,
                             float* battery_output_current,
@@ -38,7 +51,12 @@ void a_box_pull_data(int* success,
             link_board_battery_output_current(battery_output_current) &&
             link_board_network_voltage(network_voltage) &&
             link_board_battery_voltage(battery_voltage);
-
+    if ((*success) && !validate_data(*battery_input_current,
+                                     *battery_output_current,
+                                     *network_voltage,
+                                     *battery_voltage)) {
+        *success = 0;
+    }
     if (!(*success)) {
         *battery_input_current = NAN;
         *battery_output_current = NAN;
