@@ -2,7 +2,7 @@ OUT = communication
 CC = gcc
 ODIR = build
 SDIR = ../../
-CFLAGS=-Wall -I../../ -Ilibserialport
+CFLAGS=-Wall -I../../
 
 OBJECTS=build/shared/algorithm/circular_buffer.o \
 		build/shared/algorithm/map.o \
@@ -15,26 +15,12 @@ OBJECTS=build/shared/algorithm/circular_buffer.o \
 		build/interface/communication/serial.o \
 		build/interface/communication/rs232.o
 
-.PHONY: libserialport clean
+.PHONY: clean
 
 all: $(OUT)
 
 $(OUT): $(OBJECTS)
-	libtool --mode=link $(CC) $(CFLAGS) main.c $(OBJECTS) -o $(OUT)
-
-
-libserialport_build:
-	echo updating libserialport git repo; \
-	git submodule init; \
-	git submodule update; \
-	echo entering libserialport dir; \
-	cd libserialport; \
-	echo autogen; \
-	./autogen.sh; \
-	./configure; \
-	make; \
-	cd ..
-
+	$(CC) $(CFLAGS) main.c $(OBJECTS) -o $(OUT)
 
 $(ODIR)/%.o: $(SDIR)/%.c
 	@mkdir -p $(@D)
