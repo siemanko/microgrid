@@ -23,7 +23,7 @@ class SerialBindings(object):
         self.indicators = [None, None]
 
     def start_process(self):
-        self.p = Popen([COMMUNICATION_BIN, str(self.port)], bufsize=1, stdin=PIPE, stdout=PIPE, close_fds=True)
+        self.p = Popen([COMMUNICATION_BIN, str(self.port)], bufsize=1, stdin=PIPE, stdout=PIPE, close_fds=sys.platform!='win32')
         (self.child_stdout, self.child_stdin) = (self.p.stdout, self.p.stdin)
 
     def thread_loop(self):
@@ -44,7 +44,7 @@ class SerialBindings(object):
                 self.child_stdin.flush()
                 reply = self.child_stdout.readline()[:-1]
                 if not b"none" in reply:
-                    self.callback([ int(x) for x in reply.split(b' ') if x != b'']);
+                    self.callback([ int(x) for x in reply.split(b' ') if (x != b'' and x!=b'\r')]);
                     self.indicators[0] = ' :-)'
             except Exception as e:
                 time.sleep(1.0)
