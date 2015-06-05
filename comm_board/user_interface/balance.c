@@ -1,12 +1,15 @@
 #include "balance.h"
-
+#include "../utils/debug.h"
 #include "constants.h"
 #include "demand_response/common.h"
 #include "demand_response/b_box.h"
 
+#include "../drivers/button.h"
+#include <stdio.h>
 
-static uint32_t balance = 0;
-static uint32_t last_price = 0;
+static uint32_t balance = INITIAL_BALANCE;
+static uint32_t last_price = 0; //DS:  Changed this, used to be 0 
+
 uint32_t balance_get() {
     return balance;
 }
@@ -18,13 +21,22 @@ void balance_set(uint32_t value) {
 int32_t balance_estimated_time_remaining() {
     if (last_price == 0) {
         return -1;
-    } else {
+    } else {        
         return balance / last_price;
     }
 }
 
 
-void balance_step() {
+void balance_step() {    
+    //DS:  Edit
+    //char * buttonPress = "button press: ";
+    char outBuf[60] ="";
+    //sprintf(buttonPress,"button press is : %d", button_check());
+    sprintf(outBuf,"button press is: %d ", button_check());
+    debug(DEBUG_INFO, outBuf);
+    debug(DEBUG_INFO, "demand response state is : %s", dr_state_as_string(b_box_demand_reponse_current_state()));
+        
+    
     if (balance > 0) {
         if (b_box_readings_ready()) {
             // debug(DEBUG_GRID_STATE, "here %d %f",sizeof(float), power);

@@ -55,12 +55,14 @@ float b_box_get_power() {
 }
 
 static void dr_update_state(DemandResponeState new_state) {
-    int higher_price = state_to_price_coefficient(new_state) >
-            state_to_price_coefficient(current_state);
+    int higher_price = 0;    
+    //DS:  EDIT, We do not have a higher price if going from DR_OFF to any other state
+    if( current_state != DR_STATE_OFF &&  state_to_price_coefficient(new_state) > state_to_price_coefficient(current_state)) higher_price = 1;
+    
     int enough_time_passed =  estimated_boot_time +
             DR_CHILLAX < time_seconds_since_epoch();
     if (higher_price && enough_time_passed) {
-        awaiting_price_ack = 1;
+        awaiting_price_ack = 1; 
         debug(DEBUG_INFO, "Prices went up, waiting for button.");
     }
     current_state = new_state;
@@ -83,7 +85,8 @@ void init_b_box_demand_response() {
     num_bad_readings_in_row = 0;
     awaiting_price_ack = 0;
     estimated_boot_time = time_seconds_since_epoch();
-    current_state = DR_STATE_OFF;
+    current_state = DR_STATE_OFF;//DS:  Edit
+    current_state = DR_STATE_GREEN; //DS:  Edit, this used to be off
     set_message_handler(UMSG_DEMAND_REPONSE, demand_reponse_handler);
 }
 
@@ -125,10 +128,12 @@ void b_box_demand_response_step() {
     // If comms with A-box are failing turn everything off.
     if (last_state_broadcast + MAX_TIME_BETWEEN_BROADCASTS_S < 
             time_seconds_since_epoch()) {
-        current_state = DR_STATE_OFF;
+            //current_state = DR_STATE_OFF;  DS:  Edit, should not be commented
     }
     // update readings
-    update_readings();
+    update_readings();    
+     
+    //load_board_ports_on();  //DS:  Edit, remove this    
     
     // unconditional on and off state.
     if (current_state == DR_STATE_OFF) {
@@ -147,7 +152,7 @@ void b_box_demand_response_step() {
             awaiting_price_ack = 0;
             button_reset();
         } else {
-            load_board_ports_off();
+            load_board_ports_off(); 
             return; 
         }
     } else {
@@ -157,7 +162,8 @@ void b_box_demand_response_step() {
     if (b_box_readings_ready()) {
         // balance based switch off
         if (balance_get() == 0 && b_box_is_power_consumed()) {
-            load_board_ports_off();
+            //load_board_ports_off(); DS:  Edit, should not be commented
+            load_board_ports_on(); //DS:  Edit, should be removed
             // return;
         }
         if (balance_get() > 0 && !b_box_is_power_consumed()) {
@@ -165,9 +171,10 @@ void b_box_demand_response_step() {
         }
     } else {
         // if comms with load board fail turn everything off.
-        if (num_bad_readings_in_row > BAD_READINGS_BEFORE_SWITCHOFF)
-            load_board_ports_off();
-    }
-
+        if (num_bad_readings_in_row > BAD_READINGS_BEFORE_SWITCHOFF)  
+            //load_board_ports_off();  DS:  Edit, should not be commented
+             load_board_ports_on(); //DS:  Edit, should be removed
+    }   
+     
 }
 

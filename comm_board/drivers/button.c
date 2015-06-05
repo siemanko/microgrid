@@ -2,12 +2,12 @@
 
 #include <p33EP512GM710.h>
 
-#define BUTTON_NUM_CHECKS_BEFORE_ACTIVE 50
+#define BUTTON_NUM_CHECKS_BEFORE_ACTIVE 100     //DS:  Edit, Szymon's code was 50
 
 #define TRIS_BUTTON  TRISAbits.TRISA4
 #define PIN_BUTTON   LATAbits.LATA4
 
-int num_times_active = 0;
+static int num_times_active = 0;
 
 void init_button() {
     // set button as input

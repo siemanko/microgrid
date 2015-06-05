@@ -11,6 +11,7 @@ typedef enum {
     DR_STATE_TOTAL
 } DemandResponeState;
 
+
 const char* dr_state_as_string(DemandResponeState state);
 
 int state_to_price_coefficient(DemandResponeState state);

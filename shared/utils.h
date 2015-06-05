@@ -48,5 +48,7 @@ void set_assert_callback(void (*callback)(const char*, va_list));
 // to computer joint checksum for multiple pieces of data.
 uint32_t checksum(uint32_t initial, const uint8_t* data, int len);
 
+void reboot_chip();
+
 #endif	/* LIBRARYFUNCTIONS_H */
 

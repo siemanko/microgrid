@@ -1,11 +1,11 @@
 #include "storage.h"
-
 #include "constants.h"
 #include "utils/debug.h"
 #include "drivers/timer.h"
 #include "user_interface/balance.h"
 #include "demand_response/state_of_charge.h"
 #include "demand_response/a_box.h"
+#include "shared/utils.h"
 
 
 void init_storage() {
@@ -18,7 +18,8 @@ void storage_integrity_check() {
                STORAGE_INTEGRITY_CONSTANT;
     if (!ok) {
         debug(DEBUG_ERROR, "Storage integrity check failed - resetting.");
-        storage_factory_reset();
+        //storage_factory_reset();  //DS:  Edit, should be inlcuded
+        reboot_chip();          //DS:  Edit, should be removed
     }
     if (FORCE_FACTORY_RESET) {
         debug(DEBUG_INFO, "Forced storage reset - update the code.");
@@ -30,7 +31,8 @@ void storage_integrity_check() {
 void storage_load_settings() {
     storage_integrity_check();
     time_set_seconds_since_epoch(eeprom_read_uint32(STORAGE_TIME));
-    balance_set(eeprom_read_uint32(STORAGE_BALANCE));
+    balance_set(eeprom_read_uint32(STORAGE_BALANCE));    
+    
     state_of_charge_q = eeprom_read_float(STORAGE_STATE_OF_CHARGE);
     uncertertainty_of_charge =
             eeprom_read_float(STORAGE_UNCERTAINTY_OF_CHARGE);
@@ -81,6 +83,5 @@ void storage_factory_reset() {
             DEFAULT_RED_THRESHOLD);
     eeprom_write_float(STORAGE_YELLOW_THRESHOLD,
             DEFAULT_YELLOW_THRESHOLD);
-
-    
+  
 }

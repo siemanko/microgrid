@@ -51,7 +51,7 @@ static uint32_t divider[]    = { 86400, 3600, 60,  1 };
 static char divider_letter[] = { 'd',   'h',  'm', 's' };
 
 
-void print_time(uint32_t td) {
+void print_time(uint32_t td) {    
     int didx;
     for (didx = 0; didx < 4; ++didx) {
         if (td >= divider[didx]) {
@@ -74,7 +74,7 @@ void display_step() {
             LCD_print("Appliances off.");
         } else {
             LCD_char_custom(6);
-            LCD_char(' ');
+            LCD_char(' ');            
             print_time(etr);
         }
         LCD_replace_row("", LCD_ROW_BOTTOM);
