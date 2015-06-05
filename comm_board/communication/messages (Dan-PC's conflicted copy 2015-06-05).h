@@ -24,7 +24,6 @@ typedef enum {
     UMSG_SET_STATE_OF_CHARGE = 17,
     UMSG_SET_BATTERY_CAPACITY = 18,
     UMSG_SET_THRESHOLDS = 19,
-    UMSG_RESET_NETWORK = 20,
     // leave last (also make sure no gaps above)
     UMSG_TOTAL_MESSAGES 
 } MessageToUlink; 

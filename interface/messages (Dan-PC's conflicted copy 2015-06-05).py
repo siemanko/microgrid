@@ -20,7 +20,6 @@ class ToUlink(object):
     SET_STATE_OF_CHARGE = 17
     SET_BATTERY_CAPACITY = 18
     SET_THRESHOLDS = 19
-    RESET_NETWORK = 20
 
 class ToComputer(object):
     DEBUG = 0

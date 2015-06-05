@@ -65,15 +65,6 @@ void reset_pic_handler(Message* msg) {
     asm("RESET");
 }
 
-void reset_network_handler(Message * msg){
-    debug_unsafe(DEBUG_INFO, "Watch out, you're resetting the whole network!");    
-    
-    MessageBuilder mb;
-    make_mb(&mb, 1);
-    mb_add_char(&mb, UMSG_RESET_PIC);
-    send_mb(&mb, BROADCAST_UID);       
-}
-
 void get_memory_handler(Message* msg) {
     Vector addresses;
     const int INITIAL_VECTOR_CAPACITY = 500;
@@ -144,12 +135,11 @@ void register_misc_message_handlers() {
     set_message_handler(UMSG_GET_SETTINGS,       get_settings_handler);
     set_message_handler(UMSG_SET_TIME,           set_time_handler);
     set_message_handler(UMSG_RESET_PIC,          reset_pic_handler);
-    set_message_handler(UMSG_RESET_NETWORK,      reset_network_handler);
     set_message_handler(UMSG_GET_MEMORY,         get_memory_handler);
     set_message_handler(UMSG_SET_UID_NODE_TYPE,  set_uid_node_type_handler);
     set_message_handler(UMSG_SET_BALANCE,        set_balance_handler);
     set_message_handler(UMSG_READ_EEPROM,        read_eeprom_handler);
     set_message_handler(UMSG_TEST_LEDS,          test_leds_handler);
-    set_message_handler(UMSG_PRINT_LOCAL_TIME,   print_local_time_handler);    
+    set_message_handler(UMSG_PRINT_LOCAL_TIME,   print_local_time_handler);
 }
 
