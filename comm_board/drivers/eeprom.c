@@ -1,6 +1,5 @@
 #include <p33EP512GM710.h>
 #include <spi.h>
-
 #include "shared/utils.h"
 
 
@@ -276,6 +275,7 @@ void eeprom_write_uint32(unsigned short adress, long data) {
     int i;
     for(i=0; i<4; ++i) eeprom_write_byte(adress+i, bytes[i]);
 }
+
 
 /* eraseEEPROM() - erase entire contents of EEPROM
  *

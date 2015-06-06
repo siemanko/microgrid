@@ -276,11 +276,15 @@
         spacing: 10
         Button:
             size_hint: (1, 0.1)
-            text: 'Load Data'
+            text: 'Load DataP'
             on_press: c.get.data_logger.load_data()
         Button:
             size_hint: (1, 0.1)
-            text: 'Reset Logs'
+            text: 'Reset Logs1'
+        Button:
+            size_hint: (1, 0.1)
+            text: 'Clear Screen'
+            on_press: c.get.data_logger.clear_logs()
         Label:
     BoxLayout:
         size_hint: (.65,1)

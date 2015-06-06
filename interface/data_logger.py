@@ -20,7 +20,8 @@ class ColumnType(object):
     UINT32 = 2
 
 class DataPuller(object):
-    def __init__(self, send, log):
+
+    def __init__(self, send, log ):
         self.send = send
         self.log = log
 
@@ -39,20 +40,27 @@ class DataPuller(object):
         self.done = False
         self.failure = False
 
+        self.number_of_data_points_received = 0     #DS:  Edit, the current line you are pulling from
+        self.this_many_readings_between_saves = 10   #DS:  Edit
+        self.number_of_total_data_points_received = 0    #DS:  Debug variable
+
     def on_message(self, msg):
         try:
+            print('48 data logger')
             dl_msg_type = msg[1]
-            if dl_msg_type == DataLoggerMessages.EXTRACT_GENERAL:
+            if dl_msg_type == DataLoggerMessages.EXTRACT_GENERAL:       #DS:  identifies the general information about the data
                 self.uid = msg[2]
                 self.n_columns = parse_uint32(msg[3:7])
                 self.n_entries = parse_uint32(msg[7:11])
                 self.schema_name = stringify(msg[11:])
-            elif dl_msg_type == DataLoggerMessages.EXTRACT_COLUMN:
+                print('55 data logger schema name : ' + self.schema_name)
+            elif dl_msg_type == DataLoggerMessages.EXTRACT_COLUMN:      #DS:  which columns contain which data
                 column_idx = msg[2]
                 self.column_done[column_idx] = True
                 self.column_type[column_idx] = msg[3]
                 self.column_name[column_idx] = stringify(msg[4:])
-            elif dl_msg_type == DataLoggerMessages.EXTRACT_DATA:
+                print('61 data logger one column name : ' + self.column_name[column_idx])
+            elif dl_msg_type == DataLoggerMessages.EXTRACT_DATA:    #ds:  actually getting the data points
                 entry_idx = parse_uint32(msg[2:6])
                 self.entry_done[entry_idx] = True
                 entry = []
@@ -64,12 +72,30 @@ class DataPuller(object):
                     if column_type == ColumnType.UINT32:
                         entry.append(parse_uint32(msg[offset:(offset+4)]))
                         offset += 4
+                print('71 the entry idx : ' + str(entry_idx))
+                print('72 data logger one entry : ' + str(tuple(entry)))
                 self.entry[entry_idx] = tuple(entry)
+
+                #DS:  Edit, For keeping track how many data points we've received so far
+                self.number_of_data_points_received+=1
+                if self.number_of_data_points_received == self.n_entries:
+                    self.number_of_data_points_received = 0
+                self.record_number_of_data_points_received()
 
             if (self.schema_name is not None and
                     all(self.column_done) and
                     all(self.entry_done)):
                 self.done = True
+
+            print('85 num data points received : ' + str(self.number_of_data_points_received))
+            print('91 num of entries :  ' + str(self.n_entries))
+            #DS:  Edit
+            if self.number_of_data_points_received  > self.this_many_readings_between_saves:
+                print('83 data logger')
+                self.partial_save_data()
+                self.number_of_data_points_received=0
+
+
         except Exception as e:
             print(e)
             self.failure = True
@@ -122,7 +148,7 @@ class DataPuller(object):
             if VERBOSE: print ('batch_start')
             batch_end = min(batch_start + BATCH_SIZE, self.n_entries)
             while not all(self.entry_done[batch_start:batch_end]) and not self.please_stop:
-                for entry in range(batch_start, batch_end):
+                for entry in range(batch_start, batch_end):     #it's right here.
                     if not self.entry_done[entry]:
                         if VERBOSE: print ('msg_start')
                         mb = MessageBuilder(ToUlink.DATA_LOGGER)
@@ -146,14 +172,44 @@ class DataPuller(object):
         return ','.join(self.column_name)
 
     def entry_line(self, entry_idx):
-        return ','.join([str(x) for x in self.entry[entry_idx]])
+        if self.entry[entry_idx] is None:
+            print('Warning at 171 data logger, none type!')
+            return 'None Type'
+        else:
+            return ','.join([str(x) for x in self.entry[entry_idx]])
 
-    def content(self):
+    def content(self):      #DS Comment, only called when saving data
         content = self.general_info()
         content.append(self.column_line())
+        print('168 data logger')
+        print('169 n entries ' + str(self.n_entries))
+
         for entry in range(self.n_entries):
+            print('171 data logger in loop entry :  ' +str(entry))
+            print('this is entry line : ' +self.entry_line(entry))
             content.append(self.entry_line(entry))
+        print('182 data logger')
         return content
+
+    #DS Comment, used to partially save the data in case of crash
+    def partial_save_data(self):
+        print('174 PRE data logger')
+        lines = self.content()  #DS:  This is defined directly above
+        print('172 data logger')
+        lines = ['%s\n' % (line,) for line in lines]
+        print('174 data logger')
+        fname = "%s_logs.txt" % (self.uid,)
+        with open(fname, "w") as f:
+            f.writelines(lines)
+        f.writelines('total number received : ' + str(self.number_of_total_data_points_received))
+        self.log("Saved to %s" % (fname,))
+
+    def record_number_of_data_points_received(self):
+        fname = "LastDataPointSeen.txt"
+        f=open(fname,'w')
+        f.write(str(self.number_of_data_points_received))
+        #f.write(self.number_of_data_points_received)
+        #f.close()
 
 class DataLogger(object):
     def __init__(self, ui_root):
@@ -182,7 +238,7 @@ class DataLogger(object):
     def load_data(self):
         self.clear_logs()
         self.log('Starting to pull the logs.')
-        self.data_puller = DataPuller(self.send, self.log)
+        self.data_puller = DataPuller( self.send, self.log )
         self.data_puller.start()
 
     def save_data(self):
