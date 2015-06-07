@@ -285,7 +285,10 @@
         Button:
             size_hint: (1, 0.1)
             text: 'Reset Logs'
-
+        Button:
+            size_hint: (1, 0.1)
+            text: 'Reset Data Logger'
+            on_press: c.get.data_logger.reset_data_logger()
         Label:
     BoxLayout:
         size_hint: (.65,1)

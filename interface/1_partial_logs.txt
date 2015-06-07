@@ -1,0 +1,208 @@
+# schema: A box logs
+# uid: 1
+timestamp,battery input current,battery output current,network voltage,battery voltage
+1433170381,-4.452282905578613,0.7478324174880981,24.77499771118164,11.911088943481445
+1433170383,-4.4608473777771,0.7494553923606873,24.773605346679688,11.912101745605469
+1433170384,0.7754570245742798,0.7735393643379211,24.774263381958008,11.91106128692627
+1433170385,-4.4312639236450195,0.7617957592010498,24.774688720703125,11.910940170288086
+1433170386,-4.444619178771973,0.7769062519073486,24.775407791137695,11.909934997558594
+1433170387,-4.438565731048584,1.612350769390758e-12,24.774309158325195,11.90928840637207
+1433170388,-4.4499969482421875,0.7684524655342102,24.774377822875977,11.909709930419922
+1433170389,-4.462240219116211,0.7857791781425476,24.77374839782715,11.909236907958984
+1433170390,-4.439394950866699,0.7958861589431763,11.887067794799805,11.908750534057617
+1433170391,-4.443380832672119,0.769033670425415,24.773853302001953,11.9089937210083
+1433170392,-4.439410209655762,0.7816656827926636,24.773914337158203,11.908361434936523
+1433170393,-4.4376959800720215,0.7600474953651428,24.773183822631836,114046944.0
+1433170394,-4.41604471206665,0.7892504334449768,24.77338218688965,11.90809440612793
+1433170395,-4.428101062774658,0.7923328280448914,24.77189064025879,11.907381057739258
+1433170396,-4.428001880645752,0.786551833152771,24.77252960205078,11.907509803771973
+3230495197,-4.401062965393066,0.7870148420333862,24.772178649902344,11.907569885253906
+1433170398,-4.434213161468506,0.7665868401527405,24.771757125854492,11.907556533813477
+1433170399,-4.436923980712891,0.7535693645477295,24.77117156982422,11.9070405960083
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type
+None Type

@@ -40,9 +40,14 @@ class DataPuller(object):
         self.done = False
         self.failure = False
 
-        self.number_of_data_points_received = 0     #DS:  Edit, the current line you are pulling from
-        self.this_many_readings_between_saves = 10   #DS:  Edit
-        self.number_of_total_data_points_received = 0    #DS:  Debug variable
+        self.number_of_data_points_received_in_current_batch = 0     #DS:  Edit, the current line you are pulling from
+        self.this_many_readings_between_saves = 4   #DS:  Edit
+
+        #DS:  EDIT:  Might want to put entry point here
+        f1 = open('LastDataPointSeen.txt','r')
+        self.position_of_last_end = f1.readline()
+        self.number_of_total_data_points_received = self.position_of_last_end
+        f1.close()
 
     def on_message(self, msg):
         try:
@@ -77,9 +82,12 @@ class DataPuller(object):
                 self.entry[entry_idx] = tuple(entry)
 
                 #DS:  Edit, For keeping track how many data points we've received so far
-                self.number_of_data_points_received+=1
-                if self.number_of_data_points_received == self.n_entries:
-                    self.number_of_data_points_received = 0
+                self.number_of_data_points_received_in_current_batch+=1
+                self.number_of_total_data_points_received+=1
+                if self.number_of_total_data_points_received == self.n_entries:
+                    self.number_of_total_data_points_received = 0
+                    self.number_of_data_points_received_in_current_batch = 0
+
                 self.record_number_of_data_points_received()
 
             if (self.schema_name is not None and
@@ -87,13 +95,14 @@ class DataPuller(object):
                     all(self.entry_done)):
                 self.done = True
 
-            print('85 num data points received : ' + str(self.number_of_data_points_received))
+            print('85 num data points received in current batch: ' + str(self.number_of_data_points_received_in_current_batch))
+            print('93 num data points received total : ' +str(self.number_of_total_data_points_received))
             print('91 num of entries :  ' + str(self.n_entries))
             #DS:  Edit
-            if self.number_of_data_points_received  > self.this_many_readings_between_saves:
+            if self.number_of_data_points_received_in_current_batch  > self.this_many_readings_between_saves:
                 print('83 data logger')
                 self.partial_save_data()
-                self.number_of_data_points_received=0
+                self.number_of_data_points_received_in_current_batch=0
 
 
         except Exception as e:
@@ -105,13 +114,18 @@ class DataPuller(object):
         self.thread.setDaemon(True)
         self.thread.start()
 
+    def reset_data_logger(self):
+        fname = "LastDataPointSeen.txt"
+        f=open(fname,'w')
+        f.write(str(0))
+
     def stop(self):
         self.please_stop = True
         self.thread.join()
 
     def pull(self):
-        MSG_TIMEOUT = 0.0001
-        BATCH_TIMEOUT = 0.5
+        MSG_TIMEOUT = .5  #DS:  Edit, used to be 0.0001
+        BATCH_TIMEOUT = 1
         BATCH_SIZE = 4
 
         while self.schema_name is None and not self.please_stop:
@@ -144,11 +158,19 @@ class DataPuller(object):
         self.entry_done = [False for _ in range(self.n_entries)]
         self.entry = [None for _ in range(self.n_entries)]
 
-        for batch_start in range(0, self.n_entries, BATCH_SIZE):
+
+        for batch_start in range(int(self.position_of_last_end), self.n_entries, BATCH_SIZE):
+
+            print(' at 155 batch starting again!  this is batch start : ' + str(batch_start))
+
             if VERBOSE: print ('batch_start')
+
             batch_end = min(batch_start + BATCH_SIZE, self.n_entries)
+
             while not all(self.entry_done[batch_start:batch_end]) and not self.please_stop:
                 for entry in range(batch_start, batch_end):     #it's right here.
+                    print(' 163 this is entry :  ' + str(entry) + ' and this is batch start : ' + str(batch_start) + ' and thsi is batch end : ' + str(batch_end))
+
                     if not self.entry_done[entry]:
                         if VERBOSE: print ('msg_start')
                         mb = MessageBuilder(ToUlink.DATA_LOGGER)
@@ -193,21 +215,22 @@ class DataPuller(object):
 
     #DS Comment, used to partially save the data in case of crash
     def partial_save_data(self):
-        print('174 PRE data logger')
+        print('199 PRE data logger')
         lines = self.content()  #DS:  This is defined directly above
         print('172 data logger')
         lines = ['%s\n' % (line,) for line in lines]
-        print('174 data logger')
-        fname = "%s_logs.txt" % (self.uid,)
+        print('203 data logger')
+        fname = "Logs\%s_partial_logs_starting_at_%s.txt" % (self.uid,self.position_of_last_end,)
+
         with open(fname, "w") as f:
             f.writelines(lines)
-        f.writelines('total number received : ' + str(self.number_of_total_data_points_received))
+            #f.writelines('total number received : ' + str(self.number_of_total_data_points_received))
         self.log("Saved to %s" % (fname,))
 
     def record_number_of_data_points_received(self):
         fname = "LastDataPointSeen.txt"
         f=open(fname,'w')
-        f.write(str(self.number_of_data_points_received))
+        f.write(str(self.number_of_total_data_points_received))
         #f.write(self.number_of_data_points_received)
         #f.close()
 
@@ -240,6 +263,11 @@ class DataLogger(object):
         self.log('Starting to pull the logs.')
         self.data_puller = DataPuller( self.send, self.log )
         self.data_puller.start()
+
+    def reset_data_logger(self):
+        self.clear_logs()
+        self.log('Resetting Data Logger.')
+        self.data_puller.reset_data_logger()
 
     def save_data(self):
         lines = self.data_puller.content()
