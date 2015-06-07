@@ -19,9 +19,8 @@ static uint32_t          current_entry_size;
 
 typedef enum {
     DLS_SCHEMA_HASH = 0,
-    DLS_NUM_LOGGED = 4,     
-    DLS_CURRENT_READING_POSITION = 8,       //DS:  Edit, added
-    DLS_DATA = 10,      //DS:  Edit, used to be 8
+    DLS_NUM_LOGGED = 4,       
+    DLS_DATA = 8,      
 } DataLoggerStorage;
 
 static uint16_t dls(uint16_t offset) {
@@ -106,10 +105,7 @@ void data_logger_log(int ignored, ...) {
 
 void data_logger_reset() {
     eeprom_write_uint32(dls(DLS_SCHEMA_HASH), schema_hash(current_schema));
-    eeprom_write_uint32(dls(DLS_NUM_LOGGED), 0);
-    
-    //DS:  Edit, starting the position of where you are reading from 
-    eeprom_write_int(dls(DLS_CURRENT_READING_POSITION) , dls(DLS_DATA));       
+    eeprom_write_uint32(dls(DLS_NUM_LOGGED), 0);          
 }
 
 // Message handling.
