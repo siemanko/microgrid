@@ -51,11 +51,15 @@ void init_a_box_demand_response() {
     init_state_of_charge();
 }
 
+//DS:  Edit, CURRENT ERROR IS HERE
 DemandResponeState a_box_demand_reponse_current_state() {
+       
+    return DR_STATE_GREEN;      //DS:  Edit, let's make this easy
+    
     if (override_active) {
         return override_state;
     } else {
-        float soc = get_state_of_charge_percentage();
+       float soc = get_state_of_charge_percentage();         
         if (soc < off_threshold) {
             return DR_STATE_OFF;
         } else if (soc < red_threshold) {
@@ -65,19 +69,24 @@ DemandResponeState a_box_demand_reponse_current_state() {
         } else {
             return DR_STATE_GREEN;
         }
-    }
+    } 
 }
 
 static void broadcast_state() {
     MessageBuilder mb;
     make_mb(&mb, 2);
     mb_add_char(&mb, UMSG_DEMAND_REPONSE);
+    
+    //DS:  Edit, debug.  PRINT OUT THE STATE OF CHARGE
+    debug(DEBUG_INFO, "a box demand response is : %s", dr_state_as_string(a_box_demand_reponse_current_state()) );
+            
     mb_add_char(&mb, (char)a_box_demand_reponse_current_state());
     send_mb(&mb, BROADCAST_UID);
+       
 }
 
 
 void a_box_demand_response_step() {
     state_of_charge_step();
-    broadcast_state();
+    broadcast_state();      
 }

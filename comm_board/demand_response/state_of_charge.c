@@ -38,9 +38,11 @@ void init_state_of_charge() {
 
 float get_state_of_charge_percentage() {
     // TODO: consider using uncertainty as well.
-    return state_of_charge_q / battery_capacity_q;
+    //return state_of_charge_q / battery_capacity_q;  //DS:  Edit, this should not be commented!
+    return 0.95;    
 }
 
+//DS:  Edit, uncertain about this because it looks like you are adding Gaussians and it came from Udacity site.
 void multiply_gaussians(float mu1, float sigma_sq1,
                         float mu2, float sigma_sq2,
                         float* new_mu, float* new_sigma_sq) {

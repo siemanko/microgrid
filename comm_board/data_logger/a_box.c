@@ -80,6 +80,7 @@ void init_a_box_data_logger() {
 }
 
 void a_box_data_logger_step() {
+      
     int success;
     float battery_input_current;
     float battery_output_current;

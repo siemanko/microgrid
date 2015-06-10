@@ -1,4 +1,5 @@
 #include "b_box.h"
+#include <stdio.h>
 
 #include "communication/other_boards/load_board.h"
 #include "demand_response/common.h"
@@ -9,6 +10,9 @@
 #include "drivers/timer.h"
 #include "shared/algorithm/circular_buffer.h"
 #include "drivers/button.h"
+#include "../drivers/eeprom.h"
+#include "../storage.h"
+#include "../user_interface/display.h"
 
 // don't display annoying push button message for first
 // <DR_CHILLAX> seconds.
@@ -27,6 +31,9 @@ static int should_results_be_used = 0;
 
 static int num_bad_readings_in_row = 0;
 
+
+static int dans_button_debug_variable = 0;
+
 // current at the output of load converter
 // the current reading does include all loads but does not include
 // current consumed by boards.
@@ -43,8 +50,20 @@ float phone_voltage;
 uint32_t grid_management_last_update;
 
 int waiting_for_confirmation() {
-    return awaiting_price_ack;
+    return awaiting_price_ack;    
 }
+
+void make_waiting_for_ack_zero(){
+    awaiting_price_ack = 0;
+}
+
+void display_button_status(){   
+    int button_press = button_check();    
+    char outBuf[10] ="";  
+    sprintf(outBuf,"bp is: %d ", button_press);
+    LCD_replace_row(outBuf, LCD_ROW_TOP);
+}
+
 
 int b_box_is_power_consumed() {
     return output_current > 0.02;
@@ -57,20 +76,24 @@ float b_box_get_power() {
 static void dr_update_state(DemandResponeState new_state) {
     int higher_price = 0;    
     //DS:  EDIT, We do not have a higher price if going from DR_OFF to any other state
-    if( current_state != DR_STATE_OFF &&  state_to_price_coefficient(new_state) > state_to_price_coefficient(current_state)) higher_price = 1;
-    
+    if( state_to_price_coefficient(new_state) > state_to_price_coefficient(current_state)){
+        higher_price = 1;
+    }
+        
     int enough_time_passed =  estimated_boot_time +
             DR_CHILLAX < time_seconds_since_epoch();
+  
     if (higher_price && enough_time_passed) {
-        awaiting_price_ack = 1; 
+        awaiting_price_ack = 1;       
         debug(DEBUG_INFO, "Prices went up, waiting for button.");
     }
+    
     current_state = new_state;
 }
 
 static void demand_reponse_handler(Message* msg) {
     assert(0 <= msg->content[1] && msg->content[1] < DR_STATE_TOTAL);
-    dr_update_state(msg->content[1]);
+    dr_update_state(msg->content[1]); 
     last_state_broadcast = time_seconds_since_epoch();
 }
 
@@ -85,8 +108,9 @@ void init_b_box_demand_response() {
     num_bad_readings_in_row = 0;
     awaiting_price_ack = 0;
     estimated_boot_time = time_seconds_since_epoch();
-    current_state = DR_STATE_OFF;//DS:  Edit
-    current_state = DR_STATE_GREEN; //DS:  Edit, this used to be off
+    //current_state = DR_STATE_OFF;//DS:  Edit, this should be the initial state
+    current_state = DR_STATE_GREEN; //DS:  Edit, this used to be off    
+    //current_state = (DemandResponeState) eeprom_read_int(STORAGE_LAST_GRID_STATE_OBSERVED);  // DS:  Edit, this used to be off
     set_message_handler(UMSG_DEMAND_REPONSE, demand_reponse_handler);
 }
 
@@ -125,6 +149,9 @@ void update_readings() {
 }
 
 void b_box_demand_response_step() {
+    //DS:  Edit, first, let's save the demand response state seen
+    //eeprom_write_int( STORAGE_LAST_GRID_STATE_OBSERVED , (int) current_state);    
+       
     // If comms with A-box are failing turn everything off.
     if (last_state_broadcast + MAX_TIME_BETWEEN_BROADCASTS_S < 
             time_seconds_since_epoch()) {
@@ -133,8 +160,6 @@ void b_box_demand_response_step() {
     // update readings
     update_readings();    
      
-    //load_board_ports_on();  //DS:  Edit, remove this    
-    
     // unconditional on and off state.
     if (current_state == DR_STATE_OFF) {
         load_board_ports_off();
@@ -144,8 +169,8 @@ void b_box_demand_response_step() {
         return;
     }
     
-    // if waiting for button push, stop everything.
-    if (awaiting_price_ack) {
+    //if waiting for button push, stop everything.
+    if (awaiting_price_ack) {  
         if (button_check()) {
             debug(DEBUG_INFO, "Prices acknowledged.");
 

@@ -20,7 +20,7 @@ int button_check() {
 }
 
 void button_reset() {
-    num_times_active = 0;
+    num_times_active = 0;  
 }
 
 void button_step() {

@@ -30,11 +30,10 @@ int32_t balance_estimated_time_remaining() {
 void balance_step() {    
     //DS:  Edit
     //char * buttonPress = "button press: ";
-    char outBuf[60] ="";
-    //sprintf(buttonPress,"button press is : %d", button_check());
-    sprintf(outBuf,"button press is: %d ", button_check());
-    debug(DEBUG_INFO, outBuf);
-    debug(DEBUG_INFO, "demand response state is : %s", dr_state_as_string(b_box_demand_reponse_current_state()));
+    //char outBuf[60] ="";  
+    //sprintf(outBuf,"button press is: %d ", button_check());
+    //debug(DEBUG_INFO, "button press is:  %d" , button_check());    
+    //debug(DEBUG_INFO, "demand response state is : %s", dr_state_as_string(b_box_demand_reponse_current_state()));
         
     
     if (balance > 0) {

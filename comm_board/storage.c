@@ -46,6 +46,9 @@ void storage_load_settings() {
 }
 
 void storage_backup() {
+    
+    debug(DEBUG_INFO, "made storage backup");
+    
     eeprom_write_uint32(STORAGE_TIME, time_seconds_since_epoch());
     eeprom_write_uint32(STORAGE_BALANCE, balance_get());
     eeprom_write_float(STORAGE_STATE_OF_CHARGE, state_of_charge_q);
