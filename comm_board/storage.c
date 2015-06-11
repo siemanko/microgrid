@@ -70,7 +70,7 @@ void storage_factory_reset() {
     eeprom_wipe();
     eeprom_write_uint32(STORAGE_INTEGRITY_CHECK,
                         STORAGE_INTEGRITY_CONSTANT);
-    eeprom_write_byte(STORAGE_UID, 1);
+    eeprom_write_byte(STORAGE_UID, 12);
     eeprom_write_byte(STORAGE_NODE_TYPE, 'B');
     eeprom_write_uint32(STORAGE_BALANCE, INITIAL_BALANCE);
     // state of charge

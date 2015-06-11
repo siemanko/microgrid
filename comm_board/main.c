@@ -26,31 +26,32 @@
 #include "drivers/button.h"
 
 void init(void) {
+   
     init_board();
     init_timer();    
     delay_ms(500);
     init_assert();
     init_storage();   
     init_cron();
-    init_communication();
-    delay_ms(500);
-    storage_load_settings();   
- 
-    if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
+    init_communication();    
+    delay_ms(500);    
+    storage_load_settings();
+     
+     if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
         init_link_board_interface();
         init_a_box_demand_response();
         init_a_box_data_logger();
-    } else {
-        init_leds();
+    } else {        
         init_button();
         init_load_board_interface();
         init_b_box_demand_response();
         init_b_box_data_logger();
-        init_display();        
-    }   
-    
+        init_leds();
+        init_display();
+    }
+       
     debug(DEBUG_INFO, "Initialization sequence complete.");
-}
+ }
 
 void init_cron_schedule() {
     cron_repeat_rapidly(communication_step);
