@@ -34,8 +34,7 @@ void balance_step() {
     //sprintf(outBuf,"button press is: %d ", button_check());
     //debug(DEBUG_INFO, "button press is:  %d" , button_check());    
     //debug(DEBUG_INFO, "demand response state is : %s", dr_state_as_string(b_box_demand_reponse_current_state()));
-        
-    
+           
     if (balance > 0) {
         if (b_box_readings_ready()) {
             // debug(DEBUG_GRID_STATE, "here %d %f",sizeof(float), power);

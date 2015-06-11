@@ -187,9 +187,8 @@ void b_box_demand_response_step() {
     if (b_box_readings_ready()) {
         // balance based switch off
         if (balance_get() == 0 && b_box_is_power_consumed()) {
-            //load_board_ports_off(); DS:  Edit, should not be commented
-            load_board_ports_on(); //DS:  Edit, should be removed
-            // return;
+            load_board_ports_off();             
+            return;
         }
         if (balance_get() > 0 && !b_box_is_power_consumed()) {
             load_board_ports_on();

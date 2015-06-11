@@ -28,15 +28,14 @@
 void init(void) {
     init_board();
     init_timer();    
-    delay_ms(200);
+    delay_ms(500);
     init_assert();
     init_storage();   
     init_cron();
     init_communication();
     delay_ms(500);
-    //storage_load_settings();   
-  
-    
+    storage_load_settings();   
+ 
     if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
         init_link_board_interface();
         init_a_box_demand_response();
@@ -48,9 +47,8 @@ void init(void) {
         init_b_box_demand_response();
         init_b_box_data_logger();
         init_display();        
-    }
- 
-        
+    }   
+    
     debug(DEBUG_INFO, "Initialization sequence complete.");
 }
 
@@ -60,11 +58,11 @@ void init_cron_schedule() {
     
     if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
         cron_repeat_every_s(LOG_DATA_EVERY_S,  a_box_data_logger_step);        
-        cron_repeat_every_s(5, discover_nodes);       
+        cron_repeat_every_s(2, discover_nodes);       
         cron_repeat_every_s(1,  a_box_demand_response_step);      
     } else {
         cron_repeat_rapidly(button_step);
-        cron_repeat_every_s(2,  display_step);
+        cron_repeat_every_s(1,  display_step);
         cron_repeat_every_s(1,  balance_step);
         cron_repeat_every_s(1,  b_box_demand_response_step);
         cron_repeat_every_s(LOG_DATA_EVERY_S, b_box_data_logger_step);  

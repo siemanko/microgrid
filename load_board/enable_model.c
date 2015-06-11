@@ -33,10 +33,10 @@ void initializePorts(){
 
 void set_light_port_intensity(float percentage) {
     //if (abs(light_port_intensity - percentage) < 1e-10) return;
-
     double max_value = 0.8 * PTPER;
     PDC4 = (unsigned int)(percentage * max_value);
-
+    PDC3=  (unsigned int)(percentage * max_value);   
+    
     light_port_intensity = percentage;
 }
 
