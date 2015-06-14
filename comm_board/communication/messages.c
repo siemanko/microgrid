@@ -62,12 +62,12 @@ void set_time_handler(Message* msg) {
 }
 
 void reset_pic_handler(Message* msg) {
-    debug_unsafe(DEBUG_INFO, "Resetting PIC. See you soon!");
+    //debug_unsafe(DEBUG_INFO, "Resetting PIC. See you soon!");
     asm("RESET");
 }
 
 void reset_network_handler(Message * msg){
-    debug_unsafe(DEBUG_INFO, "Watch out, you're resetting the whole network!");    
+    //debug_unsafe(DEBUG_INFO, "Watch out, you're resetting the whole network!");    
     
     MessageBuilder mb;
     make_mb(&mb, 1);
@@ -96,8 +96,8 @@ void get_memory_handler(Message* msg) {
         free(addresses.buffer[vidx]);
     }
     destroy_vector(&addresses);
-    debug(DEBUG_INFO, "Free memory on heap: %l bytes (approximately).",
-            mem_used);
+    //debug(DEBUG_INFO, "Free memory on heap: %l bytes (approximately).",
+    //        mem_used);
 }
 
 void set_uid_node_type_handler(Message* msg) {
@@ -118,16 +118,16 @@ void read_eeprom_handler(Message* msg) {
     uint32_t addr = bytes_to_uint32(msg->content + 2);
     if (variable_type == 0) { // float
         float f_read = eeprom_read_float((uint16_t)addr);
-        debug(DEBUG_INFO, "EEPROM address %l contains float %f.",
-                addr, f_read); 
+        //debug(DEBUG_INFO, "EEPROM address %l contains float %f.",
+        //        addr, f_read); 
     } else if (variable_type == 1) { // uint32
         uint32_t l_read = eeprom_read_uint32((uint16_t)addr);
-        debug(DEBUG_INFO, "EEPROM address %l contains uint32 %l.",
-                addr, l_read);       
+        //debug(DEBUG_INFO, "EEPROM address %l contains uint32 %l.",
+        //        addr, l_read);       
     } else if (variable_type == 2) { // byte
         uint32_t b_read = eeprom_read_byte((uint16_t)addr);
-        debug(DEBUG_INFO, "EEPROM address %l contains byte %d.",
-                addr, (int)b_read); 
+        //debug(DEBUG_INFO, "EEPROM address %l contains byte %d.",
+        //        addr, (int)b_read); 
     }
 }
 
@@ -138,7 +138,7 @@ void test_leds_handler(Message* msg) {
 void print_local_time_handler(Message* msg) {
     struct tm *lt; 
     lt = ulink_local_time();
-    debug(DEBUG_INFO, "Local time: %s", asctime(lt));
+    //debug(DEBUG_INFO, "Local time: %s", asctime(lt));
 }
 
 void register_misc_message_handlers() {

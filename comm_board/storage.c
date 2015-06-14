@@ -17,8 +17,9 @@ void storage_integrity_check() {
     ok = ok && eeprom_read_uint32(STORAGE_INTEGRITY_CHECK) ==
                STORAGE_INTEGRITY_CONSTANT;
     if (!ok) {
-        debug(DEBUG_ERROR, "Storage integrity check failed - resetting.");
-        //storage_factory_reset();  //DS:  Edit, should be inlcuded
+        //debug(DEBUG_ERROR, "Storage integrity check failed - resetting.");
+        //delay_ms(200);
+        //storage_factory_reset();  //DS:  Edit, should be inlcuded                
         reboot_chip();          //DS:  Edit, should be removed
     }
     if (FORCE_FACTORY_RESET) {

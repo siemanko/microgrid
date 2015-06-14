@@ -73,7 +73,7 @@ void pong_handler(Message* msg) {
 
 void get_connected_nodes_handler(Message* msg) {
 
-/*    MessageBuilder mb;
+    MessageBuilder mb;
     make_mb(&mb, 20);
     mb_add_char(&mb, CMSG_DEBUG);
     mb_add_char(&mb, DEBUG_INFO);
@@ -86,5 +86,5 @@ void get_connected_nodes_handler(Message* msg) {
             mb_add_formated(&mb, "%d, ", nodes_online.contents[idx]->key);
         }
     }
-    send_mb(&mb, COMPUTER_UID); */  //DS:  Edit, removed
+    send_mb(&mb, COMPUTER_UID); 
 }

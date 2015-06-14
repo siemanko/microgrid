@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "drivers/timer.h"
 
 #include <stdint.h>
 #include <string.h>
@@ -134,5 +135,6 @@ uint32_t checksum(uint32_t initial, const uint8_t* data, int len) {
 }
 
 void reboot_chip(){
+    delay_ms(500);
     asm("reset");
 }
