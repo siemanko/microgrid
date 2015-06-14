@@ -51,7 +51,7 @@ void init(void) {
         init_leds();       
     }
        
-    int heyPeople = 9;
+    int ShouldBeSolvingDebugging = 9;
     debug(DEBUG_INFO, "Initialization sequence complete.");
  }
 
