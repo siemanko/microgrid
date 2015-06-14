@@ -10,4 +10,6 @@ void button_reset();
 
 void button_step();
 
+void display_button_status();
+
 #endif

@@ -31,6 +31,7 @@ void ping(uint8_t target) {
 }
 
 void discover_nodes() {
+     
     while(1) {
         int disconnect_uid = -1;
         int idx;
@@ -56,7 +57,7 @@ void ping_handler(Message* msg) {
     if (msg->source == COMPUTER_UID) {
         LCD_blink("ping", LCD_ROW_TOP, 200);
         debug(DEBUG_INFO, "pong");
-    } else {
+    } else {        
         MessageBuilder mb;
         make_mb(&mb, 1);
         mb_add_char(&mb, UMSG_PONG);
@@ -71,7 +72,8 @@ void pong_handler(Message* msg) {
 }
 
 void get_connected_nodes_handler(Message* msg) {
-    MessageBuilder mb;
+
+/*    MessageBuilder mb;
     make_mb(&mb, 20);
     mb_add_char(&mb, CMSG_DEBUG);
     mb_add_char(&mb, DEBUG_INFO);
@@ -84,5 +86,5 @@ void get_connected_nodes_handler(Message* msg) {
             mb_add_formated(&mb, "%d, ", nodes_online.contents[idx]->key);
         }
     }
-    send_mb(&mb, COMPUTER_UID);
+    send_mb(&mb, COMPUTER_UID); */  //DS:  Edit, removed
 }

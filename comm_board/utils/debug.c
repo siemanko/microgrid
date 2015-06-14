@@ -22,13 +22,14 @@ void debug(char subsystem, const char* format, ...) {
     va_list args;
     va_start(args, format);
     debug_args(subsystem, format, args);
-    va_end(args);
+    va_end(args);  
+
 }
 
 void debug_args(char subsystem, const char* format, va_list args) {
     MessageBuilder mb;
     make_debug_mb(&mb, subsystem, format, args);
-    send((uint8_t*)mb.message, mb.next_char, COMPUTER_UID);
+    send((uint8_t*)mb.message, mb.next_char, COMPUTER_UID); 
 }
 
 void debug_unsafe(char subsystem, const char* format, ...) {
@@ -37,7 +38,9 @@ void debug_unsafe(char subsystem, const char* format, ...) {
     debug_unsafe_args(subsystem, format, args);
     va_end(args);
 }
-void debug_unsafe_args(char subsystem, const char* format, va_list args) {
+
+void debug_unsafe_args(char subsystem, const char* format, va_list args) {  
+        
     MessageBuilder mb;
     make_debug_mb(&mb, subsystem, format, args);
     
@@ -47,5 +50,5 @@ void debug_unsafe_args(char subsystem, const char* format, va_list args) {
     msg->destination = COMPUTER_UID;
     msg->length = (uint8_t)mb.next_char;
     msg->content = (uint8_t*)mb.message;
-    computer_send_message_unsafe(msg);
+    computer_send_message_unsafe(msg); 
 }

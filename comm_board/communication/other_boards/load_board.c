@@ -42,7 +42,7 @@ int load_board_ports_off(){
     int success = spi_command(TURN_PORT1_OFF_MSG) &&
                   spi_command(TURN_PORT2_OFF_MSG) &&
                   spi_command(TURN_LIGHT_OFF_MSG);
-    // debug(DEBUG_INFO, "sent OFF signal to all appliances: %d", success);
+    debug(DEBUG_INFO, "sent OFF signal to all appliances: %d", success);
     return success;
 }
 
@@ -50,6 +50,6 @@ int load_board_ports_on(){
     int success = spi_command(TURN_PORT1_ON_MSG) &&
                   spi_command(TURN_PORT2_ON_MSG) &&
                   spi_command(TURN_LIGHT_ON_MSG);
-    // debug(DEBUG_INFO, "sent ON signal to all appliances: %d", success);
+    debug(DEBUG_INFO, "sent ON signal to all appliances: %d", success);
     return success;
 }

@@ -46,24 +46,28 @@ void init(void) {
         init_load_board_interface();
         init_b_box_demand_response();
         init_b_box_data_logger();
-        init_leds();
         init_display();
+        delay_ms(2000);
+        init_leds();       
     }
        
+    int heyPeople = 9;
     debug(DEBUG_INFO, "Initialization sequence complete.");
  }
 
 void init_cron_schedule() {
-    cron_repeat_rapidly(communication_step);
-    cron_repeat_every_s(10, storage_backup);
+  
+   cron_repeat_rapidly(communication_step); 
+   cron_repeat_every_s(10, storage_backup);
     
     if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
         cron_repeat_every_s(LOG_DATA_EVERY_S,  a_box_data_logger_step);        
-        cron_repeat_every_s(2, discover_nodes);       
-        cron_repeat_every_s(1,  a_box_demand_response_step);      
+        cron_repeat_every_s(3, discover_nodes);       
+        cron_repeat_every_s(2,  a_box_demand_response_step);    //Seems to be some type of error here that causes chip restart    
     } else {
-        cron_repeat_rapidly(button_step);
-        cron_repeat_every_s(1,  display_step);
+        //cron_repeat_rapidly(button_step);     //DS:  Edit, replaced by interrupt code
+        //cron_repeat_every_s(1,  display_step);
+        cron_repeat_every_ms(300,display_step);
         cron_repeat_every_s(1,  balance_step);
         cron_repeat_every_s(1,  b_box_demand_response_step);
         cron_repeat_every_s(LOG_DATA_EVERY_S, b_box_data_logger_step);  
@@ -77,7 +81,7 @@ int main() {
     init_cron_schedule();
     
     while(1) {
-        cron_step();
+       cron_step();
     }
 
     return 1;

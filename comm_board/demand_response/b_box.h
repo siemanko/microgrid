@@ -19,6 +19,6 @@ void b_box_demand_response_step();
 
 //DS:  Edit, dan debug
 void make_waiting_for_ack_zero();
-void display_button_status();
+
 
 #endif

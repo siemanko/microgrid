@@ -83,9 +83,9 @@ void state_of_charge_step() {
                              battery_input_current,
                              battery_output_current,
                              battery_capacity_q);
-    debug(DEBUG_INFO, "battery voltage = %f, current delta = %f",
+    /*debug(DEBUG_INFO, "battery voltage = %f, current delta = %f",
             battery_voltage, battery_input_current - battery_output_current);
-    debug(DEBUG_INFO, "SOC estimate from voltage: %f", measurement_mu);
+    debug(DEBUG_INFO, "SOC estimate from voltage: %f", measurement_mu); */
     
     float measurement_uncertainty =
             VOLTAGE_SENSOR_UNCERTAINTY * measurement_mu;

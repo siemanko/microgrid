@@ -37,7 +37,8 @@ void set_message_handler(MessageToUlink msg_type,
 }
 
 void get_settings_handler(Message* msg) {
-    MessageBuilder mb;
+ 
+ /*   MessageBuilder mb;
     make_mb(&mb, 11);
     mb_add_char(&mb, CMSG_GET_SETTINGS_REPLY);
     mb_add_uint32_noprefix(&mb, time_seconds_since_epoch());
@@ -51,7 +52,7 @@ void get_settings_handler(Message* msg) {
     mb_add_float_noprefix(&mb, red_threshold);
     mb_add_float_noprefix(&mb, yellow_threshold);
 
-    send_mb(&mb, COMPUTER_UID);
+    send_mb(&mb, COMPUTER_UID); */  //DS: Edit, removed code
 }
 
 void set_time_handler(Message* msg) {

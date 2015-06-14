@@ -28,11 +28,7 @@ static uint32_t last_state_broadcast = 0;
 static DemandResponeState current_state;
 
 static int should_results_be_used = 0;
-
 static int num_bad_readings_in_row = 0;
-
-
-static int dans_button_debug_variable = 0;
 
 // current at the output of load converter
 // the current reading does include all loads but does not include
@@ -57,12 +53,7 @@ void make_waiting_for_ack_zero(){
     awaiting_price_ack = 0;
 }
 
-void display_button_status(){   
-    int button_press = button_check();    
-    char outBuf[10] ="";  
-    sprintf(outBuf,"bp is: %d ", button_press);
-    LCD_replace_row(outBuf, LCD_ROW_TOP);
-}
+
 
 
 int b_box_is_power_consumed() {
@@ -141,7 +132,7 @@ void update_readings() {
     should_results_be_used = should_results_be_used &&
             validate_readings();
     if (!should_results_be_used) {
-        // debug(DEBUG_INFO, "Problem getting readings from load board");
+        debug(DEBUG_INFO, "Problem getting readings from load board");
         ++num_bad_readings_in_row;
     } else {
         num_bad_readings_in_row = 0;
@@ -181,7 +172,7 @@ void b_box_demand_response_step() {
             return; 
         }
     } else {
-        button_reset();
+        button_reset();  //DS:  Edit, should not be commented
     }
     
     if (b_box_readings_ready()) {

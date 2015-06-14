@@ -48,6 +48,7 @@ void ethermini_send(Ethermini* e,  Message *msg) {
 void ethermini_send_immediately(Ethermini *e, Message *msg) {
     // preamble - 2 time 170
     int pidx;
+        
     for (pidx=0; pidx < ETHERMINI_FRAMING_PREAMBLE_LENGTH; ++pidx) {
         e->put(ETHERMINI_FRAMING_PREAMBLE);
     }
@@ -60,7 +61,7 @@ void ethermini_send_immediately(Ethermini *e, Message *msg) {
     e->put(msg->length);
     int msg_idx = 0;
     for (msg_idx = 0; msg_idx < msg->length; ++msg_idx) {
-        e->put(msg->content[msg_idx]);
+      e->put(msg->content[msg_idx]);
     }
     uint8_t cc[4];
     uint32_to_bytes(message_checksum(msg), cc);
@@ -68,6 +69,7 @@ void ethermini_send_immediately(Ethermini *e, Message *msg) {
     for (ccidx = 0; ccidx < 4; ++ccidx) {
         e->put(cc[ccidx]);
     }
+     
 }
 
 void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {
@@ -155,15 +157,16 @@ Message* ethermini_receive_message(Ethermini* e) {
 
 void ethermini_step(Ethermini* e) {
     // send all the messages.
+    
     while(!cb_empty(e->outbound_messages)) {
         Message* msg = (Message*)cb_popqueue(e->outbound_messages);
         ethermini_send_immediately(e, msg);
         message_free(msg);
-    }
-
+    }  
+        
     while(!cb_empty(e->inbound_messages)) {
         Message* msg = (Message*)cb_popqueue(e->inbound_messages);
         e->on_message_callback(msg);
         message_free(msg);
-    }
+    } 
 }

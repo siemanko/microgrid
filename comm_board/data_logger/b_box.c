@@ -67,7 +67,7 @@ void b_box_print_dl_message_handler(Message* msg) {
         output_current,
         network_voltage,
         output_voltage,
-        phone_voltage);
+        phone_voltage); 
 }
 
 void init_b_box_data_logger() {
@@ -103,7 +103,7 @@ void b_box_data_logger_step() {
         output_current,
         network_voltage,
         output_voltage,
-        phone_voltage);
+        phone_voltage); 
     
     data_logger_log(0,
                     time_seconds_since_epoch(),
