@@ -49,9 +49,8 @@ void init(void) {
         init_display();
         delay_ms(2000);
         init_leds();       
-    }
-       
-    int heyPeople = 9;
+    }      
+   
     debug(DEBUG_INFO, "Initialization sequence complete.");
  }
 
