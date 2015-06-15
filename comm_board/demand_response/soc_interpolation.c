@@ -1,4 +1,7 @@
 #include "soc_interpolation.h"
+#include "../utils/debug.h"
+#include "../communication/interface.h"
+
 
 #include <math.h>
 
@@ -105,15 +108,21 @@ static int get_bracket(float target, const float* values, const int num_values) 
     int bracket_result;
     int bracket_idx;
     for(bracket_idx = 0; bracket_idx <= num_values; ++bracket_idx) {
+                
         float value_lower_bound = -1.0/0.0; // -inf
+                
         if (bracket_idx > 0) value_lower_bound = values[bracket_idx -1];
+        
         float value_upper_bound = 1.0/0.0; // -inf
+                
         if (bracket_idx < num_values) value_upper_bound = values[bracket_idx];
         // printf("bracket %d: %f,%f\n", bracket_idx, value_lower_bound, value_upper_bound);
         if (value_lower_bound <= target && target < value_upper_bound) {
             bracket_result = bracket_idx;
             break;
         }
+    
+    
     }
 
     return bracket_result;
@@ -128,13 +137,17 @@ static float float_abs(float x) {
     return x > 0 ? x : -x;
 }
 
+
+
 static float get_soc_from_curve(float voltage, int curve_idx) {
-    int voltage_bracket = get_bracket(voltage, curve_voltage[curve_idx], curve_length[curve_idx]);
+    
+    int voltage_bracket = get_bracket(voltage, curve_voltage[curve_idx], curve_length[curve_idx]);   
+    
     if (voltage_bracket == 0)
         return curve_soc[curve_idx][voltage_bracket];
     if (voltage_bracket == curve_length[curve_idx])
         return curve_soc[curve_idx][voltage_bracket - 1];
-
+    
     const float v1 = curve_voltage[curve_idx][voltage_bracket - 1];
     const float v2 = curve_voltage[curve_idx][voltage_bracket];
     const float soc1 = curve_soc[curve_idx][voltage_bracket-1];
@@ -143,6 +156,10 @@ static float get_soc_from_curve(float voltage, int curve_idx) {
     return linear_interpolation(voltage, v1, v2, soc1, soc2);
 }
 
+
+
+//DS:  Edit, note:  
+
 float get_soc_estimate(float voltage, 
                        float current_in,
                        float current_out,
@@ -150,29 +167,36 @@ float get_soc_estimate(float voltage,
     float rate_of_charge = (current_in - current_out) / battery_capacity_q;
 
     int curve_bracket = get_bracket(rate_of_charge, curve_charge_rate, NUM_CURVES);
-    
     float estimate_percent;
     
+
     if (curve_bracket == 0) {
-        estimate_percent = get_soc_from_curve(voltage, curve_bracket);
-    } else if (curve_bracket == NUM_CURVES) {
+        estimate_percent = get_soc_from_curve(voltage, curve_bracket);        
+    } else if (curve_bracket == NUM_CURVES) { 
+       
         estimate_percent = get_soc_from_curve(voltage, curve_bracket-1);
+        
     } else if (curve_bracket == CHARGE_TO_DISCHARGE_BRACKET) {
-        if (rate_of_charge < 0.0) {
+        //DS:  Edit, this runs
+        if (rate_of_charge < 0.0) {           
+            
             estimate_percent = get_soc_from_curve(voltage, curve_bracket-1);
-        } else {
+        } else {           
+            
             estimate_percent = get_soc_from_curve(voltage, curve_bracket);
         }
-    } else {
-        float log_my_roc = log(float_abs(rate_of_charge));
-        float log_roc1 = log(float_abs(curve_charge_rate[curve_bracket-1]));
+    } else {               
+        
+        float log_my_roc = log(float_abs(rate_of_charge));  
+        float log_roc1 = log(float_abs(curve_charge_rate[curve_bracket-1]));  
         float log_roc2 = log(float_abs(curve_charge_rate[curve_bracket]));
-        float soc1 = get_soc_from_curve(voltage, curve_bracket- 1);
+        float soc1 = get_soc_from_curve(voltage, curve_bracket- 1);  //PROBLEM IS HERE
         float soc2 = get_soc_from_curve(voltage, curve_bracket);
-
+    
         estimate_percent = linear_interpolation(log_my_roc, log_roc1, log_roc2, soc1, soc2);
     }
     
+    debug(DEBUG_INFO, " Battery percent : %f " , estimate_percent);
+    
     return estimate_percent/100.0 * battery_capacity_q;
-
 }

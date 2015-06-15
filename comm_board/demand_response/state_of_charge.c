@@ -69,6 +69,8 @@ void state_of_charge_step() {
     if (!success) return;
 
    
+    debug(DEBUG_INFO, "Battery IN current: %f and Battery OUT current : %f ", battery_input_current, battery_output_current);
+    
     // motion step
     float motion_delta_mu = battery_input_current - battery_output_current;
     float motion_uncertainty = 
@@ -76,19 +78,23 @@ void state_of_charge_step() {
                                        + battery_output_current);
     state_of_charge_q += motion_delta_mu;
     uncertertainty_of_charge += motion_uncertainty;
-          
-     
+        
+    
+    
     // measurement step
     float measurement_mu = 
             get_soc_estimate(battery_voltage,
                              battery_input_current,
                              battery_output_current,
                              battery_capacity_q);
-    debug(DEBUG_INFO, "battery voltage = %f, current delta = %f",
+    debug(DEBUG_INFO, "battery voltage = %f, current delta = %f", 
             battery_voltage, battery_input_current - battery_output_current);
     debug(DEBUG_INFO, "SOC estimate from voltage: %f", measurement_mu); 
     
-    float measurement_uncertainty =
+    
+    //DS:  Edit, removing filter for now
+    /*
+    float measurement_uncertainty = 
             VOLTAGE_SENSOR_UNCERTAINTY * measurement_mu;
     
     // It's actually important to use temporaries here
@@ -99,6 +105,10 @@ void state_of_charge_step() {
                        &new_mu, &new_uncert);
     state_of_charge_q = new_mu;
     uncertertainty_of_charge = new_uncert;
+     */
 
- 
- }
+    debug(DEBUG_INFO, " Measurement mu : %f ", measurement_mu);
+    
+    state_of_charge_q = measurement_mu;
+
+}

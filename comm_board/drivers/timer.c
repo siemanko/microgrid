@@ -38,8 +38,9 @@ void init_timer(void) {
     // EXPLENATION FOR RESET/INTERRUPT PERIOD
     // SYS_FREQUENCY / (PRESCALER * MILLISECONDS_IN_SECONDS)
     // 36850000 / (256 * 1000)
-    PR1 = 144;
-
+//    PR1 = 144;
+    PR1 = 136;   
+    
     T1CONbits.TON = 1;
     T1CONbits.TCKPS = 0b11; // PRESCALER: 256
 

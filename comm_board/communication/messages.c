@@ -38,7 +38,7 @@ void set_message_handler(MessageToUlink msg_type,
 
 void get_settings_handler(Message* msg) {
  
- /*   MessageBuilder mb;
+    MessageBuilder mb;
     make_mb(&mb, 11);
     mb_add_char(&mb, CMSG_GET_SETTINGS_REPLY);
     mb_add_uint32_noprefix(&mb, time_seconds_since_epoch());
@@ -52,7 +52,7 @@ void get_settings_handler(Message* msg) {
     mb_add_float_noprefix(&mb, red_threshold);
     mb_add_float_noprefix(&mb, yellow_threshold);
 
-    send_mb(&mb, COMPUTER_UID); */  //DS: Edit, removed code
+    send_mb(&mb, COMPUTER_UID);
 }
 
 void set_time_handler(Message* msg) {
@@ -118,16 +118,16 @@ void read_eeprom_handler(Message* msg) {
     uint32_t addr = bytes_to_uint32(msg->content + 2);
     if (variable_type == 0) { // float
         float f_read = eeprom_read_float((uint16_t)addr);
-        //debug(DEBUG_INFO, "EEPROM address %l contains float %f.",
-        //        addr, f_read); 
+        debug(DEBUG_INFO, "EEPROM address %l contains float %f.",
+                addr, f_read); 
     } else if (variable_type == 1) { // uint32
         uint32_t l_read = eeprom_read_uint32((uint16_t)addr);
-        //debug(DEBUG_INFO, "EEPROM address %l contains uint32 %l.",
-        //        addr, l_read);       
+        debug(DEBUG_INFO, "EEPROM address %l contains uint32 %l.",
+                addr, l_read);       
     } else if (variable_type == 2) { // byte
         uint32_t b_read = eeprom_read_byte((uint16_t)addr);
-        //debug(DEBUG_INFO, "EEPROM address %l contains byte %d.",
-        //        addr, (int)b_read); 
+        debug(DEBUG_INFO, "EEPROM address %l contains byte %d.",
+                addr, (int)b_read); 
     }
 }
 

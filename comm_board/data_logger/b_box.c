@@ -21,6 +21,8 @@ static const DataLoggerType column_type[] = {
     DATA_LOGGER_TYPE_FLOAT,
 
 };
+
+
 static const char* column_name[] = {
     "timestamp",
     "output current",
