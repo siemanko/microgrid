@@ -76,11 +76,10 @@ static void broadcast_state() {
     mb_add_char(&mb, UMSG_DEMAND_REPONSE);
     
     //DS:  Edit, debug.  PRINT OUT THE STATE OF CHARGE
-    //debug(DEBUG_INFO, "a box demand response is : %s", dr_state_as_string(a_box_demand_reponse_current_state()) );
+    debug(DEBUG_INFO, "a box demand response is : %s", dr_state_as_string(a_box_demand_reponse_current_state()) );
             
     mb_add_char(&mb, (char)a_box_demand_reponse_current_state());
     send_mb(&mb, BROADCAST_UID);
-
 }
 
 

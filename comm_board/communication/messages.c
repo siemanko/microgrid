@@ -38,7 +38,7 @@ void set_message_handler(MessageToUlink msg_type,
 
 void get_settings_handler(Message* msg) {
  
- /*   MessageBuilder mb;
+    MessageBuilder mb;
     make_mb(&mb, 11);
     mb_add_char(&mb, CMSG_GET_SETTINGS_REPLY);
     mb_add_uint32_noprefix(&mb, time_seconds_since_epoch());
@@ -52,7 +52,7 @@ void get_settings_handler(Message* msg) {
     mb_add_float_noprefix(&mb, red_threshold);
     mb_add_float_noprefix(&mb, yellow_threshold);
 
-    send_mb(&mb, COMPUTER_UID); */  //DS: Edit, removed code
+    send_mb(&mb, COMPUTER_UID);
 }
 
 void set_time_handler(Message* msg) {
@@ -62,12 +62,12 @@ void set_time_handler(Message* msg) {
 }
 
 void reset_pic_handler(Message* msg) {
-    debug_unsafe(DEBUG_INFO, "Resetting PIC. See you soon!");
+    //debug_unsafe(DEBUG_INFO, "Resetting PIC. See you soon!");
     asm("RESET");
 }
 
 void reset_network_handler(Message * msg){
-    debug_unsafe(DEBUG_INFO, "Watch out, you're resetting the whole network!");    
+    //debug_unsafe(DEBUG_INFO, "Watch out, you're resetting the whole network!");    
     
     MessageBuilder mb;
     make_mb(&mb, 1);
@@ -96,8 +96,8 @@ void get_memory_handler(Message* msg) {
         free(addresses.buffer[vidx]);
     }
     destroy_vector(&addresses);
-    debug(DEBUG_INFO, "Free memory on heap: %l bytes (approximately).",
-            mem_used);
+    //debug(DEBUG_INFO, "Free memory on heap: %l bytes (approximately).",
+    //        mem_used);
 }
 
 void set_uid_node_type_handler(Message* msg) {
@@ -138,7 +138,7 @@ void test_leds_handler(Message* msg) {
 void print_local_time_handler(Message* msg) {
     struct tm *lt; 
     lt = ulink_local_time();
-    debug(DEBUG_INFO, "Local time: %s", asctime(lt));
+    //debug(DEBUG_INFO, "Local time: %s", asctime(lt));
 }
 
 void register_misc_message_handlers() {

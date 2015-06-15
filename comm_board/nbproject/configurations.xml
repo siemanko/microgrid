@@ -299,6 +299,7 @@
         <property key="CRC" value="true"/>
         <property key="CTMU" value="true"/>
         <property key="DCI" value="true"/>
+        <property key="Freeze All Other Peripherals" value="true"/>
         <property key="I2C1" value="true"/>
         <property key="I2C2" value="true"/>
         <property key="INPUT CAPTURE 1" value="true"/>

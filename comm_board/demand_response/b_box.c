@@ -13,6 +13,8 @@
 #include "../drivers/eeprom.h"
 #include "../storage.h"
 #include "../user_interface/display.h"
+#include "../shared/communication/ethermini.h"
+
 
 // don't display annoying push button message for first
 // <DR_CHILLAX> seconds.
@@ -49,12 +51,9 @@ int waiting_for_confirmation() {
     return awaiting_price_ack;    
 }
 
-void make_waiting_for_ack_zero(){
-    awaiting_price_ack = 0;
+void set_waiting_for_ack(int waiting_for_ack_value){
+    awaiting_price_ack = waiting_for_ack_value;
 }
-
-
-
 
 int b_box_is_power_consumed() {
     return output_current > 0.02;
@@ -66,7 +65,7 @@ float b_box_get_power() {
 
 static void dr_update_state(DemandResponeState new_state) {
     int higher_price = 0;    
-    //DS:  EDIT, We do not have a higher price if going from DR_OFF to any other state
+    
     if( state_to_price_coefficient(new_state) > state_to_price_coefficient(current_state)){
         higher_price = 1;
     }
@@ -97,7 +96,7 @@ void init_b_box_demand_response() {
     grid_management_last_update = 0;
     should_results_be_used = 0;
     num_bad_readings_in_row = 0;
-    awaiting_price_ack = 0;
+    awaiting_price_ack = eeprom_read_int(STORAGE_AWAITING_PRICE_ACK);    
     estimated_boot_time = time_seconds_since_epoch();
     //current_state = DR_STATE_OFF;//DS:  Edit, this should be the initial state
     current_state = DR_STATE_GREEN; //DS:  Edit, this used to be off    
@@ -132,7 +131,7 @@ void update_readings() {
     should_results_be_used = should_results_be_used &&
             validate_readings();
     if (!should_results_be_used) {
-        debug(DEBUG_INFO, "Problem getting readings from load board");
+        //debug(DEBUG_INFO, "Problem getting readings from load board");
         ++num_bad_readings_in_row;
     } else {
         num_bad_readings_in_row = 0;
@@ -140,9 +139,10 @@ void update_readings() {
 }
 
 void b_box_demand_response_step() {
-    //DS:  Edit, first, let's save the demand response state seen
-    //eeprom_write_int( STORAGE_LAST_GRID_STATE_OBSERVED , (int) current_state);    
-       
+         
+    debug(DEBUG_INFO, "max size of message : %f " , debug_ethermini_max_messages());
+    
+    
     // If comms with A-box are failing turn everything off.
     if (last_state_broadcast + MAX_TIME_BETWEEN_BROADCASTS_S < 
             time_seconds_since_epoch()) {
@@ -172,7 +172,7 @@ void b_box_demand_response_step() {
             return; 
         }
     } else {
-        button_reset();  //DS:  Edit, should not be commented
+        button_reset(); 
     }
     
     if (b_box_readings_ready()) {
@@ -190,6 +190,6 @@ void b_box_demand_response_step() {
             //load_board_ports_off();  DS:  Edit, should not be commented
              load_board_ports_on(); //DS:  Edit, should be removed
     }   
-     
+      
 }
 

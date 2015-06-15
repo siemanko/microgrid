@@ -5,6 +5,7 @@
 #include "user_interface/balance.h"
 #include "demand_response/state_of_charge.h"
 #include "demand_response/a_box.h"
+#include "demand_response/b_box.h"
 #include "shared/utils.h"
 
 
@@ -17,15 +18,16 @@ void storage_integrity_check() {
     ok = ok && eeprom_read_uint32(STORAGE_INTEGRITY_CHECK) ==
                STORAGE_INTEGRITY_CONSTANT;
     if (!ok) {
-        debug(DEBUG_ERROR, "Storage integrity check failed - resetting.");
-        //storage_factory_reset();  //DS:  Edit, should be inlcuded
+        //debug(DEBUG_ERROR, "Storage integrity check failed - resetting.");
+        //
+        //storage_factory_reset();  //DS:  Edit, should be inlcuded                
+        delay_ms(200);
         reboot_chip();          //DS:  Edit, should be removed
     }
     if (FORCE_FACTORY_RESET) {
         debug(DEBUG_INFO, "Forced storage reset - update the code.");
-        storage_factory_reset();
-    }
-    
+        //storage_factory_reset();
+    }    
 }
 
 void storage_load_settings() {
@@ -38,11 +40,11 @@ void storage_load_settings() {
             eeprom_read_float(STORAGE_UNCERTAINTY_OF_CHARGE);
     battery_capacity_q =
             eeprom_read_float(STORAGE_BATTERY_CAPACITY);
-    
-    
     off_threshold = eeprom_read_float(STORAGE_OFF_THRESHOLD);
     red_threshold = eeprom_read_float(STORAGE_RED_THRESHOLD);
     yellow_threshold = eeprom_read_float(STORAGE_YELLOW_THRESHOLD);
+    set_waiting_for_ack(eeprom_read_int(STORAGE_AWAITING_PRICE_ACK));
+       
 }
 
 void storage_backup() {
@@ -55,14 +57,15 @@ void storage_backup() {
     eeprom_write_float(STORAGE_UNCERTAINTY_OF_CHARGE,
             uncertertainty_of_charge);
     eeprom_write_float(STORAGE_BATTERY_CAPACITY,
-            battery_capacity_q);
-    
+            battery_capacity_q);    
     eeprom_write_float(STORAGE_OFF_THRESHOLD,
             off_threshold);
     eeprom_write_float(STORAGE_RED_THRESHOLD,
             red_threshold);    
     eeprom_write_float(STORAGE_YELLOW_THRESHOLD,
-            yellow_threshold);    
+            yellow_threshold);   
+    eeprom_write_int(STORAGE_AWAITING_PRICE_ACK, waiting_for_confirmation());
+         
 }
 
 

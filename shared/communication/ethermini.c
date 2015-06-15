@@ -10,6 +10,20 @@
 #define ETHERMINI_FRAMING_SOF             171
 #define ETHERMINI_FRAMING_PREAMBLE_LENGTH 3
 
+
+//DS:  Edit, for debugging output buffer
+static float debug_num_messages_max;
+
+static void debug_reset_max(float current_number){
+    if(current_number > debug_num_messages_max){
+        debug_num_messages_max=current_number;
+    }   
+}
+float debug_ethermini_max_messages(){
+    return debug_num_messages_max;
+}
+
+
 void make_ethermini(Ethermini* e,
         void (*put)(uint8_t),
         void (*on_message_callback)(Message*)) {
@@ -60,16 +74,20 @@ void ethermini_send_immediately(Ethermini *e, Message *msg) {
     e->put(msg->source);
     e->put(msg->length);
     int msg_idx = 0;
+    
+    float dan_debug_current_num_messages = 0;    
     for (msg_idx = 0; msg_idx < msg->length; ++msg_idx) {
       e->put(msg->content[msg_idx]);
-    }
+      dan_debug_current_num_messages++;
+    }    
+    debug_reset_max(dan_debug_current_num_messages);
+        
     uint8_t cc[4];
     uint32_to_bytes(message_checksum(msg), cc);
     int ccidx;
     for (ccidx = 0; ccidx < 4; ++ccidx) {
         e->put(cc[ccidx]);
-    }
-     
+    }     
 }
 
 void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {

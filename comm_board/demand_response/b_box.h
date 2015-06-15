@@ -18,7 +18,7 @@ DemandResponeState b_box_demand_reponse_current_state();
 void b_box_demand_response_step();
 
 //DS:  Edit, dan debug
-void make_waiting_for_ack_zero();
+void set_waiting_for_ack(int waiting_for_ack_value);
 
 
 #endif

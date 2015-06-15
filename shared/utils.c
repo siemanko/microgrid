@@ -133,6 +133,6 @@ uint32_t checksum(uint32_t initial, const uint8_t* data, int len) {
     return initial;
 }
 
-void reboot_chip(){
+void reboot_chip(){    
     asm("reset");
 }

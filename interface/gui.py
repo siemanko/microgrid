@@ -73,7 +73,6 @@ class RootView(BoxLayout):
 
         self.last_serial_choices = set()
 
-
         self.update_serial_choices()
 
     def on_message(self, msg):

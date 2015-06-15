@@ -11,7 +11,7 @@
 #define PRICE_COEFF_RED    10
 #define PRICE_COEFF_OFF    0
 
-#define DEFAULT_BATTERY_CAPACITY_Q 25200.0
+#define DEFAULT_BATTERY_CAPACITY_Q 720000.0     //200 Ah
 
 // uncertainty of a current sensor is 2%
 #define CURRENT_SENSOR_UNCERTAINTY 0.02

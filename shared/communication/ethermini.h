@@ -46,4 +46,8 @@ Message* ethermini_receive_message(Ethermini* e);
 
 void ethermini_step(Ethermini* e);
 
+//DS:  Edit,  for debugging output buffer
+float debug_ethermini_max_messages();
+
+
 #endif
