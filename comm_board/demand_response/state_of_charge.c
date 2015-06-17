@@ -15,6 +15,12 @@ float state_of_charge_q         = 1.0;
 float uncertertainty_of_charge  = DEFAULT_BATTERY_CAPACITY_Q;
 float battery_capacity_q        = DEFAULT_BATTERY_CAPACITY_Q;
 
+#define SIZE_OF_SOC_MOVING_AVERAGE      40
+static float state_of_charge_history[SIZE_OF_SOC_MOVING_AVERAGE];
+static int current_index_state_of_charge_history = 0;
+static int max_index_state_of_charge_history = SIZE_OF_SOC_MOVING_AVERAGE;
+
+
 static void set_state_of_charge_handler(Message* msg) {
     assert(msg->length == 9);
     state_of_charge_q = bytes_to_float(msg->content + 1);
@@ -28,6 +34,37 @@ static void set_battery_capacity_handler(Message* msg) {
 }
 
 
+static float compute_moving_average(float next_state_of_charge_value){
+         
+    float sum_of_state_of_charge = 0;
+    int i;
+        
+    if(current_index_state_of_charge_history >= max_index_state_of_charge_history){
+                
+        for(i = 0; i < max_index_state_of_charge_history - 1; i++){
+            state_of_charge_history[i] = state_of_charge_history[i + 1];
+            sum_of_state_of_charge += state_of_charge_history[i];
+        }
+        state_of_charge_history[max_index_state_of_charge_history-1] = next_state_of_charge_value; 
+        
+        sum_of_state_of_charge += next_state_of_charge_value;                 
+        
+        return sum_of_state_of_charge/max_index_state_of_charge_history;        
+    
+    }else{       
+        
+        state_of_charge_history[current_index_state_of_charge_history] = next_state_of_charge_value;
+        
+        for( i=0; i < current_index_state_of_charge_history+1 ; i++ ){
+            sum_of_state_of_charge += state_of_charge_history[i];
+        }        
+        current_index_state_of_charge_history++;        
+    
+        return sum_of_state_of_charge / current_index_state_of_charge_history;
+    }   
+}
+
+
 void init_state_of_charge() {
     set_message_handler(UMSG_SET_STATE_OF_CHARGE,
             set_state_of_charge_handler);
@@ -38,8 +75,8 @@ void init_state_of_charge() {
 
 float get_state_of_charge_percentage() {
     // TODO: consider using uncertainty as well.
-    //return state_of_charge_q / battery_capacity_q;  //DS:  Edit, this should not be commented!
-    return 0.95;    
+    debug(DEBUG_INFO , "Battery estimate : %f ", 100*state_of_charge_q / battery_capacity_q);
+    return state_of_charge_q / battery_capacity_q;  
 }
 
 //DS:  Edit, uncertain about this because it looks like you are adding Gaussians and it came from Udacity site.
@@ -69,15 +106,15 @@ void state_of_charge_step() {
     if (!success) return;
 
    
-    debug(DEBUG_INFO, "Battery IN current: %f and Battery OUT current : %f ", battery_input_current, battery_output_current);
+    //debug(DEBUG_INFO, "Battery IN current: %f and Battery OUT current : %f ", battery_input_current, battery_output_current);
     
     // motion step
-    float motion_delta_mu = battery_input_current - battery_output_current;
-    float motion_uncertainty = 
-            CURRENT_SENSOR_UNCERTAINTY * (battery_input_current
-                                       + battery_output_current);
-    state_of_charge_q += motion_delta_mu;
-    uncertertainty_of_charge += motion_uncertainty;
+    //float motion_delta_mu = battery_input_current - battery_output_current;
+    //float motion_uncertainty = 
+     //       CURRENT_SENSOR_UNCERTAINTY * (battery_input_current
+     //                                  + battery_output_current);
+    //state_of_charge_q += motion_delta_mu;
+    //uncertertainty_of_charge += motion_uncertainty;
         
     
     
@@ -87,9 +124,9 @@ void state_of_charge_step() {
                              battery_input_current,
                              battery_output_current,
                              battery_capacity_q);
-    debug(DEBUG_INFO, "battery voltage = %f, current delta = %f", 
-            battery_voltage, battery_input_current - battery_output_current);
-    debug(DEBUG_INFO, "SOC estimate from voltage: %f", measurement_mu); 
+    //debug(DEBUG_INFO, "battery voltage = %f, current delta = %f", 
+    //        battery_voltage, battery_input_current - battery_output_current);
+    //debug(DEBUG_INFO, "SOC estimate from voltage: %f", measurement_mu); 
     
     
     //DS:  Edit, removing filter for now
@@ -107,8 +144,12 @@ void state_of_charge_step() {
     uncertertainty_of_charge = new_uncert;
      */
 
-    debug(DEBUG_INFO, " Measurement mu : %f ", measurement_mu);
-    
-    state_of_charge_q = measurement_mu;
-
+    //debug(DEBUG_INFO, " Measurement mu : %f ", measurement_mu);    
+    //state_of_charge_q = measurement_mu;
+    state_of_charge_q = compute_moving_average(measurement_mu);
+            
+            
 }
+
+
+

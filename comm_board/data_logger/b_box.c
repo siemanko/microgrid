@@ -64,12 +64,12 @@ void b_box_print_dl_message_handler(Message* msg) {
                   &phone_voltage);
     
     
-    debug(DEBUG_INFO, "B box(%d): %f %f %f %f", 
+    /*debug(DEBUG_INFO, "B box(%d): %f %f %f %f", 
         success,
         output_current,
         network_voltage,
         output_voltage,
-        phone_voltage); 
+        phone_voltage); */
 }
 
 void init_b_box_data_logger() {
@@ -100,12 +100,12 @@ void b_box_data_logger_step() {
                   &phone_voltage);
     
     
-    debug(DEBUG_INFO, "B box(%d): %f %f %f %f", 
+    /*debug(DEBUG_INFO, "B box(%d): %f %f %f %f", 
         success,
         output_current,
         network_voltage,
         output_voltage,
-        phone_voltage); 
+        phone_voltage); */
     
     data_logger_log(0,
                     time_seconds_since_epoch(),

@@ -11,6 +11,8 @@
 
 static int override_active;
 static DemandResponeState override_state;
+static DemandResponeState a_box_current_state;
+
 
 float off_threshold    =  DEFAULT_OFF_THRESHOLD;
 float red_threshold    =  DEFAULT_RED_THRESHOLD;
@@ -44,6 +46,7 @@ static void set_thresholds_handler(Message* msg) {
 
 void init_a_box_demand_response() {
     override_active = 0;
+    a_box_current_state = DR_STATE_GREEN;
     set_message_handler(UMSG_OVERRIDE_DEMAND_REPONSE,
             override_demand_reponse_handler);
     set_message_handler(UMSG_SET_THRESHOLDS,
@@ -57,18 +60,30 @@ DemandResponeState a_box_demand_reponse_current_state() {
     if (override_active) {
         return override_state;
     } else {
-       float soc = get_state_of_charge_percentage();         
-        if (soc < off_threshold) {
-            return DR_STATE_OFF;
-        } else if (soc < red_threshold) {
-            return DR_STATE_RED;
-        } else if (soc < yellow_threshold) {
-            return DR_STATE_YELLOW;
-        } else {
-            return DR_STATE_GREEN;
-        }
-    } 
-}
+       float soc = get_state_of_charge_percentage(); 
+       
+       if( a_box_current_state == DR_STATE_OFF && soc > off_threshold + GRID_STATE_HYSTERESIS_PERCENT ){
+           a_box_current_state = DR_STATE_RED;        
+           
+       } else if( a_box_current_state == DR_STATE_RED && soc > red_threshold + GRID_STATE_HYSTERESIS_PERCENT ){
+           a_box_current_state = DR_STATE_YELLOW;   
+           
+       } else if( a_box_current_state == DR_STATE_RED && soc < off_threshold - GRID_STATE_HYSTERESIS_PERCENT ){
+           a_box_current_state = DR_STATE_OFF;        
+           
+       } else if( a_box_current_state == DR_STATE_YELLOW && soc > yellow_threshold + GRID_STATE_HYSTERESIS_PERCENT ){
+           a_box_current_state = DR_STATE_GREEN;       
+           
+       } else if( a_box_current_state == DR_STATE_YELLOW && soc < red_threshold - GRID_STATE_HYSTERESIS_PERCENT){
+           a_box_current_state = DR_STATE_RED;
+           
+       } else if( a_box_current_state == DR_STATE_GREEN && soc < yellow_threshold - GRID_STATE_HYSTERESIS_PERCENT){
+           a_box_current_state = DR_STATE_YELLOW;
+           
+       }    
+       return a_box_current_state;
+    }
+ }
 
 static void broadcast_state() {
     MessageBuilder mb;

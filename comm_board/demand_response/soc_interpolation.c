@@ -120,9 +120,7 @@ static int get_bracket(float target, const float* values, const int num_values) 
         if (value_lower_bound <= target && target < value_upper_bound) {
             bracket_result = bracket_idx;
             break;
-        }
-    
-    
+        }  
     }
 
     return bracket_result;
@@ -136,7 +134,6 @@ float linear_interpolation(const float xtarget, const float x1, const float x2, 
 static float float_abs(float x) {
     return x > 0 ? x : -x;
 }
-
 
 
 static float get_soc_from_curve(float voltage, int curve_idx) {
@@ -195,8 +192,7 @@ float get_soc_estimate(float voltage,
     
         estimate_percent = linear_interpolation(log_my_roc, log_roc1, log_roc2, soc1, soc2);
     }
-    
-    debug(DEBUG_INFO, " Battery percent : %f " , estimate_percent);
-    
-    return estimate_percent/100.0 * battery_capacity_q;
+  
+   return estimate_percent/100.0 * battery_capacity_q;
+
 }

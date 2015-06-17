@@ -56,7 +56,7 @@ void discover_nodes() {
 void ping_handler(Message* msg) {
     if (msg->source == COMPUTER_UID) {
         LCD_blink("ping", LCD_ROW_TOP, 200);
-        debug(DEBUG_INFO, "pong");
+        //debug(DEBUG_INFO, "pong");
     } else {        
         MessageBuilder mb;
         make_mb(&mb, 1);

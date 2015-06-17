@@ -12,7 +12,8 @@
 
 
 //DS:  Edit, for debugging output buffer
-static float debug_num_messages_max;
+static float debug_num_messages_max = 0;
+static float debug_num_total_messages_sent = 0;
 
 static void debug_reset_max(float current_number){
     if(current_number > debug_num_messages_max){
@@ -62,7 +63,7 @@ void ethermini_send(Ethermini* e,  Message *msg) {
 void ethermini_send_immediately(Ethermini *e, Message *msg) {
     // preamble - 2 time 170
     int pidx;
-        
+       
     for (pidx=0; pidx < ETHERMINI_FRAMING_PREAMBLE_LENGTH; ++pidx) {
         e->put(ETHERMINI_FRAMING_PREAMBLE);
     }
@@ -87,7 +88,8 @@ void ethermini_send_immediately(Ethermini *e, Message *msg) {
     int ccidx;
     for (ccidx = 0; ccidx < 4; ++ccidx) {
         e->put(cc[ccidx]);
-    }     
+    }
+    
 }
 
 void ethermini_on_symbol(Ethermini* e, uint8_t symbol) {

@@ -25,7 +25,7 @@ void storage_integrity_check() {
         reboot_chip();          //DS:  Edit, should be removed
     }
     if (FORCE_FACTORY_RESET) {
-        debug(DEBUG_INFO, "Forced storage reset - update the code.");
+        //debug(DEBUG_INFO, "Forced storage reset - update the code.");
         //storage_factory_reset();
     }    
 }
@@ -49,7 +49,7 @@ void storage_load_settings() {
 
 void storage_backup() {
     
-    debug(DEBUG_INFO, "made storage backup");
+    //debug(DEBUG_INFO, "made storage backup");
     
     eeprom_write_uint32(STORAGE_TIME, time_seconds_since_epoch());
     eeprom_write_uint32(STORAGE_BALANCE, balance_get());

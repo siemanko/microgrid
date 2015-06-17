@@ -118,16 +118,16 @@ void read_eeprom_handler(Message* msg) {
     uint32_t addr = bytes_to_uint32(msg->content + 2);
     if (variable_type == 0) { // float
         float f_read = eeprom_read_float((uint16_t)addr);
-        debug(DEBUG_INFO, "EEPROM address %l contains float %f.",
-                addr, f_read); 
+        //debug(DEBUG_INFO, "EEPROM address %l contains float %f.",
+        //        addr, f_read); 
     } else if (variable_type == 1) { // uint32
         uint32_t l_read = eeprom_read_uint32((uint16_t)addr);
-        debug(DEBUG_INFO, "EEPROM address %l contains uint32 %l.",
-                addr, l_read);       
+        //debug(DEBUG_INFO, "EEPROM address %l contains uint32 %l.",
+        //        addr, l_read);       
     } else if (variable_type == 2) { // byte
         uint32_t b_read = eeprom_read_byte((uint16_t)addr);
-        debug(DEBUG_INFO, "EEPROM address %l contains byte %d.",
-                addr, (int)b_read); 
+        //debug(DEBUG_INFO, "EEPROM address %l contains byte %d.",
+        //        addr, (int)b_read); 
     }
 }
 

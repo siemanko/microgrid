@@ -51,13 +51,13 @@ void init(void) {
         init_leds();       
     }      
    
-    debug(DEBUG_INFO, "Initialization sequence complete.");
+    //debug(DEBUG_INFO, "Initialization sequence complete.");
  }
 
 void init_cron_schedule() {
   
    cron_repeat_rapidly(communication_step); 
-   cron_repeat_every_s(2, storage_backup);
+   cron_repeat_every_s(3, storage_backup);
     
     if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
         cron_repeat_every_s(LOG_DATA_EVERY_S,  a_box_data_logger_step);        

@@ -69,7 +69,7 @@ void data_logger_load_schema(DataLoggerSchema* schema) {
     uint32_t current_hash = eeprom_read_uint32(dls(DLS_SCHEMA_HASH));
     uint32_t new_hash = schema_hash(schema);
     if (current_hash != new_hash) {
-        debug(DEBUG_INFO, "Schema changed reseting logs");
+        //debug(DEBUG_INFO, "Schema changed reseting logs");
         data_logger_reset();
     }
     current_entry_size = entry_size(schema);
@@ -127,8 +127,8 @@ void dl_message_handler(Message* msg) {
         uint32_t num_possible =
                 (EEPROM_TOTAL_MEMORY - STORAGE_DATA_LOGGER) / 
                 current_entry_size - 1;
-        debug(DEBUG_INFO, "Logging schema %s. Logged %l of %l possible).",
-                current_schema->name, num_logged, num_possible);
+        //debug(DEBUG_INFO, "Logging schema %s. Logged %l of %l possible).",
+        //        current_schema->name, num_logged, num_possible);
     } else if (msg->content[1] == DLM_EXTRACT_GENERAL) {
         assert(msg->length == 2);
         uint32_t num_logged2 = eeprom_read_uint32(dls(DLS_NUM_LOGGED));
@@ -184,7 +184,7 @@ void dl_message_handler(Message* msg) {
         }
         send_mb(&mb3, COMPUTER_UID);
     } else if (msg->content[1] == DLM_RESET) {
-        debug(DEBUG_INFO, "Resetting data logger");
+        //debug(DEBUG_INFO, "Resetting data logger");
         data_logger_reset();  
     } else {
         assert(0);

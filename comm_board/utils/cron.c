@@ -165,8 +165,8 @@ void cron_step() {
 }
 
 void cron_print_stats() {
-    debug(DEBUG_CRON, " average of %l steps per second.",
-        average_steps_per_second);
+    //debug(DEBUG_CRON, " average of %l steps per second.",
+    //    average_steps_per_second);
     #ifdef CRON_STATS
         int vidx;
         for (vidx = 0; vidx < repeat_rapid.size; ++vidx) {
@@ -182,6 +182,6 @@ void cron_print_stats() {
             debug(DEBUG_CRON, "%s avg exec time = %l us", rms->name, rms->avg_execution_us);
         }
     #else
-        debug(DEBUG_ERROR, "To get detailed statistics define CRON_STATS.");
+        //debug(DEBUG_ERROR, "To get detailed statistics define CRON_STATS.");
     #endif
 }

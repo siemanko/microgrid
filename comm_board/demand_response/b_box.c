@@ -35,19 +35,19 @@ static int num_bad_readings_in_row = 0;
 // current at the output of load converter
 // the current reading does include all loads but does not include
 // current consumed by boards.
-float output_current;
+static float output_current;
 // voltage at the input to power converter, should be more or less the same
 // for all boards.
-float network_voltage;
+static float network_voltage;
 // this is voltage at the output of load converter. It is also the voltage
 // used at port1.
-float output_voltage;
+static float output_voltage;
 // voltage at port2
-float phone_voltage;
+static float phone_voltage;
 
 uint32_t grid_management_last_update;
 
-int waiting_for_confirmation() {
+int waiting_for_confirmation() {    
     return awaiting_price_ack;    
 }
 
@@ -75,10 +75,11 @@ static void dr_update_state(DemandResponeState new_state) {
   
     if (higher_price && enough_time_passed) {
         awaiting_price_ack = 1;       
-        debug(DEBUG_INFO, "Prices went up, waiting for button.");
+        //debug(DEBUG_INFO, "Prices went up, waiting for button.");
     }
     
-    current_state = new_state;
+    current_state = new_state;    
+    if(new_state == DR_STATE_GREEN) awaiting_price_ack = 0;
 }
 
 static void demand_reponse_handler(Message* msg) {
@@ -98,10 +99,14 @@ void init_b_box_demand_response() {
     num_bad_readings_in_row = 0;
     awaiting_price_ack = eeprom_read_int(STORAGE_AWAITING_PRICE_ACK);    
     estimated_boot_time = time_seconds_since_epoch();
-    //current_state = DR_STATE_OFF;//DS:  Edit, this should be the initial state
+    
+   // current_state = DR_STATE_OFF;//DS:  Edit, this should be the initial state
+    //DS:  Edit:  start with green for now because the PICs reset often and otherwise you would
+    //be shutting off people's loads for no reason    
     current_state = DR_STATE_GREEN; //DS:  Edit, this used to be off    
     //current_state = (DemandResponeState) eeprom_read_int(STORAGE_LAST_GRID_STATE_OBSERVED);  // DS:  Edit, this used to be off
     set_message_handler(UMSG_DEMAND_REPONSE, demand_reponse_handler);
+
 }
 
 // Basic sanity checks on readings be get from load board
@@ -131,7 +136,7 @@ void update_readings() {
     should_results_be_used = should_results_be_used &&
             validate_readings();
     if (!should_results_be_used) {
-        //debug(DEBUG_INFO, "Problem getting readings from load board");
+        debug(DEBUG_INFO, "Problem getting readings from load board");
         ++num_bad_readings_in_row;
     } else {
         num_bad_readings_in_row = 0;
@@ -140,8 +145,10 @@ void update_readings() {
 
 void b_box_demand_response_step() {
          
-    debug(DEBUG_INFO, "max size of message : %f " , debug_ethermini_max_messages());
-    
+    //debug(DEBUG_INFO, "max size of message : %f " , debug_ethermini_max_messages());
+    //DS:  Edit, for debugging    
+    //debug(DEBUG_INFO, " current state is :  %s ", dr_state_as_string(current_state));
+       
     
     // If comms with A-box are failing turn everything off.
     if (last_state_broadcast + MAX_TIME_BETWEEN_BROADCASTS_S < 
@@ -163,7 +170,7 @@ void b_box_demand_response_step() {
     //if waiting for button push, stop everything.
     if (awaiting_price_ack) {  
         if (button_check()) {
-            debug(DEBUG_INFO, "Prices acknowledged.");
+            //debug(DEBUG_INFO, "Prices acknowledged.");
 
             awaiting_price_ack = 0;
             button_reset();
