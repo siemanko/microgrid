@@ -44,7 +44,8 @@ class SerialBindings(object):
                 self.child_stdin.flush()
                 reply = self.child_stdout.readline()[:-1]
                 #if(reply.decode("ascii")[0] != 'n'):
-                #    print('reply : ' + reply.decode("ascii"))
+                    #print('reply 1')
+                    #print('reply : ' + reply.decode("ascii"))
                 time.sleep(0.1)
                 if not b"none" in reply:
                     self.callback([ int(x) for x in reply.split(b' ') if (x != b'' and x!=b'\r')]);

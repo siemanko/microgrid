@@ -51,7 +51,7 @@ void init(void) {
         init_leds();       
     }      
    
-    //debug(DEBUG_INFO, "Initialization sequence complete.");
+    debug(DEBUG_INFO, "Initialization sequence complete.");
  }
 
 void init_cron_schedule() {
