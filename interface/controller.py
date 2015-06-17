@@ -124,6 +124,16 @@ class Ctrl(object):
             print (e)
             print ('WARNING: wrong battery capacity value.')
 
+    def set_total_balance(self):
+        try:
+            mb = MessageBuilder(ToUlink.SET_TOTAL_BALANCE)
+            total_balance = float(self.ui_root.settings.total_balance)
+            mb.add_float(total_balance)
+            self.send(mb.to_bytes())
+        except Exception as e:
+            print(e)
+            print ('Warning: wrong total balance value.')
+
     def set_thresholds(self):
         try:
             mb = MessageBuilder(ToUlink.SET_THRESHOLDS)
@@ -147,6 +157,17 @@ class Ctrl(object):
 
     def reset_network(self):
         mb = MessageBuilder(ToUlink.RESET_NETWORK)
+        self.send(mb.to_bytes())
+    def reset_balance(self):
+        mb = MessageBuilder(ToUlink.RESET_BALANCE)
+        self.send(mb.to_bytes())
+    def reset_network_balance(self):
+        mb = MessageBuilder(ToUlink.RESET_NETWORK_BALANCE)
+        self.send(mb.to_bytes())
+    def synchronize_network_time(self):
+        ts = int(time.time())
+        mb = MessageBuilder(ToUlink.SYNCHRONIZE_NETWORK_TIME)
+        mb.add_uint32(ts)
         self.send(mb.to_bytes())
 
     def get_connected_nodes(self):

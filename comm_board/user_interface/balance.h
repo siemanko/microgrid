@@ -4,8 +4,15 @@
 #include <stdint.h>
 
 uint32_t balance_get();
+
 void balance_set(uint32_t value);
+
+uint32_t get_total_balance();
+
+void total_balance_set(uint32_t value);
+
 void balance_step();
+
 int32_t balance_estimated_time_remaining();
 
 #endif

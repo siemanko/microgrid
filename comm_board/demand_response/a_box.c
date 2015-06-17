@@ -25,10 +25,10 @@ static void override_demand_reponse_handler(Message* msg) {
     override_active = msg->content[1];
     override_state = msg->content[2];
     if (override_active) {
-        debug(DEBUG_INFO, "Overriding demand response state to %s.",
-                dr_state_as_string(override_state));
+        //debug(DEBUG_INFO, "Overriding demand response state to %s.",
+        //        dr_state_as_string(override_state));
     } else {
-        debug(DEBUG_INFO, "Demand response state override disabled.");
+        //debug(DEBUG_INFO, "Demand response state override disabled.");
     }
 }
 
@@ -91,7 +91,7 @@ static void broadcast_state() {
     mb_add_char(&mb, UMSG_DEMAND_REPONSE);
     
     //DS:  Edit, debug.  PRINT OUT THE STATE OF CHARGE
-    debug(DEBUG_INFO, "a box demand response is : %s", dr_state_as_string(a_box_demand_reponse_current_state()) );
+    //debug(DEBUG_INFO, "a box demand response is : %s", dr_state_as_string(a_box_demand_reponse_current_state()) );
             
     mb_add_char(&mb, (char)a_box_demand_reponse_current_state());
     send_mb(&mb, BROADCAST_UID);

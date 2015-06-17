@@ -39,7 +39,7 @@ void set_message_handler(MessageToUlink msg_type,
 void get_settings_handler(Message* msg) {
  
     MessageBuilder mb;
-    make_mb(&mb, 11);
+    make_mb(&mb, 12);
     mb_add_char(&mb, CMSG_GET_SETTINGS_REPLY);
     mb_add_uint32_noprefix(&mb, time_seconds_since_epoch());
     mb_add_char(&mb, eeprom_read_byte(STORAGE_UID));
@@ -51,7 +51,8 @@ void get_settings_handler(Message* msg) {
     mb_add_float_noprefix(&mb, off_threshold);
     mb_add_float_noprefix(&mb, red_threshold);
     mb_add_float_noprefix(&mb, yellow_threshold);
-
+    mb_add_uint32_noprefix(&mb , get_total_balance());
+    
     send_mb(&mb, COMPUTER_UID);
 }
 
@@ -61,6 +62,17 @@ void set_time_handler(Message* msg) {
     cron_reset_timers();
 }
 
+void synchronize_network_time(Message * msg){
+    set_time_handler(msg);
+ 
+    MessageBuilder mb;
+    make_mb(&mb, 2);
+    mb_add_char(&mb , UMSG_SET_TIME );
+    mb_add_uint32_noprefix( &mb, bytes_to_uint32(msg->content + 1) );
+    send_mb( &mb , BROADCAST_UID);
+}
+
+
 void reset_pic_handler(Message* msg) {
     //debug_unsafe(DEBUG_INFO, "Resetting PIC. See you soon!");
     asm("RESET");
@@ -68,12 +80,28 @@ void reset_pic_handler(Message* msg) {
 
 void reset_network_handler(Message * msg){
     //debug_unsafe(DEBUG_INFO, "Watch out, you're resetting the whole network!");    
-    
     MessageBuilder mb;
     make_mb(&mb, 1);
     mb_add_char(&mb, UMSG_RESET_PIC);
     send_mb(&mb, BROADCAST_UID);       
 }
+
+
+void reset_network_balance_handler(Message * msg){
+   //Only A can reset the network balance    
+    if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
+        debug(DEBUG_INFO, "Resetting network balance");
+        MessageBuilder mb;
+        make_mb(&mb , 1);
+        mb_add_char( &mb, UMSG_RESET_BALANCE);
+        send_mb(&mb , BROADCAST_UID);    
+   }
+}
+
+void reset_balance_handler(Message * msg){
+      balance_set(get_total_balance());
+}
+
 
 void get_memory_handler(Message* msg) {
     Vector addresses;
@@ -112,6 +140,12 @@ void set_balance_handler(Message* msg) {
     balance_set(balance);
 }
 
+void set_total_balance_handler(Message * msg){
+    assert(msg->length == 5);
+    uint32_t initial_total_balance = bytes_to_uint32(msg->content + 1);
+    total_balance_set(initial_total_balance);
+}
+
 void read_eeprom_handler(Message* msg) {
     assert(msg->length == 6);
     int variable_type = msg->content[1];
@@ -142,15 +176,20 @@ void print_local_time_handler(Message* msg) {
 }
 
 void register_misc_message_handlers() {
-    set_message_handler(UMSG_GET_SETTINGS,       get_settings_handler);
-    set_message_handler(UMSG_SET_TIME,           set_time_handler);
-    set_message_handler(UMSG_RESET_PIC,          reset_pic_handler);
-    set_message_handler(UMSG_RESET_NETWORK,      reset_network_handler);
-    set_message_handler(UMSG_GET_MEMORY,         get_memory_handler);
-    set_message_handler(UMSG_SET_UID_NODE_TYPE,  set_uid_node_type_handler);
-    set_message_handler(UMSG_SET_BALANCE,        set_balance_handler);
-    set_message_handler(UMSG_READ_EEPROM,        read_eeprom_handler);
-    set_message_handler(UMSG_TEST_LEDS,          test_leds_handler);
-    set_message_handler(UMSG_PRINT_LOCAL_TIME,   print_local_time_handler);    
+    set_message_handler(UMSG_GET_SETTINGS,              get_settings_handler);
+    set_message_handler(UMSG_SET_TIME,                  set_time_handler);
+    set_message_handler(UMSG_RESET_PIC,                 reset_pic_handler);
+    set_message_handler(UMSG_RESET_NETWORK,             reset_network_handler);
+    set_message_handler(UMSG_GET_MEMORY,                get_memory_handler);
+    set_message_handler(UMSG_SET_UID_NODE_TYPE,         set_uid_node_type_handler);
+    set_message_handler(UMSG_SET_BALANCE,               set_balance_handler);
+    set_message_handler(UMSG_READ_EEPROM,               read_eeprom_handler);
+    set_message_handler(UMSG_TEST_LEDS,                 test_leds_handler);
+    set_message_handler(UMSG_PRINT_LOCAL_TIME,          print_local_time_handler);    
+    set_message_handler(UMSG_SET_TOTAL_BALANCE,         set_total_balance_handler);
+    set_message_handler(UMSG_RESET_BALANCE,             reset_balance_handler);
+    set_message_handler(UMSG_RESET_NETWORK_BALANCE,     reset_network_balance_handler);
+    set_message_handler(UMSG_SYNCHRONIZE_NETWORK_TIME,   synchronize_network_time);
+    
 }
 

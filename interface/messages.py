@@ -21,6 +21,10 @@ class ToUlink(object):
     SET_BATTERY_CAPACITY = 18
     SET_THRESHOLDS = 19
     RESET_NETWORK = 20
+    SET_TOTAL_BALANCE = 21
+    RESET_BALANCE = 22
+    RESET_NETWORK_BALANCE = 23
+    SYNCHRONIZE_NETWORK_TIME = 24
 
 class ToComputer(object):
     DEBUG = 0

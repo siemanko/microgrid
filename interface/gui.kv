@@ -76,14 +76,15 @@
     box_uid:       id_box_uid
     box_node_type: id_box_node_type
     box_balance:   id_box_balance
-
+    total_balance: id_total_balance
     off_threshold: id_off_threshold
     red_threshold: id_red_threshold
     yellow_threshold: id_yellow_threshold
-
     state_of_charge: id_state_of_charge
     uncertainty_of_charge: id_uncertainty_of_charge
     battery_capacity: id_battery_capacity
+
+
 
     orientation: 'vertical'
     spacing: 10
@@ -162,6 +163,17 @@
             size_hint: (0.5, 1)
             text:'Set thresholds (off, red, yellow respectively)'
             on_press: c.get.set_thresholds()
+    BoxLayout:
+        size_hint: (1, 0.1)
+        orientation: 'horizontal'
+        SettingsText:
+            size_hint: (0.5, 1)
+            id: id_total_balance
+        Button:
+            size_hint: (0.5, 1)
+            text:'Set total balance'
+            on_press: c.get.set_total_balance()
+
     Label:
 
 <DebugView>:
@@ -258,7 +270,18 @@
             size_hint: (1,0.15)
             text: 'Reboot Entire Network'
             on_press: c.get.reset_network()
-        Label:
+        Button:
+            size_hint: (1, 0.15)
+            text: 'Reset Balance'
+            on_press: c.get.reset_balance()
+        Button:
+            size_hint: (1,0.15)
+            text: 'Reset Network Balance'
+            on_press: c.get.reset_network_balance()
+        Button:
+            size_hint:(1,0.15)
+            text: 'Synchronize Network Time'
+            on_press: c.get.synchronize_network_time()
 
     BoxLayout:
         size_hint: (.65,1)

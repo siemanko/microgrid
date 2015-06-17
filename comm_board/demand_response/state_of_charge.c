@@ -75,7 +75,7 @@ void init_state_of_charge() {
 
 float get_state_of_charge_percentage() {
     // TODO: consider using uncertainty as well.
-    debug(DEBUG_INFO , "Battery estimate : %f ", 100*state_of_charge_q / battery_capacity_q);
+    //debug(DEBUG_INFO , "Battery estimate : %f ", 100*state_of_charge_q / battery_capacity_q);
     return state_of_charge_q / battery_capacity_q;  
 }
 

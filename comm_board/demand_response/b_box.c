@@ -136,7 +136,7 @@ void update_readings() {
     should_results_be_used = should_results_be_used &&
             validate_readings();
     if (!should_results_be_used) {
-        debug(DEBUG_INFO, "Problem getting readings from load board");
+        //debug(DEBUG_INFO, "Problem getting readings from load board");
         ++num_bad_readings_in_row;
     } else {
         num_bad_readings_in_row = 0;

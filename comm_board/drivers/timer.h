@@ -1,6 +1,8 @@
 #ifndef DRIVERS_TIMER_H
 #define	DRIVERS_TIMER_H
 
+#define MINUTES_IN_DAY      1440
+
 #include <stdint.h>
 #include <time.h>
 

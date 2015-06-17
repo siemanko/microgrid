@@ -89,14 +89,14 @@ class MessageHandler(object):
             box_uid = msg[5]
             box_node_type = chr(msg[6])
             box_balance = parse_uint32(msg[7:11])
-            state_of_charge       = parse_float(msg[11:15])
+            state_of_charge = parse_float(msg[11:15])
             uncertainty_of_charge = parse_float(msg[15:19])
             battery_capacity = parse_float(msg[19:23])
 
             off_threshold = parse_float(msg[23:27])
             red_threshold = parse_float(msg[27:31])
             yellow_threshold = parse_float(msg[31:35])
-
+            total_balance = parse_uint32(msg[35:39])
 
             #self.log('Time on device is ' + str(date))
 
@@ -111,6 +111,7 @@ class MessageHandler(object):
             self.update_if_not_focused(self.ui_root.settings.off_threshold, str(off_threshold))
             self.update_if_not_focused(self.ui_root.settings.red_threshold, str(red_threshold))
             self.update_if_not_focused(self.ui_root.settings.yellow_threshold, str(yellow_threshold))
+            self.update_if_not_focused(self.ui_root.settings.total_balance, str(total_balance))
 
         elif msg_type == ToComputer.DATA_LOGGER_REPLY:
             controller.get.data_logger.on_message(msg)

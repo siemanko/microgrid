@@ -25,6 +25,10 @@ typedef enum {
     UMSG_SET_BATTERY_CAPACITY = 18,
     UMSG_SET_THRESHOLDS = 19,
     UMSG_RESET_NETWORK = 20,
+    UMSG_SET_TOTAL_BALANCE = 21,
+    UMSG_RESET_BALANCE = 22,
+    UMSG_RESET_NETWORK_BALANCE = 23,
+    UMSG_SYNCHRONIZE_NETWORK_TIME = 24,
     // leave last (also make sure no gaps above)
     UMSG_TOTAL_MESSAGES 
 } MessageToUlink; 
