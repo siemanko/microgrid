@@ -8,27 +8,35 @@
 
 #define NAN 0.0/0.0
 
-
 DataLoggerSchema b_box_schema;
 
+
 static const char* name = "B box logs";
-static const uint8_t num_column = 5;
+
+static const uint8_t num_column = 7;
+
+//DS: Edit, 
+//Current schema size is 24 bytes 
+//This means 32000/24 = 13333 data points or 1 every 5 minutes for 4.6 days
 static const DataLoggerType column_type[] = {
     DATA_LOGGER_TYPE_UINT32,
     DATA_LOGGER_TYPE_FLOAT,
     DATA_LOGGER_TYPE_FLOAT,
     DATA_LOGGER_TYPE_FLOAT,
     DATA_LOGGER_TYPE_FLOAT,
-
+    DATA_LOGGER_TYPE_INT,
+    DATA_LOGGER_TYPE_INT,
 };
 
-
+//DS:  Edit, need to change
 static const char* column_name[] = {
     "timestamp",
     "output current",
     "network voltage",
     "output voltage",
-    "phone_voltage"
+    "phone_voltage",
+    "grid state",
+    "waiting on ack"
 };
 
 void pull_readings(int* success,
@@ -64,12 +72,12 @@ void b_box_print_dl_message_handler(Message* msg) {
                   &phone_voltage);
     
     
-    /*debug(DEBUG_INFO, "B box(%d): %f %f %f %f", 
+    debug(DEBUG_INFO, "B box(%d): %f %f %f %f", 
         success,
         output_current,
         network_voltage,
         output_voltage,
-        phone_voltage); */
+        phone_voltage); 
 }
 
 void init_b_box_data_logger() {
@@ -82,9 +90,6 @@ void init_b_box_data_logger() {
     data_logger_load_schema(&b_box_schema);
     set_message_handler(UMSG_PRINT_DATA_LOGS, b_box_print_dl_message_handler);
 }
-
-
-
 
 void b_box_data_logger_step() {
     int success;
@@ -100,17 +105,22 @@ void b_box_data_logger_step() {
                   &phone_voltage);
     
     
-    /*debug(DEBUG_INFO, "B box(%d): %f %f %f %f", 
+    debug(DEBUG_INFO, "B box(%d): %f %f %f %f", 
         success,
         output_current,
         network_voltage,
         output_voltage,
-        phone_voltage); */
+        phone_voltage); 
     
+    //DS:  Edit, needs to change
     data_logger_log(0,
                     time_seconds_since_epoch(),
                     output_current,
                     network_voltage,
                     output_voltage,
-                    phone_voltage);
+                    phone_voltage,
+                    b_box_demand_reponse_current_state(),
+                    waiting_for_confirmation());
 }
+
+
