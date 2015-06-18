@@ -18,7 +18,7 @@
 
 // don't display annoying push button message for first
 // <DR_CHILLAX> seconds.
-#define DR_CHILLAX 5
+#define DR_CHILLAX 1    //I AM DR. CHILLAX, WELCOME TO THE DANCE, DUHN DUHN DUHN DUHN ... DA DA DA DA DA 
 
 #define BAD_READINGS_BEFORE_SWITCHOFF 15
 #define MAX_TIME_BETWEEN_BROADCASTS_S 5
@@ -35,7 +35,7 @@ static int num_bad_readings_in_row = 0;
 // current at the output of load converter
 // the current reading does include all loads but does not include
 // current consumed by boards.
-static float output_current;
+static float output_current = 0;
 // voltage at the input to power converter, should be more or less the same
 // for all boards.
 static float network_voltage;
@@ -73,13 +73,15 @@ static void dr_update_state(DemandResponeState new_state) {
     int enough_time_passed =  estimated_boot_time +
             DR_CHILLAX < time_seconds_since_epoch();
   
-    if (higher_price && enough_time_passed) {
-        awaiting_price_ack = 1;       
+    if (higher_price && enough_time_passed ) {        
+        awaiting_price_ack = 1;               
         //debug(DEBUG_INFO, "Prices went up, waiting for button.");
     }
     
     current_state = new_state;    
     if(new_state == DR_STATE_GREEN) awaiting_price_ack = 0;
+        
+    
 }
 
 static void demand_reponse_handler(Message* msg) {
@@ -107,7 +109,7 @@ void init_b_box_demand_response() {
     //current_state = (DemandResponeState) eeprom_read_int(STORAGE_LAST_GRID_STATE_OBSERVED);  // DS:  Edit, this used to be off
     set_message_handler(UMSG_DEMAND_REPONSE, demand_reponse_handler);
 
-}
+} 
 
 // Basic sanity checks on readings be get from load board
 int validate_readings() {
@@ -137,7 +139,7 @@ void update_readings() {
             validate_readings();
     if (!should_results_be_used) {
         //debug(DEBUG_INFO, "Problem getting readings from load board");
-        ++num_bad_readings_in_row;
+        ++num_bad_readings_in_row;   
     } else {
         num_bad_readings_in_row = 0;
     }
@@ -147,7 +149,7 @@ void b_box_demand_response_step() {
          
     //debug(DEBUG_INFO, "max size of message : %f " , debug_ethermini_max_messages());
     //DS:  Edit, for debugging    
-    //debug(DEBUG_INFO, " current state is :  %s ", dr_state_as_string(current_state));
+    debug(DEBUG_INFO, " current state is :  %s ", dr_state_as_string(current_state));
        
     
     // If comms with A-box are failing turn everything off.

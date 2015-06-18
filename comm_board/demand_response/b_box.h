@@ -9,6 +9,8 @@ void init_b_box_demand_response();
 // this function is meant to extract that piece of state
 // (true if waiting for button).
 int waiting_for_confirmation();
+int b_box_is_power_consumed();
+
 
 int b_box_readings_ready();
 float b_box_get_power();

@@ -26,6 +26,7 @@ void init_button() {
 // returns true if button was recently pressed.
 int button_check() {
     return num_times_active >= BUTTON_NUM_CHECKS_BEFORE_ACTIVE;
+   // return 0;
 }
 
 void button_reset() {

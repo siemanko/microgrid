@@ -6,6 +6,7 @@
 typedef enum {
     DATA_LOGGER_TYPE_FLOAT = 1,
     DATA_LOGGER_TYPE_UINT32 = 2,
+    DATA_LOGGER_TYPE_INT = 3,
 } DataLoggerType;
 
 typedef struct {

@@ -122,5 +122,3 @@ void b_box_data_logger_step() {
                     b_box_demand_reponse_current_state(),
                     waiting_for_confirmation());
 }
-
-

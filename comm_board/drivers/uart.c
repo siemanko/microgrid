@@ -77,10 +77,10 @@ void init_uart(uart_device u) {
 
 void uart_put(uart_device u, uint8_t data) {
     if (u == UART_DEVICE1) {
-        while(U1STAbits.UTXBF == 1); // while transmit buffer is
+        //while(U1STAbits.UTXBF == 1); // while transmit buffer is
                                      // still full.
-        U1TXREG = data;
-        while(!U1STAbits.TRMT);      // until transmit buffer is empty.
+        //U1TXREG = data;
+        //while(!U1STAbits.TRMT);      // until transmit buffer is empty.
     } else if (u == UART_DEVICE2) {
         // TODO(szymon): understand LATC7.
         LATCbits.LATC7 = 1;

@@ -4,7 +4,7 @@ from threading import Thread
 
 from messages import ToUlink
 from utils import MessageBuilder
-from utils import parse_uint32, parse_float, stringify
+from utils import parse_int, parse_uint32, parse_float, stringify
 
 VERBOSE = False
 
@@ -18,6 +18,7 @@ class DataLoggerMessages(object):
 class ColumnType(object):
     FLOAT = 1
     UINT32 = 2
+    INT16  = 3
 
 class DataPuller(object):
 
@@ -46,12 +47,11 @@ class DataPuller(object):
         #DS:  EDIT:  Might want to put entry point here
         f1 = open('LastDataPointSeen.txt','r')
         self.position_of_last_end = f1.readline()
-        self.number_of_total_data_points_received = self.position_of_last_end
+        self.number_of_total_data_points_received = int(self.position_of_last_end)
         f1.close()
 
     def on_message(self, msg):
         try:
-            print('48 data logger')
             dl_msg_type = msg[1]
             if dl_msg_type == DataLoggerMessages.EXTRACT_GENERAL:       #DS:  identifies the general information about the data
                 self.uid = msg[2]
@@ -77,17 +77,18 @@ class DataPuller(object):
                     if column_type == ColumnType.UINT32:
                         entry.append(parse_uint32(msg[offset:(offset+4)]))
                         offset += 4
+                    if column_type == ColumnType.INT16:
+                        entry.append(parse_int(msg[offset:(offset+2)]))
+                        offset += 2
                 print('71 the entry idx : ' + str(entry_idx))
                 print('72 data logger one entry : ' + str(tuple(entry)))
                 self.entry[entry_idx] = tuple(entry)
-
-                #DS:  Edit, For keeping track how many data points we've received so far
-                self.number_of_data_points_received_in_current_batch+=1
-                self.number_of_total_data_points_received+=1
+                # DS:  Edit, For keeping track how many data points we've received so far
+                self.number_of_data_points_received_in_current_batch += 1
+                self.number_of_total_data_points_received += 1
                 if self.number_of_total_data_points_received == self.n_entries:
                     self.number_of_total_data_points_received = 0
                     self.number_of_data_points_received_in_current_batch = 0
-
                 self.record_number_of_data_points_received()
 
             if (self.schema_name is not None and
@@ -100,7 +101,6 @@ class DataPuller(object):
             print('91 num of entries :  ' + str(self.n_entries))
             #DS:  Edit
             if self.number_of_data_points_received_in_current_batch  > self.this_many_readings_between_saves:
-                print('83 data logger')
                 self.partial_save_data()
                 self.number_of_data_points_received_in_current_batch=0
 
@@ -124,6 +124,7 @@ class DataPuller(object):
         self.thread.join()
 
     def pull(self):
+
         MSG_TIMEOUT = .5  #DS:  Edit, used to be 0.0001
         BATCH_TIMEOUT = 1
         BATCH_SIZE = 4
@@ -203,29 +204,24 @@ class DataPuller(object):
     def content(self):      #DS Comment, only called when saving data
         content = self.general_info()
         content.append(self.column_line())
-        print('168 data logger')
-        print('169 n entries ' + str(self.n_entries))
 
         for entry in range(self.n_entries):
             print('171 data logger in loop entry :  ' +str(entry))
             print('this is entry line : ' +self.entry_line(entry))
             content.append(self.entry_line(entry))
-        print('182 data logger')
         return content
 
     #DS Comment, used to partially save the data in case of crash
     def partial_save_data(self):
-        print('199 PRE data logger')
         lines = self.content()  #DS:  This is defined directly above
-        print('172 data logger')
         lines = ['%s\n' % (line,) for line in lines]
-        print('203 data logger')
         fname = "Logs\%s_partial_logs_starting_at_%s.txt" % (self.uid,self.position_of_last_end,)
 
         with open(fname, "w") as f:
             f.writelines(lines)
             #f.writelines('total number received : ' + str(self.number_of_total_data_points_received))
         self.log("Saved to %s" % (fname,))
+        self.log("Total number of saved data points: " + str(self.number_of_total_data_points_received))
 
     def record_number_of_data_points_received(self):
         fname = "LastDataPointSeen.txt"

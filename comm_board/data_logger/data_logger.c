@@ -59,6 +59,8 @@ static uint32_t entry_size() {
             res += 4;
         } else if (column_type == DATA_LOGGER_TYPE_UINT32) {
             res += 4;
+        } else if(column_type == DATA_LOGGER_TYPE_INT){
+            res += 2;
         }
     }
     return res;
@@ -97,6 +99,10 @@ void data_logger_log(int ignored, ...) {
             uint32_t l = va_arg(args, uint32_t);
             eeprom_write_uint32(offset, l);
             offset += 4;
+        } else if (column_type == DATA_LOGGER_TYPE_INT){
+            int l = va_arg(args, int);
+            eeprom_write_int(offset , l);
+            offset+=2;           
         }
     }
     eeprom_write_uint32(dls(DLS_NUM_LOGGED), num_data+1);       //HERE IS THE KEY PLACE 
@@ -180,6 +186,10 @@ void dl_message_handler(Message* msg) {
                 uint32_t l =  eeprom_read_uint32(offset);
                 mb_add_uint32_noprefix(&mb3, l);
                 offset += 4;
+            } else if( column_type == DATA_LOGGER_TYPE_INT){
+                int l = eeprom_read_int(offset);
+                mb_add_int_noprefix(&mb3, l);
+                offset+=2;
             }
         }
         send_mb(&mb3, COMPUTER_UID);

@@ -38,6 +38,7 @@ void set_message_handler(MessageToUlink msg_type,
 
 void get_settings_handler(Message* msg) {
  
+    /*
     MessageBuilder mb;
     make_mb(&mb, 12);
     mb_add_char(&mb, CMSG_GET_SETTINGS_REPLY);
@@ -54,7 +55,10 @@ void get_settings_handler(Message* msg) {
     mb_add_uint32_noprefix(&mb , get_total_balance());
     
     send_mb(&mb, COMPUTER_UID);
-}
+     */
+   
+ }
+     
 
 void set_time_handler(Message* msg) {
     uint32_t ts = bytes_to_uint32(msg->content + 1);
@@ -90,7 +94,7 @@ void reset_network_handler(Message * msg){
 void reset_network_balance_handler(Message * msg){
    //Only A can reset the network balance    
     if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
-        debug(DEBUG_INFO, "Resetting network balance");
+        //debug(DEBUG_INFO, "Resetting network balance");
         MessageBuilder mb;
         make_mb(&mb , 1);
         mb_add_char( &mb, UMSG_RESET_BALANCE);

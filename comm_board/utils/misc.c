@@ -19,7 +19,7 @@ void display_assert_message(const char* format, va_list args) {
         while(1) {
             free(reserved);
             // TODO(szymon): also display on LCD?
-            debug_unsafe_args(DEBUG_ERROR, format, args);
+            //debug_unsafe_args(DEBUG_ERROR, format, args);
             delay_ms(1000);
         }
     }

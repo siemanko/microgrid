@@ -36,7 +36,7 @@ void init(void) {
     init_communication();    
     delay_ms(300);   
     storage_load_settings();
-       
+         
     
      if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
         init_link_board_interface();
@@ -51,7 +51,7 @@ void init(void) {
         init_leds();       
     }      
    
-    debug(DEBUG_INFO, "Initialization sequence complete.");
+    //debug(DEBUG_INFO, "Initialization sequence complete.");
  }
 
 void init_cron_schedule() {
