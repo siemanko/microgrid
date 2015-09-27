@@ -15,7 +15,7 @@ float state_of_charge_q         = 1.0;
 float uncertertainty_of_charge  = DEFAULT_BATTERY_CAPACITY_Q;
 float battery_capacity_q        = DEFAULT_BATTERY_CAPACITY_Q;
 
-#define SIZE_OF_SOC_MOVING_AVERAGE      40
+#define SIZE_OF_SOC_MOVING_AVERAGE      100
 static float state_of_charge_history[SIZE_OF_SOC_MOVING_AVERAGE];
 static int current_index_state_of_charge_history = 0;
 static int max_index_state_of_charge_history = SIZE_OF_SOC_MOVING_AVERAGE;
@@ -75,7 +75,7 @@ void init_state_of_charge() {
 
 float get_state_of_charge_percentage() {
     // TODO: consider using uncertainty as well.
-    //debug(DEBUG_INFO , "Battery estimate : %f ", 100*state_of_charge_q / battery_capacity_q);
+    debug(DEBUG_INFO , "Battery estimate : %f ", 100*state_of_charge_q / battery_capacity_q);
     return state_of_charge_q / battery_capacity_q;  
 }
 
@@ -127,7 +127,10 @@ void state_of_charge_step() {
     //debug(DEBUG_INFO, "battery voltage = %f, current delta = %f", 
     //        battery_voltage, battery_input_current - battery_output_current);
     //debug(DEBUG_INFO, "SOC estimate from voltage: %f", measurement_mu); 
-    
+
+
+
+    debug(DEBUG_INFO, "battery in: %f and battery out: %f " , battery_input_current, battery_output_current );
     
     //DS:  Edit, removing filter for now
     /*

@@ -57,6 +57,8 @@ void init_a_box_demand_response() {
 //DS:  Edit, CURRENT ERROR IS HERE
 DemandResponeState a_box_demand_reponse_current_state() {
      
+    return DR_STATE_GREEN;
+    
     if (override_active) {
         return override_state;
     } else {

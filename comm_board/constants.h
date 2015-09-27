@@ -4,14 +4,14 @@
 #define ASSERTS_ENABLED  0
 //#define CRON_STATS
 
-#define LOG_DATA_EVERY_S 60
+#define LOG_DATA_EVERY_S 300
 
 #define PRICE_COEFF_GREEN  1
 #define PRICE_COEFF_YELLOW 2
 #define PRICE_COEFF_RED    10
 #define PRICE_COEFF_OFF    0
 
-#define DEFAULT_BATTERY_CAPACITY_Q 108000.0     //200 Ah
+#define DEFAULT_BATTERY_CAPACITY_Q 720000.0     //200 Ah
 
 // uncertainty of a current sensor is 2%
 #define CURRENT_SENSOR_UNCERTAINTY 0.02

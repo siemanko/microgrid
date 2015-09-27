@@ -35,8 +35,20 @@ void init(void) {
     init_cron();
     init_communication();    
     delay_ms(300);   
-    storage_load_settings();
-         
+    
+    /*
+    eeprom_write_float(STORAGE_OFF_THRESHOLD,
+            0.25);
+    eeprom_write_float(STORAGE_RED_THRESHOLD,
+            0.35);    
+    eeprom_write_float(STORAGE_YELLOW_THRESHOLD,
+            0.55);
+    */
+   // eeprom_write_uint32(STORAGE_BALANCE, 300000);
+    
+    
+    storage_load_settings();    
+    
     
      if (eeprom_read_byte(STORAGE_NODE_TYPE) == 'A') {
         init_link_board_interface();
